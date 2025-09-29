@@ -6,7 +6,11 @@
     <title>Text Formatter - Online Text Formatting Tool</title>
     <meta name="description" content="Free online text formatter for Facebook, LinkedIn, Discord. Format text with bold, italic, line numbers, remove empty lines, and more.">
     <meta name="keywords" content="Text Formatter, Facebook Text Formatter, Linkedin Text Formatter, Discord Text Formatter, Online Text Formatter">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Claude Design System Variables */
@@ -158,9 +162,16 @@
                     <img src="logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
                     <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
                 </div>
-                <nav class="hidden md:flex space-x-8">
-                    <a href="#features" class="text-gray-700 hover:text-primary">Features</a>
-                    <a href="#faq" class="text-gray-700 hover:text-primary">FAQ</a>
+                <nav class="flex items-center space-x-6">
+                    <div class="hidden md:flex space-x-8">
+                        <a href="#features" class="text-gray-700 hover:text-primary">Features</a>
+                        <a href="#faq" class="text-gray-700 hover:text-primary">FAQ</a>
+                    </div>
+                    <a href="https://github.com/indielucas/text-formatter" target="_blank" rel="noopener noreferrer" class="text-gray-700 hover:text-primary transition-colors" title="View on GitHub">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
                 </nav>
             </div>
         </div>
@@ -183,7 +194,7 @@
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Text Formatting Tools</h3>
 
                         <!-- Formatting Functions -->
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-4">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-12">
                             <button id="addLineNumbers" class="format-btn">
                                 📝 Line Numbers
                             </button>
@@ -215,16 +226,6 @@
                                 🏷️ Title Case
                             </button>
                         </div>
-
-                        <!-- History Controls -->
-                        <div class="flex gap-3 justify-center">
-                            <button id="undo" class="format-btn disabled:opacity-50">
-                                ↶ Undo
-                            </button>
-                            <button id="redo" class="format-btn disabled:opacity-50">
-                                ↷ Redo
-                            </button>
-                        </div>
                     </div>
 
                     <!-- Editor and Preview -->
@@ -236,6 +237,13 @@
 
                                 <!-- Editor Toolbar -->
                                 <div class="flex gap-2 justify-center sm:justify-end">
+                                    <button id="undo" class="px-3 py-1 format-btn text-sm">
+                                        ↶ Undo
+                                    </button>
+                                    <button id="redo" class="px-3 py-1 format-btn text-sm">
+                                        ↷ Redo
+                                    </button>
+
                                     <button id="bold" class="px-3 py-1 format-btn text-sm" title="Bold (Markdown: **text**)">
                                         <span class="font-bold">B</span>
                                     </button>
@@ -257,7 +265,7 @@
                         <div class="flex flex-col h-full">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
                                 <h3 class="text-lg font-medium text-gray-900">Preview</h3>
-                                <button id="copyPreview" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary font-medium transition-colors w-full sm:w-auto">
+                                <button id="copyPreview" class="px-3 py-1 format-btn text-sm">
                                     📋 Copy to Clipboard
                                 </button>
                             </div>
@@ -275,7 +283,7 @@
             <div class="main-container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">About Text Formatter</h2>
-                    <div class="max-w-3xl mx-auto text-gray-600 space-y-4">
+                    <div class="mx-auto text-gray-600 space-y-4">
                         <p>
                             Text Formatter is a powerful online text formatting tool designed to help you format text for various social media platforms including Facebook, LinkedIn, Discord, and more. Whether you're a content creator, social media manager, or just someone who wants to make their text look more professional, our tool provides all the essential formatting features you need.
                         </p>
