@@ -1,0 +1,12 @@
+# Cloudflare Pages redirects
+
+# Handle SPA routing - all requests should go to index.html
+/*    /index.html   200
+
+# Specific redirects for better SEO
+/facebook-text-formatter    /pages/facebook-text-formatter.html    200
+/linkedin-text-formatter    /pages/linkedin-text-formatter.html    200
+/discord-text-formatter     /pages/discord-text-formatter.html     200
+/online-text-formatter      /pages/online-text-formatter.html      200
+/privacy                    /pages/privacy.html                     200
+/terms                      /pages/terms.html                       200
