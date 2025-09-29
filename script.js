@@ -158,14 +158,46 @@ class TextFormatter {
 
     init() {
         this.loadHistory();
-        this.initMonacoEditor();
+
+        // Initialize Monaco editor with proper timing
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => this.initMonacoEditor(), 100);
+            });
+        } else {
+            setTimeout(() => this.initMonacoEditor(), 100);
+        }
+
         this.initWysiwygEditor();
         this.bindEvents();
         this.updateUndoRedoButtons();
     }
 
     initMonacoEditor() {
-        require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@0.45.0/min/vs' } });
+        // Enhanced Monaco Editor loading with better error handling
+        const monacoScript = document.querySelector('script[src*="monaco-editor"]');
+
+        if (!monacoScript) {
+            console.error('Monaco Editor script not found');
+            this.fallbackToTextarea();
+            return;
+        }
+
+        // Wait for script to load if not already loaded
+        if (typeof require === 'undefined') {
+            setTimeout(() => this.initMonacoEditor(), 100);
+            return;
+        }
+
+        // Configure require with fallback CDN
+        require.config({
+            paths: {
+                vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs'
+            },
+            // Add timeout and error handling
+            waitSeconds: 30
+        });
+
         require(['vs/editor/editor.main'], () => {
             this.editor = monaco.editor.create(document.getElementById('monaco-editor'), {
                 value: 'Start typing your text here...\n\nUse the buttons above to format your text.',
@@ -234,7 +266,73 @@ class TextFormatter {
 
             this.updatePreview();
             this.saveToHistory(this.editor.getValue());
+        }, (error) => {
+            console.error('Failed to load Monaco Editor:', error);
+            this.fallbackToTextarea();
         });
+    }
+
+    fallbackToTextarea() {
+        console.log('Using fallback textarea editor');
+        const monacoContainer = document.getElementById('monaco-editor');
+
+        // Create fallback textarea
+        const textarea = document.createElement('textarea');
+        textarea.id = 'fallback-editor';
+        textarea.className = 'w-full h-full p-4 font-mono text-sm border-none outline-none resize-none';
+        textarea.value = 'Start typing your text here...\n\nUse the buttons above to format your text.';
+        textarea.style.backgroundColor = 'var(--background)';
+        textarea.style.color = 'var(--foreground)';
+        textarea.style.minHeight = '400px';
+
+        // Replace Monaco container with textarea
+        monacoContainer.innerHTML = '';
+        monacoContainer.appendChild(textarea);
+
+        // Set up textarea as the editor
+        this.editor = {
+            getValue: () => textarea.value,
+            setValue: (value) => { textarea.value = value; },
+            getSelection: () => ({
+                startLineNumber: 1,
+                startColumn: textarea.selectionStart + 1,
+                endLineNumber: 1,
+                endColumn: textarea.selectionEnd + 1
+            }),
+            executeEdits: (id, edits) => {
+                if (edits && edits[0]) {
+                    const start = textarea.selectionStart;
+                    const end = textarea.selectionEnd;
+                    const value = textarea.value;
+                    textarea.value = value.substring(0, start) + edits[0].text + value.substring(end);
+                }
+            },
+            focus: () => textarea.focus(),
+            setPosition: () => {},
+            layout: () => {},
+            updateOptions: () => {},
+            addAction: () => {},
+            getModel: () => ({
+                getPositionAt: (offset) => ({ lineNumber: 1, column: offset + 1 }),
+                getValueInRange: (range) => {
+                    if (range && range.startColumn && range.endColumn) {
+                        return textarea.value.substring(range.startColumn - 1, range.endColumn - 1);
+                    }
+                    return '';
+                }
+            }),
+            setSelection: () => {},
+            revealRangeInCenter: () => {}
+        };
+
+        // Add event listeners
+        textarea.addEventListener('input', () => {
+            this.updatePreview();
+        });
+
+        // Save initial state
+        this.updatePreview();
+        this.saveToHistory(textarea.value);
     }
 
     cleanText(text) {
