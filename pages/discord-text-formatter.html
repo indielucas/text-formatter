@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Text Formatter - Format Text for Discord Messages</title>
+    <meta name="description" content="Format your Discord messages with bold, italic, strikethrough, and code formatting. Create engaging Discord content with proper markdown formatting and special characters.">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+                        <img src="../logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-primary">Home</a>
+                    <a href="/#features" class="text-gray-700 hover:text-primary">Features</a>
+                    <a href="/#faq" class="text-gray-700 hover:text-primary">FAQ</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-6">Discord Text Formatter</h1>
+
+                <div class="prose max-w-none">
+                    <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-semibold text-purple-900 mb-3">🎮 Enhanced Discord Messages & Chat</h2>
+                        <p class="text-purple-800">
+                            Create standout Discord messages with markdown formatting, code blocks, and special text effects that work perfectly in Discord servers and DMs.
+                        </p>
+                        <a href="index.html" class="inline-block mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors">
+                            Start Formatting Text →
+                        </a>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Why Format Discord Messages?</h2>
+                    <p class="text-gray-700 mb-4">
+                        Discord supports rich text formatting through markdown syntax. Well-formatted messages are easier to read, more engaging, and help convey information clearly in busy chat environments. Whether you're moderating, gaming, or collaborating, proper formatting makes your messages stand out.
+                    </p>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Discord Formatting Features</h2>
+                    <ul class="list-disc pl-6 text-gray-700 mb-6">
+                        <li><strong>Bold Text:</strong> Make important messages stand out with **bold** formatting</li>
+                        <li><strong>Italic Text:</strong> Add emphasis with *italic* text</li>
+                        <li><strong>Code Formatting:</strong> Share code snippets with proper `inline code` and ```code blocks```</li>
+                        <li><strong>Line Organization:</strong> Structure messages with proper line breaks</li>
+                        <li><strong>List Creation:</strong> Add line numbers for step-by-step instructions</li>
+                        <li><strong>Case Conversion:</strong> Proper capitalization for different contexts</li>
+                        <li><strong>Clean Text:</strong> Remove unwanted whitespace and empty lines</li>
+                        <li><strong>Emoji Management:</strong> Add or remove emojis as needed</li>
+                    </ul>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Discord Markdown Quick Reference</h2>
+
+                    <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Common Discord Formatting</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Text Formatting:</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li><code>**bold text**</code> → <strong>bold text</strong></li>
+                                    <li><code>*italic text*</code> → <em>italic text</em></li>
+                                    <li><code>~~strikethrough~~</code> → <del>strikethrough</del></li>
+                                    <li><code>__underline__</code> → <u>underline</u></li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900 mb-2">Code Formatting:</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li><code>`inline code`</code></li>
+                                    <li><code>```code block```</code></li>
+                                    <li><code>```js</code><br>JavaScript code<br><code>```</code></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Discord Use Cases & Examples</h2>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">1. Gaming Communities</h3>
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                        <p class="text-gray-700 mb-2"><strong>Best for:</strong> Event announcements, raid coordination, game instructions</p>
+                        <p class="text-gray-700"><strong>Formatting tips:</strong> Use bold for important times/dates, numbered lists for steps, code blocks for game commands</p>
+                    </div>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">2. Development Teams</h3>
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                        <p class="text-gray-700 mb-2"><strong>Best for:</strong> Code sharing, bug reports, project updates</p>
+                        <p class="text-gray-700"><strong>Formatting tips:</strong> Code blocks for snippets, bold for error messages, proper line breaks for readability</p>
+                    </div>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">3. Study Groups & Education</h3>
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                        <p class="text-gray-700 mb-2"><strong>Best for:</strong> Study schedules, assignment discussions, resource sharing</p>
+                        <p class="text-gray-700"><strong>Formatting tips:</strong> Numbered lists for study plans, bold for deadlines, clean formatting for notes</p>
+                    </div>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">4. Community Management</h3>
+                    <div class="bg-blue-50 rounded-lg p-4 mb-4">
+                        <p class="text-gray-700 mb-2"><strong>Best for:</strong> Server rules, announcements, moderation messages</p>
+                        <p class="text-gray-700"><strong>Formatting tips:</strong> Bold for important rules, numbered lists for procedures, clean structure for clarity</p>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Discord Formatting Best Practices</h2>
+
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+                        <h4 class="font-semibold text-green-900 mb-3">✅ Discord Do's:</h4>
+                        <ul class="list-disc pl-6 text-green-800">
+                            <li>Use bold text for important information and alerts</li>
+                            <li>Format code properly with code blocks or inline code</li>
+                            <li>Create numbered lists for step-by-step instructions</li>
+                            <li>Use proper line breaks for message readability</li>
+                            <li>Remove extra whitespace for cleaner appearance</li>
+                            <li>Use appropriate capitalization for context (gaming vs. professional)</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+                        <h4 class="font-semibold text-red-900 mb-3">❌ Discord Don'ts:</h4>
+                        <ul class="list-disc pl-6 text-red-800">
+                            <li>Avoid excessive ALL CAPS (considered shouting)</li>
+                            <li>Don't send walls of unformatted text</li>
+                            <li>Avoid mixing multiple formatting styles randomly</li>
+                            <li>Don't forget to format code snippets properly</li>
+                            <li>Avoid leaving excessive empty lines</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Advanced Discord Text Techniques</h2>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">Embed-Style Messages</h3>
+                    <p class="text-gray-700 mb-4">
+                        Create structured, embed-like messages using proper formatting, bold headers, and organized content that's easy to scan and read.
+                    </p>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">Command Documentation</h3>
+                    <p class="text-gray-700 mb-4">
+                        Use code formatting for bot commands, inline code for parameters, and numbered lists for command sequences to create clear documentation.
+                    </p>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">Event Organization</h3>
+                    <p class="text-gray-700 mb-4">
+                        Format event announcements with bold dates and times, numbered agendas, and clear section breaks to make information easily accessible.
+                    </p>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Server-Specific Formatting</h2>
+                    <p class="text-gray-700 mb-4">
+                        Different Discord servers have different cultures and expectations:
+                    </p>
+
+                    <ul class="list-disc pl-6 text-gray-700 mb-6">
+                        <li><strong>Gaming servers:</strong> Casual formatting, emoji-friendly, game-specific terminology</li>
+                        <li><strong>Professional servers:</strong> Clean formatting, proper capitalization, minimal emoji</li>
+                        <li><strong>Educational servers:</strong> Structured formatting, numbered lists, clear organization</li>
+                        <li><strong>Creative communities:</strong> Flexible formatting, artistic expression, varied styles</li>
+                    </ul>
+
+                    <div class="bg-purple-50 border border-purple-200 rounded-lg p-6 mt-8">
+                        <h3 class="text-lg font-semibold text-purple-900 mb-2">🚀 Ready to Level Up Your Discord Messages?</h3>
+                        <p class="text-purple-800 mb-4">
+                            Use our Discord text formatter to create engaging, well-formatted messages that stand out in any Discord server.
+                        </p>
+                        <a href="/" class="inline-block bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors">
+                            Start Formatting Now →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="../logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h3 class="text-lg font-bold">Text Formatter</h3>
+                    </div>
+                    <p class="text-gray-400">Professional online text formatting tool for all your text processing needs.</p>
+                    <p class="text-gray-400 mt-2"><span class="text-white font-medium">text-formatter.com</span></p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Tools</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="facebook-text-formatter.html" class="hover:text-white">Facebook Text Formatter</a></li>
+                        <li><a href="linkedin-text-formatter.html" class="hover:text-white">LinkedIn Text Formatter</a></li>
+                        <li><a href="discord-text-formatter.html" class="hover:text-white">Discord Text Formatter</a></li>
+                        <li><a href="online-text-formatter.html" class="hover:text-white">Online Text Formatter</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Text Formatter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

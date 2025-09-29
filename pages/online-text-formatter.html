@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Text Formatter - Free Text Formatting Tool</title>
+    <meta name="description" content="Free online text formatter with advanced features. Format text for any platform with case conversion, line manipulation, whitespace control, and markdown formatting.">
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+                        <img src="../logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                    </a>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-primary">Home</a>
+                    <a href="/#features" class="text-gray-700 hover:text-primary">Features</a>
+                    <a href="/#faq" class="text-gray-700 hover:text-primary">FAQ</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-6">Online Text Formatter</h1>
+
+                <div class="prose max-w-none">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+                        <h2 class="text-xl font-semibold text-blue-900 mb-3">🛠️ Complete Text Formatting Solution</h2>
+                        <p class="text-blue-800">
+                            Comprehensive online text formatter with advanced features for any platform. Format text for Facebook, LinkedIn, Discord, emails, documents, and more.
+                        </p>
+                        <a href="index.html" class="inline-block mt-4 bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors">
+                            Start Formatting Text →
+                        </a>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Why Use an Online Text Formatter?</h2>
+                    <p class="text-gray-700 mb-4">
+                        An online text formatter saves time and ensures consistency across all your content. Whether you're copying text from different sources, preparing content for multiple platforms, or just need to clean up messy formatting, our tool handles it all in one place.
+                    </p>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Complete Feature Set</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Text Case Conversion</h3>
+                            <ul class="list-disc pl-6 text-gray-700">
+                                <li>UPPERCASE conversion</li>
+                                <li>lowercase conversion</li>
+                                <li>Title Case formatting</li>
+                                <li>Sentence case correction</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Line Manipulation</h3>
+                            <ul class="list-disc pl-6 text-gray-700">
+                                <li>Add line numbers</li>
+                                <li>Remove empty lines</li>
+                                <li>Join lines together</li>
+                                <li>Split text into lines</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Content Control</h3>
+                            <ul class="list-disc pl-6 text-gray-700">
+                                <li>Remove emoji characters</li>
+                                <li>Trim whitespace</li>
+                                <li>Add timestamps/dates</li>
+                                <li>Special character handling</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Formatting Tools</h3>
+                            <ul class="list-disc pl-6 text-gray-700">
+                                <li>Bold text formatting</li>
+                                <li>Italic text styling</li>
+                                <li>Markdown support</li>
+                                <li>Undo/Redo functionality</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Platform-Specific Formatting</h2>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">Social Media Platforms</h3>
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <p class="text-gray-700 mb-2"><strong>Facebook, Twitter, Instagram:</strong> Optimize for social engagement</p>
+                        <ul class="list-disc pl-6 text-gray-700">
+                            <li>Clean line breaks for readability</li>
+                            <li>Proper hashtag formatting</li>
+                            <li>Emoji management</li>
+                            <li>Character count optimization</li>
+                        </ul>
+                    </div>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">Professional Platforms</h3>
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <p class="text-gray-700 mb-2"><strong>LinkedIn, Email, Documents:</strong> Professional formatting standards</p>
+                        <ul class="list-disc pl-6 text-gray-700">
+                            <li>Proper sentence case</li>
+                            <li>Clean whitespace management</li>
+                            <li>Professional punctuation</li>
+                            <li>Consistent formatting</li>
+                        </ul>
+                    </div>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">Technical Platforms</h3>
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <p class="text-gray-700 mb-2"><strong>Discord, Slack, Forums:</strong> Markdown and code formatting</p>
+                        <ul class="list-disc pl-6 text-gray-700">
+                            <li>Markdown syntax support</li>
+                            <li>Code block formatting</li>
+                            <li>Structured lists</li>
+                            <li>Technical documentation</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Common Use Cases</h2>
+
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <h4 class="font-semibold text-gray-900 mb-2">Content Migration</h4>
+                            <p class="text-gray-700">Moving content between platforms with different formatting requirements</p>
+                        </div>
+
+                        <div class="border-l-4 border-green-500 pl-4">
+                            <h4 class="font-semibold text-gray-900 mb-2">Text Cleanup</h4>
+                            <p class="text-gray-700">Cleaning up messy text copied from PDFs, websites, or emails</p>
+                        </div>
+
+                        <div class="border-l-4 border-purple-500 pl-4">
+                            <h4 class="font-semibold text-gray-900 mb-2">Bulk Processing</h4>
+                            <p class="text-gray-700">Processing large amounts of text for consistent formatting</p>
+                        </div>
+
+                        <div class="border-l-4 border-orange-500 pl-4">
+                            <h4 class="font-semibold text-gray-900 mb-2">Multi-Platform Publishing</h4>
+                            <p class="text-gray-700">Preparing content for multiple social media and professional platforms</p>
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Advanced Features</h2>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">Real-Time Preview</h3>
+                    <p class="text-gray-700 mb-4">
+                        See your formatting changes instantly with our live preview feature. Compare before and after side-by-side to ensure perfect results.
+                    </p>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">History & Undo</h3>
+                    <p class="text-gray-700 mb-4">
+                        Full undo/redo functionality keeps track of up to 50 editing steps, so you can experiment freely and revert any changes.
+                    </p>
+
+                    <h3 class="text-xl font-medium text-gray-900 mt-6 mb-3">Privacy-First Design</h3>
+                    <p class="text-gray-700 mb-4">
+                        All text processing happens locally in your browser. Your content never leaves your device, ensuring complete privacy and security.
+                    </p>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Formatting Best Practices</h2>
+
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+                        <h4 class="font-semibold text-green-900 mb-3">✅ Universal Best Practices:</h4>
+                        <ul class="list-disc pl-6 text-green-800">
+                            <li>Use consistent capitalization throughout your content</li>
+                            <li>Remove unnecessary whitespace and empty lines</li>
+                            <li>Format lists with proper numbering or bullets</li>
+                            <li>Use bold text sparingly for key information</li>
+                            <li>Test formatted text on target platform before publishing</li>
+                            <li>Keep formatting simple and readable</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+                        <h4 class="font-semibold text-red-900 mb-3">❌ Common Formatting Mistakes:</h4>
+                        <ul class="list-disc pl-6 text-red-800">
+                            <li>Mixing multiple case styles in the same content</li>
+                            <li>Leaving excessive whitespace or empty lines</li>
+                            <li>Over-formatting with too many bold/italic elements</li>
+                            <li>Not considering platform-specific limitations</li>
+                            <li>Forgetting to proofread after formatting</li>
+                        </ul>
+                    </div>
+
+                    <h2 class="text-2xl font-semibold text-gray-900 mt-8 mb-4">Getting Started</h2>
+                    <ol class="list-decimal pl-6 text-gray-700 mb-6">
+                        <li>Paste or type your text in the editor</li>
+                        <li>Select the formatting tools you need</li>
+                        <li>See real-time preview of changes</li>
+                        <li>Copy formatted text to your target platform</li>
+                        <li>Use undo/redo to fine-tune as needed</li>
+                    </ol>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+                        <h3 class="text-lg font-semibold text-blue-900 mb-2">🚀 Ready to Format Your Text?</h3>
+                        <p class="text-blue-800 mb-4">
+                            Start using our comprehensive online text formatter to create perfect content for any platform or purpose.
+                        </p>
+                        <a href="/" class="inline-block bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors">
+                            Start Formatting Now →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="../logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h3 class="text-lg font-bold">Text Formatter</h3>
+                    </div>
+                    <p class="text-gray-400">Professional online text formatting tool for all your text processing needs.</p>
+                    <p class="text-gray-400 mt-2"><span class="text-white font-medium">text-formatter.com</span></p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Tools</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="facebook-text-formatter.html" class="hover:text-white">Facebook Text Formatter</a></li>
+                        <li><a href="linkedin-text-formatter.html" class="hover:text-white">LinkedIn Text Formatter</a></li>
+                        <li><a href="discord-text-formatter.html" class="hover:text-white">Discord Text Formatter</a></li>
+                        <li><a href="online-text-formatter.html" class="hover:text-white">Online Text Formatter</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Text Formatter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

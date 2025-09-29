@@ -36,6 +36,27 @@
           --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
         }
 
+        /* Dark Theme Variables - Claude Style */
+        [data-theme="dark"] {
+          --background: oklch(0.2679 0.0036 106.6427);
+          --foreground: oklch(0.8074 0.0142 93.0137);
+          --card: oklch(0.2679 0.0036 106.6427);
+          --card-foreground: oklch(0.9818 0.0054 95.0986);
+          --popover: oklch(0.3085 0.0035 106.6039);
+          --popover-foreground: oklch(0.9211 0.0040 106.4781);
+          --primary: oklch(0.6724 0.1308 38.7559);
+          --primary-foreground: oklch(1.0000 0 0);
+          --secondary: oklch(0.9818 0.0054 95.0986);
+          --secondary-foreground: oklch(0.3085 0.0035 106.6039);
+          --muted: oklch(0.2213 0.0038 106.7070);
+          --muted-foreground: oklch(0.7713 0.0169 99.0657);
+          --accent: oklch(0.2130 0.0078 95.4245);
+          --accent-foreground: oklch(0.9663 0.0080 98.8792);
+          --border: oklch(0.3618 0.0101 106.8928);
+          --input: oklch(0.4336 0.0113 100.2195);
+          --ring: oklch(0.6724 0.1308 38.7559);
+        }
+
         /* Apply Claude Design System */
         body {
             background-color: var(--background);
@@ -97,6 +118,8 @@
             background-color: var(--accent) !important;
         }
 
+        /* Monaco editor line number spacing - removed conflicting CSS */
+
         /* Button improvements */
         .transition-colors {
             transition: all 0.2s ease-in-out;
@@ -150,6 +173,108 @@
                 padding-right: 1rem;
             }
         }
+
+        /* Modal styles */
+        .modal {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: var(--card);
+            color: var(--card-foreground);
+            border: 1px solid var(--border);
+        }
+
+        /* Toast styles */
+        .toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 9999;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Find/Replace section styles */
+        #find-replace-section {
+            background-color: var(--muted);
+            border-color: var(--border);
+        }
+
+        #find-replace-section input[type="text"] {
+            background-color: var(--background);
+            color: var(--foreground);
+            border-color: var(--border);
+        }
+
+        #find-replace-section input[type="text"]:focus {
+            outline: 2px solid var(--ring);
+            outline-offset: 2px;
+        }
+
+        #find-replace-section label {
+            color: var(--foreground);
+        }
+
+        #find-replace-section input[type="checkbox"] {
+            accent-color: var(--primary);
+        }
+
+        /* Dark theme Monaco editor adjustments */
+        [data-theme="dark"] .monaco-editor {
+            --vscode-editor-background: var(--card) !important;
+            --vscode-editor-foreground: var(--card-foreground) !important;
+        }
+
+        /* Dark theme improvements */
+        [data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        /* Dark theme modal and dropdown adjustments */
+        [data-theme="dark"] .modal-content {
+            background-color: var(--card);
+            color: var(--card-foreground);
+            border-color: var(--border);
+        }
+
+        [data-theme="dark"] #copy-menu {
+            background-color: var(--popover);
+            border-color: var(--border);
+            color: var(--popover-foreground);
+        }
+
+        [data-theme="dark"] #copy-menu button:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        /* Dark theme shortcuts modal code blocks */
+        [data-theme="dark"] code {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+        }
+
+        /* Dark theme close button */
+        [data-theme="dark"] #close-shortcuts-modal {
+            color: var(--muted-foreground);
+        }
+
+        [data-theme="dark"] #close-shortcuts-modal:hover {
+            color: var(--foreground);
+        }
+
+        /* Language selector styling */
+        #language-selector {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border-color: var(--border);
+        }
+
+        #language-selector:focus {
+            outline: 2px solid var(--ring);
+            outline-offset: 2px;
+        }
     </style>
     <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
 </head>
@@ -159,19 +284,56 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <img src="logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
-                    <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                    <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+                        <img src="logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                    </a>
                 </div>
                 <nav class="flex items-center space-x-6">
                     <div class="hidden md:flex space-x-8">
                         <a href="#features" class="text-gray-700 hover:text-primary">Features</a>
                         <a href="#faq" class="text-gray-700 hover:text-primary">FAQ</a>
                     </div>
-                    <a href="https://github.com/indielucas/text-formatter" target="_blank" rel="noopener noreferrer" class="text-gray-700 hover:text-primary transition-colors" title="View on GitHub">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                    </a>
+                    <div class="flex items-center space-x-4">
+                        <!-- Language Selector -->
+                        <!--<select id="language-selector" class="px-2 py-1 text-sm border border-gray-300 rounded format-btn" title="Select Language">
+                            <option value="en">EN</option>
+                            <option value="zh">中文</option>
+                            <option value="ja">日本語</option>
+                        </select>-->
+                        <!-- Theme Toggle -->
+                        <button id="theme-toggle" class="p-2 text-gray-700 hover:text-primary transition-colors" title="Toggle theme">
+                            <svg id="theme-icon-light" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                            <svg id="theme-icon-dark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 hidden">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                        </button>
+
+                        <!-- Keyboard Shortcuts Help -->
+                        <!--<button id="shortcuts-help" class="p-2 text-gray-700 hover:text-primary transition-colors" title="Keyboard shortcuts (Ctrl+?)">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </button>-->
+
+                        <a href="https://github.com/indielucas/text-formatter" target="_blank" rel="noopener noreferrer" class="text-gray-700 hover:text-primary transition-colors" title="View on GitHub">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </nav>
             </div>
         </div>
@@ -229,14 +391,18 @@
                     </div>
 
                     <!-- Editor and Preview -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 editor-preview-container">
+                    <div id="editor-preview-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6 editor-preview-container">
                         <!-- Editor Column -->
-                        <div class="flex flex-col h-full">
+                        <div id="editor-column" class="flex flex-col h-full">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
                                 <h3 class="text-lg font-medium text-gray-900">Text Editor</h3>
 
                                 <!-- Editor Toolbar -->
                                 <div class="flex gap-2 justify-center sm:justify-end">
+                                    <button id="toggleEditor" class="px-3 py-1 format-btn text-sm" title="Toggle between Markdown and WYSIWYG editor">
+                                        📝 WYSIWYG
+                                    </button>
+
                                     <button id="undo" class="px-3 py-1 format-btn text-sm">
                                         ↶ Undo
                                     </button>
@@ -244,25 +410,44 @@
                                         ↷ Redo
                                     </button>
 
-                                    <button id="bold" class="px-3 py-1 format-btn text-sm" title="Bold (Markdown: **text**)">
+                                    <button id="bold" class="px-3 py-1 format-btn text-sm" title="Bold (Cmd+B / Ctrl+B)">
                                         <span class="font-bold">B</span>
                                     </button>
-                                    <button id="italic" class="px-3 py-1 format-btn text-sm" title="Italic (Markdown: *text*)">
+                                    <button id="italic" class="px-3 py-1 format-btn text-sm" title="Italic (Cmd+I / Ctrl+I)">
                                         <span class="italic">I</span>
                                     </button>
-                                    <button id="underline" class="px-3 py-1 format-btn text-sm" title="Underline (HTML: <u>text</u>)">
+                                    <button id="underline" class="px-3 py-1 format-btn text-sm" title="Underline (Cmd+U / Ctrl+U)">
                                         <span class="underline">U</span>
                                     </button>
-                                    <button id="strikethrough" class="px-3 py-1 format-btn text-sm" title="Strikethrough (Markdown: ~~text~~)">
+                                    <button id="strikethrough" class="px-3 py-1 format-btn text-sm" title="Strikethrough (Cmd+Shift+S / Ctrl+Shift+S)">
                                         <span class="line-through">S</span>
                                     </button>
+
+                                    <div id="copy-dropdown" class="relative" style="display: none;">
+                                        <button id="copyWysiwyg" class="px-3 py-1 format-btn text-sm" title="Copy WYSIWYG content">
+                                            📋 Copy ▼
+                                        </button>
+                                        <div id="copy-menu" class="absolute right-0 top-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10 min-w-48" style="display: none;">
+                                            <button id="copyRichText" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm">📄 Copy Rich Text</button>
+                                            <button id="copyMarkdown" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm">📝 Copy as Markdown</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div id="editor" class="border border-gray-300 rounded-lg flex-1"></div>
+                            <div id="editor-container" class="border border-gray-300 rounded-lg flex-1 relative">
+                                <div id="line-numbers" class="absolute left-0 top-0 h-full w-12 bg-gray-50 border-r border-gray-200 text-gray-500 text-sm font-mono select-none" style="display: none;">
+                                </div>
+                                <div id="monaco-editor" class="w-full h-full" style="display: block;"></div>
+                                <div id="wysiwyg-editor" class="w-full h-full p-4 font-mono text-sm outline-none overflow-y-auto"
+                                     contenteditable="true"
+                                     style="display: none; min-height: 300px; line-height: 1.5;"
+                                     placeholder="Start typing your text here...">
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Preview Column -->
-                        <div class="flex flex-col h-full">
+                        <div id="preview-column" class="flex flex-col h-full">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
                                 <h3 class="text-lg font-medium text-gray-900">Preview</h3>
                                 <button id="copyPreview" class="px-3 py-1 format-btn text-sm">
@@ -271,6 +456,40 @@
                             </div>
                             <div id="preview" class="border border-gray-300 rounded-lg p-4 bg-gray-50 font-mono text-sm whitespace-pre-wrap flex-1 overflow-y-auto">
                                 Start typing in the editor to see preview...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Find and Replace Section -->
+                    <div id="find-replace-section" class="mt-6 p-4 bg-gray-50 border border-gray-300 rounded-lg">
+                        <div class="flex flex-col lg:flex-row gap-4">
+                            <div class="flex-1">
+                                <label for="find-input" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="find">Find</label>
+                                <input type="text" id="find-input" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Search text..." data-i18n-placeholder="search_placeholder">
+                                <div id="regex-help" class="text-xs text-gray-500 mt-1" style="display: none;">
+                                    Examples: <code>\w+</code> (words), <code>\d+</code> (numbers), <code>^.*$</code> (lines)
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <label for="replace-input" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="replace">Replace</label>
+                                <input type="text" id="replace-input" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Replace with..." data-i18n-placeholder="replace_placeholder">
+                            </div>
+                            <div class="flex flex-col justify-end">
+                                <div class="flex gap-2 mb-2">
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" id="regex-mode" class="mr-1">
+                                        <span data-i18n="regex">Regex</span>
+                                    </label>
+                                    <label class="flex items-center text-sm">
+                                        <input type="checkbox" id="case-sensitive" class="mr-1">
+                                        <span data-i18n="case_sensitive">Case</span>
+                                    </label>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button id="find-next" class="px-3 py-1 format-btn text-sm" data-i18n="find_next">Find Next</button>
+                                    <button id="replace-one" class="px-3 py-1 format-btn text-sm" data-i18n="replace_one">Replace</button>
+                                    <button id="replace-all" class="px-3 py-1 format-btn text-sm" data-i18n="replace_all">Replace All</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -364,25 +583,136 @@
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Tools</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li>Facebook Text Formatter</li>
-                        <li>LinkedIn Text Formatter</li>
-                        <li>Discord Text Formatter</li>
-                        <li>Online Text Formatter</li>
+                        <li><a href="pages/facebook-text-formatter.html" class="hover:text-white">Facebook Text Formatter</a></li>
+                        <li><a href="pages/linkedin-text-formatter.html" class="hover:text-white">LinkedIn Text Formatter</a></li>
+                        <li><a href="pages/discord-text-formatter.html" class="hover:text-white">Discord Text Formatter</a></li>
+                        <li><a href="pages/online-text-formatter.html" class="hover:text-white">Online Text Formatter</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Legal</h4>
                     <ul class="space-y-2">
-                        <li><a href="privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
-                        <li><a href="terms.html" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                        <li><a href="pages/privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="pages/terms.html" class="text-gray-400 hover:text-white">Terms of Service</a></li>
                     </ul>
                 </div>
             </div>
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 Text Formatter. All rights reserved.</p>
+                <p>&copy; 2025 Text Formatter. All rights reserved.</p>
+                <p class="mt-2 text-sm">Visit us at <a href="https://text-formatter.com" title="Online Text Formatter" class="text-white font-medium">text-formatter.com</a></p>
             </div>
         </div>
     </footer>
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div id="shortcuts-modal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center">
+        <div class="modal-content max-w-2xl w-full mx-4 rounded-lg shadow-2xl p-6 max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold" data-i18n="keyboard_shortcuts">Keyboard Shortcuts</h2>
+                <button id="close-shortcuts-modal" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-3" data-i18n="editing_shortcuts">Editing Shortcuts</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span data-i18n="undo">Undo</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+Z</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="redo">Redo</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+Y</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="bold">Bold</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+B</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="italic">Italic</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+I</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="underline">Underline</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+U</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="strikethrough">Strikethrough</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+Shift+S</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="select_all">Select All</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+A</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="copy">Copy</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+C</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="paste">Paste</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+V</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="cut">Cut</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+X</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-3" data-i18n="navigation_shortcuts">Navigation Shortcuts</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span data-i18n="delete_line">Delete Line</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+D</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="select_line">Select Line</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+L</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="move_line_up">Move Line Up</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Alt+↑</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="move_line_down">Move Line Down</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Alt+↓</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="duplicate_line">Duplicate Line</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+Shift+D</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="find">Find</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+F</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="find_replace">Find & Replace</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+H</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="go_to_line">Go to Line</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+G</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="toggle_editor">Toggle Editor</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+E</code>
+                        </div>
+                        <div class="flex justify-between">
+                            <span data-i18n="help">Help</span>
+                            <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+?</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-200">
+                <p class="text-sm text-gray-600" data-i18n="shortcuts_note">
+                    Note: Use Cmd instead of Ctrl on Mac. Press Escape to close this dialog.
+                </p>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
