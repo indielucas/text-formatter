@@ -27,8 +27,16 @@
             overflow: hidden;
         }
 
-        /* Ensure proper height on mobile */
+        /* Ensure consistent heights */
+        .editor-preview-container {
+            min-height: 600px;
+        }
+
         @media (max-width: 1024px) {
+            .editor-preview-container {
+                min-height: 500px;
+            }
+
             #editor, #preview {
                 min-height: 300px !important;
             }
@@ -64,6 +72,25 @@
 
         .monaco-editor .current-line {
             background-color: rgba(59, 130, 246, 0.1) !important;
+        }
+
+        /* Perfect alignment fixes */
+        #editor {
+            min-height: calc(100% - 4px) !important;
+        }
+
+        #preview {
+            min-height: calc(100% - 4px) !important;
+        }
+
+        /* Ensure the flex containers match exactly */
+        .editor-preview-container .flex {
+            align-items: stretch;
+        }
+
+        /* Remove any default margins/padding that might cause misalignment */
+        .monaco-editor .overflow-guard {
+            border-radius: 0.5rem;
         }
     </style>
     <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
@@ -147,9 +174,9 @@
                     </div>
 
                     <!-- Editor and Preview -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 editor-preview-container">
                         <!-- Editor Column -->
-                        <div class="flex flex-col">
+                        <div class="flex flex-col h-full">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
                                 <h3 class="text-lg font-medium text-gray-900">Text Editor</h3>
 
@@ -169,18 +196,18 @@
                                     </button>
                                 </div>
                             </div>
-                            <div id="editor" class="border border-gray-300 rounded-lg flex-1 min-h-[400px] lg:min-h-[500px]"></div>
+                            <div id="editor" class="border border-gray-300 rounded-lg flex-1"></div>
                         </div>
 
                         <!-- Preview Column -->
-                        <div class="flex flex-col">
+                        <div class="flex flex-col h-full">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
                                 <h3 class="text-lg font-medium text-gray-900">Preview</h3>
                                 <button id="copyPreview" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary font-medium transition-colors w-full sm:w-auto">
                                     📋 Copy to Clipboard
                                 </button>
                             </div>
-                            <div id="preview" class="border border-gray-300 rounded-lg p-4 bg-gray-50 font-mono text-sm whitespace-pre-wrap flex-1 overflow-y-auto min-h-[400px] lg:min-h-[500px]">
+                            <div id="preview" class="border border-gray-300 rounded-lg p-4 bg-gray-50 font-mono text-sm whitespace-pre-wrap flex-1 overflow-y-auto">
                                 Start typing in the editor to see preview...
                             </div>
                         </div>

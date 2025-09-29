@@ -31,7 +31,6 @@ class TextFormatter {
                 roundedSelection: false,
                 readOnly: false,
                 cursorStyle: 'line',
-                automaticLayout: true,
                 glyphMargin: false,
                 folding: false,
                 lineDecorationsWidth: 0,
@@ -45,7 +44,11 @@ class TextFormatter {
                 renderWhitespace: 'selection',
                 bracketPairColorization: {
                     enabled: true
-                }
+                },
+                padding: { top: 16, bottom: 16 },
+                overviewRulerLanes: 0,
+                hideCursorInOverviewRuler: true,
+                overviewRulerBorder: false
             });
 
             this.editor.onDidChangeModelContent(() => {
@@ -59,6 +62,13 @@ class TextFormatter {
                 contextMenuGroupId: 'modification',
                 run: () => {
                     this.formatSelectedText();
+                }
+            });
+
+            // Ensure editor resizes properly
+            window.addEventListener('resize', () => {
+                if (this.editor) {
+                    this.editor.layout();
                 }
             });
 
