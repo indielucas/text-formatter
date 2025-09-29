@@ -36,7 +36,7 @@ wrangler pages project create text-formatter 2>/dev/null || echo "项目可能�
 
 # 部署网站
 echo "🌐 正在部署网站..."
-wrangler pages deploy ./ --project-name=text-formatter --compatibility-date=2024-09-29
+wrangler pages deploy ./ --project-name=text-formatter
 
 if [ $? -eq 0 ]; then
     echo "✅ 部署成功！"
