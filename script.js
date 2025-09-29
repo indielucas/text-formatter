@@ -26,11 +26,40 @@ class TextFormatter {
                 automaticLayout: true,
                 fontSize: 14,
                 lineNumbers: 'on',
-                scrollBeyondLastLine: false
+                scrollBeyondLastLine: false,
+                selectOnLineNumbers: true,
+                roundedSelection: false,
+                readOnly: false,
+                cursorStyle: 'line',
+                automaticLayout: true,
+                glyphMargin: false,
+                folding: false,
+                lineDecorationsWidth: 0,
+                lineNumbersMinChars: 3,
+                renderLineHighlight: 'line',
+                contextmenu: true,
+                mouseWheelZoom: true,
+                smoothScrolling: true,
+                cursorBlinking: 'blink',
+                cursorSmoothCaretAnimation: true,
+                renderWhitespace: 'selection',
+                bracketPairColorization: {
+                    enabled: true
+                }
             });
 
             this.editor.onDidChangeModelContent(() => {
                 this.updatePreview();
+            });
+
+            // Add context menu options
+            this.editor.addAction({
+                id: 'format-text',
+                label: 'Format Text',
+                contextMenuGroupId: 'modification',
+                run: () => {
+                    this.formatSelectedText();
+                }
             });
 
             this.updatePreview();
@@ -50,6 +79,12 @@ class TextFormatter {
         document.getElementById('lowercase').addEventListener('click', () => this.toLowerCase());
         document.getElementById('sentenceCase').addEventListener('click', () => this.toSentenceCase());
         document.getElementById('titleCase').addEventListener('click', () => this.toTitleCase());
+
+        // Editor toolbar buttons
+        document.getElementById('bold').addEventListener('click', () => this.wrapSelectedText('**', '**'));
+        document.getElementById('italic').addEventListener('click', () => this.wrapSelectedText('*', '*'));
+        document.getElementById('underline').addEventListener('click', () => this.wrapSelectedText('<u>', '</u>'));
+        document.getElementById('strikethrough').addEventListener('click', () => this.wrapSelectedText('~~', '~~'));
 
         // History buttons
         document.getElementById('undo').addEventListener('click', () => this.undo());
@@ -218,6 +253,71 @@ class TextFormatter {
             console.error('Failed to copy text: ', err);
             alert('Failed to copy text. Please try again.');
         }
+    }
+
+    wrapSelectedText(startWrapper, endWrapper) {
+        if (!this.editor) return;
+
+        const selection = this.editor.getSelection();
+        const selectedText = this.editor.getModel().getValueInRange(selection);
+
+        if (selectedText) {
+            // If text is selected, wrap it
+            const wrappedText = `${startWrapper}${selectedText}${endWrapper}`;
+            this.editor.executeEdits('', [{
+                range: selection,
+                text: wrappedText
+            }]);
+        } else {
+            // If no text is selected, insert wrapper at cursor position
+            const position = this.editor.getPosition();
+            const wrappedText = `${startWrapper}${endWrapper}`;
+            this.editor.executeEdits('', [{
+                range: new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column),
+                text: wrappedText
+            }]);
+
+            // Move cursor between the wrappers
+            const newPosition = new monaco.Position(position.lineNumber, position.column + startWrapper.length);
+            this.editor.setPosition(newPosition);
+        }
+
+        this.editor.focus();
+        this.saveToHistory(this.editor.getValue());
+    }
+
+    formatSelectedText() {
+        if (!this.editor) return;
+
+        const selection = this.editor.getSelection();
+        const selectedText = this.editor.getModel().getValueInRange(selection);
+
+        if (selectedText) {
+            // Apply basic formatting to selected text
+            const formattedText = selectedText.trim();
+            this.editor.executeEdits('', [{
+                range: selection,
+                text: formattedText
+            }]);
+
+            this.saveToHistory(this.editor.getValue());
+        }
+    }
+
+    getSelectedText() {
+        if (!this.editor) return '';
+        const selection = this.editor.getSelection();
+        return this.editor.getModel().getValueInRange(selection);
+    }
+
+    replaceSelectedText(newText) {
+        if (!this.editor) return;
+        const selection = this.editor.getSelection();
+        this.editor.executeEdits('', [{
+            range: selection,
+            text: newText
+        }]);
+        this.saveToHistory(this.editor.getValue());
     }
 }
 
