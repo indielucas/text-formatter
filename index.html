@@ -264,17 +264,6 @@
             color: var(--foreground);
         }
 
-        /* Language selector styling */
-        #language-selector {
-            background-color: var(--secondary);
-            color: var(--secondary-foreground);
-            border-color: var(--border);
-        }
-
-        #language-selector:focus {
-            outline: 2px solid var(--ring);
-            outline-offset: 2px;
-        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 </head>
@@ -295,12 +284,6 @@
                         <a href="#faq" class="text-gray-700 hover:text-primary">FAQ</a>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <!-- Language Selector -->
-                        <!--<select id="language-selector" class="px-2 py-1 text-sm border border-gray-300 rounded format-btn" title="Select Language">
-                            <option value="en">EN</option>
-                            <option value="zh">中文</option>
-                            <option value="ja">日本語</option>
-                        </select>-->
                         <!-- Theme Toggle -->
                         <button id="theme-toggle" class="p-2 text-gray-700 hover:text-primary transition-colors" title="Toggle theme">
                             <svg id="theme-icon-light" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
@@ -464,31 +447,31 @@
                     <div id="find-replace-section" class="mt-6 p-4 bg-gray-50 border border-gray-300 rounded-lg">
                         <div class="flex flex-col lg:flex-row gap-4">
                             <div class="flex-1">
-                                <label for="find-input" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="find">Find</label>
-                                <input type="text" id="find-input" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Search text..." data-i18n-placeholder="search_placeholder">
+                                <label for="find-input" class="block text-sm font-medium text-gray-700 mb-1">Find</label>
+                                <input type="text" id="find-input" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Search text...">
                                 <div id="regex-help" class="text-xs text-gray-500 mt-1" style="display: none;">
                                     Examples: <code>\w+</code> (words), <code>\d+</code> (numbers), <code>^.*$</code> (lines)
                                 </div>
                             </div>
                             <div class="flex-1">
-                                <label for="replace-input" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="replace">Replace</label>
-                                <input type="text" id="replace-input" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Replace with..." data-i18n-placeholder="replace_placeholder">
+                                <label for="replace-input" class="block text-sm font-medium text-gray-700 mb-1">Replace</label>
+                                <input type="text" id="replace-input" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Replace with...">
                             </div>
                             <div class="flex flex-col justify-end">
                                 <div class="flex gap-2 mb-2">
                                     <label class="flex items-center text-sm">
                                         <input type="checkbox" id="regex-mode" class="mr-1">
-                                        <span data-i18n="regex">Regex</span>
+                                        <span>Regex</span>
                                     </label>
                                     <label class="flex items-center text-sm">
                                         <input type="checkbox" id="case-sensitive" class="mr-1">
-                                        <span data-i18n="case_sensitive">Case</span>
+                                        <span>Case</span>
                                     </label>
                                 </div>
                                 <div class="flex gap-2">
-                                    <button id="find-next" class="px-3 py-1 format-btn text-sm" data-i18n="find_next">Find Next</button>
-                                    <button id="replace-one" class="px-3 py-1 format-btn text-sm" data-i18n="replace_one">Replace</button>
-                                    <button id="replace-all" class="px-3 py-1 format-btn text-sm" data-i18n="replace_all">Replace All</button>
+                                    <button id="find-next" class="px-3 py-1 format-btn text-sm">Find Next</button>
+                                    <button id="replace-one" class="px-3 py-1 format-btn text-sm">Replace</button>
+                                    <button id="replace-all" class="px-3 py-1 format-btn text-sm">Replace All</button>
                                 </div>
                             </div>
                         </div>
@@ -608,98 +591,98 @@
     <div id="shortcuts-modal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center">
         <div class="modal-content max-w-2xl w-full mx-4 rounded-lg shadow-2xl p-6 max-h-[80vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold" data-i18n="keyboard_shortcuts">Keyboard Shortcuts</h2>
+                <h2 class="text-2xl font-bold">Keyboard Shortcuts</h2>
                 <button id="close-shortcuts-modal" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <h3 class="text-lg font-semibold mb-3" data-i18n="editing_shortcuts">Editing Shortcuts</h3>
+                    <h3 class="text-lg font-semibold mb-3">Editing Shortcuts</h3>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
-                            <span data-i18n="undo">Undo</span>
+                            <span>Undo</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+Z</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="redo">Redo</span>
+                            <span>Redo</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+Y</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="bold">Bold</span>
+                            <span>Bold</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+B</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="italic">Italic</span>
+                            <span>Italic</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+I</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="underline">Underline</span>
+                            <span>Underline</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+U</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="strikethrough">Strikethrough</span>
+                            <span>Strikethrough</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+Shift+S</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="select_all">Select All</span>
+                            <span>Select All</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+A</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="copy">Copy</span>
+                            <span>Copy</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+C</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="paste">Paste</span>
+                            <span>Paste</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+V</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="cut">Cut</span>
+                            <span>Cut</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+X</code>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-semibold mb-3" data-i18n="navigation_shortcuts">Navigation Shortcuts</h3>
+                    <h3 class="text-lg font-semibold mb-3">Navigation Shortcuts</h3>
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
-                            <span data-i18n="delete_line">Delete Line</span>
+                            <span>Delete Line</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+D</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="select_line">Select Line</span>
+                            <span>Select Line</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+L</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="move_line_up">Move Line Up</span>
+                            <span>Move Line Up</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Alt+↑</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="move_line_down">Move Line Down</span>
+                            <span>Move Line Down</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Alt+↓</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="duplicate_line">Duplicate Line</span>
+                            <span>Duplicate Line</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+Shift+D</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="find">Find</span>
+                            <span>Find</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+F</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="find_replace">Find & Replace</span>
+                            <span>Find & Replace</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+H</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="go_to_line">Go to Line</span>
+                            <span>Go to Line</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+G</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="toggle_editor">Toggle Editor</span>
+                            <span>Toggle Editor</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+E</code>
                         </div>
                         <div class="flex justify-between">
-                            <span data-i18n="help">Help</span>
+                            <span>Help</span>
                             <code class="bg-gray-100 px-2 py-1 rounded">Ctrl+?</code>
                         </div>
                     </div>
@@ -707,7 +690,7 @@
             </div>
 
             <div class="mt-6 pt-4 border-t border-gray-200">
-                <p class="text-sm text-gray-600" data-i18n="shortcuts_note">
+                <p class="text-sm text-gray-600">
                     Note: Use Cmd instead of Ctrl on Mac. Press Escape to close this dialog.
                 </p>
             </div>

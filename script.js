@@ -6,15 +6,9 @@ class TextFormatter {
         this.history = [];
         this.historyIndex = -1;
         this.maxHistorySize = 50;
-        this.currentLanguage = 'en';
         this.currentTheme = 'light';
         this.findMatches = [];
         this.currentMatchIndex = -1;
-        this.languages = {
-            en: {},
-            zh: {},
-            ja: {}
-        };
         this.initializeSettings();
         this.init();
     }
@@ -25,136 +19,10 @@ class TextFormatter {
         const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         this.currentTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
 
-        // Load language preference
-        const savedLanguage = localStorage.getItem('textFormatter_language');
-        const browserLanguage = navigator.language.split('-')[0];
-        this.currentLanguage = savedLanguage || (this.languages[browserLanguage] ? browserLanguage : 'en');
-
-        // Initialize language data
-        this.initializeLanguages();
-
         // Apply theme
         this.applyTheme();
-
-        // Apply language
-        this.applyLanguage();
     }
 
-    initializeLanguages() {
-        this.languages = {
-            en: {
-                // General
-                find: 'Find',
-                replace: 'Replace',
-                regex: 'Regex',
-                case_sensitive: 'Case',
-                find_next: 'Find Next',
-                replace_one: 'Replace',
-                replace_all: 'Replace All',
-                search_placeholder: 'Search text...',
-                replace_placeholder: 'Replace with...',
-
-                // Shortcuts
-                keyboard_shortcuts: 'Keyboard Shortcuts',
-                editing_shortcuts: 'Editing Shortcuts',
-                navigation_shortcuts: 'Navigation Shortcuts',
-                undo: 'Undo',
-                redo: 'Redo',
-                bold: 'Bold',
-                italic: 'Italic',
-                underline: 'Underline',
-                strikethrough: 'Strikethrough',
-                select_all: 'Select All',
-                copy: 'Copy',
-                paste: 'Paste',
-                cut: 'Cut',
-                delete_line: 'Delete Line',
-                select_line: 'Select Line',
-                move_line_up: 'Move Line Up',
-                move_line_down: 'Move Line Down',
-                duplicate_line: 'Duplicate Line',
-                find_replace: 'Find & Replace',
-                go_to_line: 'Go to Line',
-                toggle_editor: 'Toggle Editor',
-                help: 'Help',
-                shortcuts_note: 'Note: Use Cmd instead of Ctrl on Mac. Press Escape to close this dialog.'
-            },
-            zh: {
-                // General
-                find: '查找',
-                replace: '替换',
-                regex: '正则',
-                case_sensitive: '区分大小写',
-                find_next: '查找下一个',
-                replace_one: '替换',
-                replace_all: '全部替换',
-                search_placeholder: '搜索文本...',
-                replace_placeholder: '替换为...',
-
-                // Shortcuts
-                keyboard_shortcuts: '键盘快捷键',
-                editing_shortcuts: '编辑快捷键',
-                navigation_shortcuts: '导航快捷键',
-                undo: '撤销',
-                redo: '重做',
-                bold: '粗体',
-                italic: '斜体',
-                underline: '下划线',
-                strikethrough: '删除线',
-                select_all: '全选',
-                copy: '复制',
-                paste: '粘贴',
-                cut: '剪切',
-                delete_line: '删除行',
-                select_line: '选择行',
-                move_line_up: '上移行',
-                move_line_down: '下移行',
-                duplicate_line: '复制行',
-                find_replace: '查找替换',
-                go_to_line: '跳转到行',
-                toggle_editor: '切换编辑器',
-                help: '帮助',
-                shortcuts_note: '注意：在Mac上使用Cmd代替Ctrl。按Escape关闭此对话框。'
-            },
-            ja: {
-                // General
-                find: '検索',
-                replace: '置換',
-                regex: '正規表現',
-                case_sensitive: '大文字小文字',
-                find_next: '次を検索',
-                replace_one: '置換',
-                replace_all: 'すべて置換',
-                search_placeholder: 'テキストを検索...',
-                replace_placeholder: '置換後のテキスト...',
-
-                // Shortcuts
-                keyboard_shortcuts: 'キーボードショートカット',
-                editing_shortcuts: '編集ショートカット',
-                navigation_shortcuts: 'ナビゲーションショートカット',
-                undo: '元に戻す',
-                redo: 'やり直し',
-                bold: '太字',
-                italic: '斜体',
-                underline: '下線',
-                strikethrough: '取り消し線',
-                select_all: 'すべて選択',
-                copy: 'コピー',
-                paste: '貼り付け',
-                cut: '切り取り',
-                delete_line: '行を削除',
-                select_line: '行を選択',
-                move_line_up: '行を上に移動',
-                move_line_down: '行を下に移動',
-                duplicate_line: '行を複製',
-                find_replace: '検索と置換',
-                go_to_line: '行に移動',
-                toggle_editor: 'エディター切り替え',
-                help: 'ヘルプ',
-                shortcuts_note: '注意：MacではCtrlの代わりにCmdを使用してください。Escapeを押してこのダイアログを閉じます。'
-            }
-        };
-    }
 
     init() {
         this.loadHistory();
@@ -698,13 +566,6 @@ class TextFormatter {
         // Theme toggle
         document.getElementById('theme-toggle').addEventListener('click', () => this.toggleTheme());
 
-        // Language selector (check if exists first)
-        const languageSelector = document.getElementById('language-selector');
-        if (languageSelector) {
-            languageSelector.addEventListener('change', (e) => {
-                this.changeLanguage(e.target.value);
-            });
-        }
 
         // Shortcuts help (check if exists first)
         const shortcutsHelp = document.getElementById('shortcuts-help');
@@ -1169,40 +1030,6 @@ class TextFormatter {
         this.applyTheme();
     }
 
-    // Language Management
-    applyLanguage() {
-        const elements = document.querySelectorAll('[data-i18n]');
-        elements.forEach(element => {
-            const key = element.getAttribute('data-i18n');
-            if (this.languages[this.currentLanguage] && this.languages[this.currentLanguage][key]) {
-                element.textContent = this.languages[this.currentLanguage][key];
-            }
-        });
-
-        const placeholderElements = document.querySelectorAll('[data-i18n-placeholder]');
-        placeholderElements.forEach(element => {
-            const key = element.getAttribute('data-i18n-placeholder');
-            if (this.languages[this.currentLanguage] && this.languages[this.currentLanguage][key]) {
-                element.placeholder = this.languages[this.currentLanguage][key];
-            }
-        });
-
-        // Update language selector
-        const languageSelector = document.getElementById('language-selector');
-        if (languageSelector) {
-            languageSelector.value = this.currentLanguage;
-        }
-
-        // Save preference
-        localStorage.setItem('textFormatter_language', this.currentLanguage);
-    }
-
-    changeLanguage(language) {
-        if (this.languages[language]) {
-            this.currentLanguage = language;
-            this.applyLanguage();
-        }
-    }
 
     // Find and Replace functionality
     performFind() {
