@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Formatter - Online Text Formatting Tool</title>
+    <meta name="description" content="Free online text formatter for Facebook, LinkedIn, Discord. Format text with bold, italic, line numbers, remove empty lines, and more.">
+    <meta name="keywords" content="Text Formatter, Facebook Text Formatter, Linkedin Text Formatter, Discord Text Formatter, Online Text Formatter">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af'
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <img src="logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                    <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                </div>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#features" class="text-gray-700 hover:text-primary">Features</a>
+                    <a href="#faq" class="text-gray-700 hover:text-primary">FAQ</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Text Formatter Tool -->
+        <section class="py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Online Text Formatter</h2>
+                    <p class="text-lg text-gray-600">Format your text for Facebook, LinkedIn, Discord and more with our powerful online text formatting tool</p>
+                </div>
+
+                <!-- Tool Interface -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <!-- Action Buttons -->
+                    <div class="mb-6">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <button id="addLineNumbers" class="px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-sm">
+                                📝 Add Line Numbers
+                            </button>
+                            <button id="removeEmptyLines" class="px-3 py-2 bg-green-100 text-green-700 rounded hover:bg-green-200 text-sm">
+                                🗑️ Remove Empty Lines
+                            </button>
+                            <button id="joinLines" class="px-3 py-2 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 text-sm">
+                                📄 Join Lines
+                            </button>
+                            <button id="removeWhitespace" class="px-3 py-2 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 text-sm">
+                                ✂️ Remove Whitespace
+                            </button>
+                            <button id="removeEmoji" class="px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 text-sm">
+                                🚫 Remove Emoji
+                            </button>
+                            <button id="addDate" class="px-3 py-2 bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 text-sm">
+                                📅 Add Date
+                            </button>
+                            <button id="uppercase" class="px-3 py-2 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 text-sm">
+                                ⬆️ UPPERCASE
+                            </button>
+                            <button id="lowercase" class="px-3 py-2 bg-pink-100 text-pink-700 rounded hover:bg-pink-200 text-sm">
+                                ⬇️ lowercase
+                            </button>
+                            <button id="sentenceCase" class="px-3 py-2 bg-teal-100 text-teal-700 rounded hover:bg-teal-200 text-sm">
+                                📝 Sentence case
+                            </button>
+                            <button id="titleCase" class="px-3 py-2 bg-cyan-100 text-cyan-700 rounded hover:bg-cyan-200 text-sm">
+                                🏷️ Title Case
+                            </button>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="undo" class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 disabled:opacity-50">
+                                ↶ Undo
+                            </button>
+                            <button id="redo" class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 disabled:opacity-50">
+                                ↷ Redo
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Editor and Preview -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Editor -->
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-3">Text Editor</h3>
+                            <div id="editor" class="border border-gray-300 rounded-lg" style="height: 400px;"></div>
+                        </div>
+
+                        <!-- Preview -->
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="text-lg font-medium text-gray-900">Preview</h3>
+                                <button id="copyPreview" class="px-4 py-2 bg-primary text-white rounded hover:bg-secondary">
+                                    📋 Copy
+                                </button>
+                            </div>
+                            <div id="preview" class="border border-gray-300 rounded-lg p-4 bg-gray-50 font-mono text-sm whitespace-pre-wrap" style="height: 400px; overflow-y: auto;">
+                                Start typing in the editor to see preview...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">About Text Formatter</h2>
+                    <div class="max-w-3xl mx-auto text-gray-600 space-y-4">
+                        <p>
+                            Text Formatter is a powerful online text formatting tool designed to help you format text for various social media platforms including Facebook, LinkedIn, Discord, and more. Whether you're a content creator, social media manager, or just someone who wants to make their text look more professional, our tool provides all the essential formatting features you need.
+                        </p>
+                        <p>
+                            Our comprehensive text formatter includes features like adding line numbers, removing empty lines, joining text into single lines, removing unnecessary whitespace and emojis, adding current dates, and converting text case (uppercase, lowercase, sentence case, and title case). The intuitive interface makes it easy to format your text exactly how you want it.
+                        </p>
+                        <p>
+                            With real-time preview functionality, you can see your changes instantly before copying the formatted text. The built-in undo and redo system ensures you never lose your work, and all processing happens locally in your browser for maximum privacy and speed. Perfect for Facebook text formatting, LinkedIn post formatting, Discord message formatting, and any other online text formatting needs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="py-16 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">What is a text formatter and how does it work?</h3>
+                        <p class="text-gray-600">A text formatter is a tool that helps you modify and style text according to specific formatting rules. Our online text formatter processes your text in real-time, allowing you to add line numbers, change case, remove unwanted characters, and more with just a click.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Can I use this text formatter for Facebook posts?</h3>
+                        <p class="text-gray-600">Yes! Our text formatter is perfect for Facebook posts. You can format your text with line numbers, proper capitalization, remove extra spaces, and ensure your posts look professional and well-structured.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Is this text formatter compatible with LinkedIn?</h3>
+                        <p class="text-gray-600">Absolutely! The formatted text works great for LinkedIn posts and articles. Use features like title case for headlines, sentence case for professional content, and line numbering for structured posts.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Does the text formatter work with Discord?</h3>
+                        <p class="text-gray-600">Yes, our formatter works perfectly with Discord. Format your messages, remove emojis when needed, join lines for cleaner messages, or add line numbers for code snippets and structured content.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Is my text data secure when using this formatter?</h3>
+                        <p class="text-gray-600">Yes, your data is completely secure. All text processing happens locally in your browser - no text is sent to our servers. Your content remains private and is only stored locally for undo/redo functionality.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Can I undo changes made to my text?</h3>
+                        <p class="text-gray-600">Yes! Our text formatter includes a comprehensive undo/redo system that saves up to 50 steps of your editing history. You can easily revert any changes or redo actions you've undone.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">What text case options are available?</h3>
+                        <p class="text-gray-600">We offer four case formatting options: UPPERCASE (all caps), lowercase (all lowercase), Sentence case (first letter capitalized), and Title Case (Each Word Capitalized). Perfect for different formatting needs.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">How do I remove empty lines from my text?</h3>
+                        <p class="text-gray-600">Simply paste your text into the editor and click the "Remove Empty Lines" button. The formatter will automatically detect and remove all blank lines, leaving you with clean, condensed text.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Can I add line numbers to my text?</h3>
+                        <p class="text-gray-600">Yes! Click the "Add Line Numbers" button to automatically number each line of your text. This is especially useful for code snippets, lists, or any content that benefits from numbered structure.</p>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-sm">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Is this online text formatter free to use?</h3>
+                        <p class="text-gray-600">Yes, our text formatter is completely free to use with no registration required. All features are available at no cost, and there are no limits on how much text you can format.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h3 class="text-lg font-bold">Text Formatter</h3>
+                    </div>
+                    <p class="text-gray-400">Professional online text formatting tool for all your text processing needs.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Tools</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Facebook Text Formatter</li>
+                        <li>LinkedIn Text Formatter</li>
+                        <li>Discord Text Formatter</li>
+                        <li>Online Text Formatter</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="terms.html" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Text Formatter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
