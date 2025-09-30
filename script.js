@@ -9,6 +9,11 @@ class TextFormatter {
         this.currentTheme = 'light';
         this.findMatches = [];
         this.currentMatchIndex = -1;
+        // Auto-save configuration
+        this.autoSaveKey = 'textFormatter_editorContent';
+        this.autoSaveDebounceTime = 500; // 500ms debounce
+        this.autoSaveTimeout = null;
+        this.isUndoRedoOperation = false; // Flag to prevent auto-save during undo/redo
         this.initializeSettings();
         this.init();
     }
@@ -67,8 +72,14 @@ class TextFormatter {
         });
 
         require(['vs/editor/editor.main'], () => {
+            // Load cached content if available
+            const cachedData = this.loadCachedContent();
+            const initialValue = cachedData && cachedData.content ?
+                cachedData.content :
+                'Start typing your text here...\n\nUse the buttons above to format your text.';
+
             this.editor = monaco.editor.create(document.getElementById('monaco-editor'), {
-                value: 'Start typing your text here...\n\nUse the buttons above to format your text.',
+                value: initialValue,
                 language: 'plaintext',
                 theme: this.currentTheme === 'dark' ? 'vs-dark' : 'vs',
                 minimap: { enabled: false },
@@ -103,6 +114,11 @@ class TextFormatter {
 
             this.editor.onDidChangeModelContent(() => {
                 this.updatePreview();
+                // Auto-save content changes (but not during undo/redo operations)
+                if (!this.isUndoRedoOperation) {
+                    const content = this.editor.getValue();
+                    this.debouncedAutoSave(content);
+                }
             });
 
             // Add keyboard shortcuts
@@ -144,11 +160,17 @@ class TextFormatter {
         console.log('Using fallback textarea editor');
         const monacoContainer = document.getElementById('monaco-editor');
 
+        // Load cached content if available
+        const cachedData = this.loadCachedContent();
+        const initialValue = cachedData && cachedData.content ?
+            cachedData.content :
+            'Start typing your text here...\n\nUse the buttons above to format your text.';
+
         // Create fallback textarea
         const textarea = document.createElement('textarea');
         textarea.id = 'fallback-editor';
         textarea.className = 'w-full h-full p-4 font-mono text-sm border-none outline-none resize-none';
-        textarea.value = 'Start typing your text here...\n\nUse the buttons above to format your text.';
+        textarea.value = initialValue;
         textarea.style.backgroundColor = 'var(--background)';
         textarea.style.color = 'var(--foreground)';
         textarea.style.minHeight = '400px';
@@ -196,6 +218,10 @@ class TextFormatter {
         // Add event listeners
         textarea.addEventListener('input', () => {
             this.updatePreview();
+            // Auto-save content changes (but not during undo/redo operations)
+            if (!this.isUndoRedoOperation) {
+                this.debouncedAutoSave(textarea.value);
+            }
         });
 
         // Save initial state
@@ -232,12 +258,23 @@ class TextFormatter {
     initWysiwygEditor() {
         this.wysiwygEditor = document.getElementById('wysiwyg-editor');
 
+        // Load cached content if available and in WYSIWYG mode
+        const cachedData = this.loadCachedContent();
+        const initialContent = cachedData && cachedData.content && cachedData.editor === 'wysiwyg' ?
+            this.parseMarkdown(cachedData.content) :
+            'Start typing your text here...<br><br>Use the buttons above to format your text.';
+
         // Set initial content
-        this.wysiwygEditor.innerHTML = 'Start typing your text here...<br><br>Use the buttons above to format your text.';
+        this.wysiwygEditor.innerHTML = initialContent;
 
         // Add event listeners
         this.wysiwygEditor.addEventListener('input', () => {
             this.updatePreview();
+            // Auto-save content changes (but not during undo/redo operations)
+            if (!this.isUndoRedoOperation) {
+                const content = this.htmlToMarkdown(this.wysiwygEditor.innerHTML);
+                this.debouncedAutoSave(content);
+            }
         });
 
         this.wysiwygEditor.addEventListener('keydown', (e) => {
@@ -354,6 +391,10 @@ class TextFormatter {
             this.currentEditor = 'wysiwyg';
             toggleButton.textContent = '⌨️ Code';
             toggleButton.title = 'Switch to Markdown editor';
+
+            // Auto-save the current content
+            const wysiwygContent = this.htmlToMarkdown(wysiwygEditor.innerHTML);
+            this.debouncedAutoSave(wysiwygContent);
         } else {
             // Switch to Monaco
             const htmlContent = wysiwygEditor.innerHTML;
@@ -377,6 +418,11 @@ class TextFormatter {
             this.currentEditor = 'monaco';
             toggleButton.textContent = '📝 WYSIWYG';
             toggleButton.title = 'Switch to WYSIWYG editor';
+
+            // Auto-save the current content
+            if (this.editor) {
+                this.debouncedAutoSave(this.editor.getValue());
+            }
         }
 
         this.updatePreview();
@@ -419,9 +465,17 @@ class TextFormatter {
         if (this.currentEditor === 'monaco') {
             if (this.editor) {
                 this.editor.setValue(value);
+                // Auto-save when content is programmatically set (but not during undo/redo)
+                if (!this.isUndoRedoOperation) {
+                    this.debouncedAutoSave(value);
+                }
             }
         } else {
             this.wysiwygEditor.innerHTML = this.parseMarkdown(value);
+            // Auto-save when content is programmatically set (but not during undo/redo)
+            if (!this.isUndoRedoOperation) {
+                this.debouncedAutoSave(value);
+            }
         }
     }
 
@@ -710,7 +764,9 @@ class TextFormatter {
     undo() {
         if (this.historyIndex > 0) {
             this.historyIndex--;
+            this.isUndoRedoOperation = true;
             this.setCurrentEditorValue(this.history[this.historyIndex]);
+            this.isUndoRedoOperation = false;
             this.updateUndoRedoButtons();
         }
     }
@@ -718,7 +774,9 @@ class TextFormatter {
     redo() {
         if (this.historyIndex < this.history.length - 1) {
             this.historyIndex++;
+            this.isUndoRedoOperation = true;
             this.setCurrentEditorValue(this.history[this.historyIndex]);
+            this.isUndoRedoOperation = false;
             this.updateUndoRedoButtons();
         }
     }
@@ -752,10 +810,59 @@ class TextFormatter {
         }
     }
 
+    // Auto-save functionality
+    saveContentToCache(content) {
+        try {
+            const saveData = {
+                content: content,
+                timestamp: Date.now(),
+                editor: this.currentEditor
+            };
+            localStorage.setItem(this.autoSaveKey, JSON.stringify(saveData));
+        } catch (e) {
+            console.warn('Failed to save content to localStorage:', e);
+        }
+    }
+
+    loadCachedContent() {
+        try {
+            const saved = localStorage.getItem(this.autoSaveKey);
+            if (saved) {
+                const data = JSON.parse(saved);
+                return {
+                    content: data.content || '',
+                    timestamp: data.timestamp || 0,
+                    editor: data.editor || 'monaco'
+                };
+            }
+        } catch (e) {
+            console.warn('Failed to load cached content:', e);
+        }
+        return null;
+    }
+
+    debouncedAutoSave(content) {
+        // Clear existing timeout
+        if (this.autoSaveTimeout) {
+            clearTimeout(this.autoSaveTimeout);
+        }
+
+        // Set new timeout
+        this.autoSaveTimeout = setTimeout(() => {
+            this.saveContentToCache(content);
+        }, this.autoSaveDebounceTime);
+    }
+
     formatText(formatter) {
         const currentText = this.getCurrentEditorValue();
+
+        // 先保存当前状态到历史记录（操作前的状态）
+        this.saveToHistory(currentText);
+
         const newText = formatter(currentText);
         this.setCurrentEditorValue(newText);
+
+        // 再保存新的状态到历史记录（操作后的状态）
         this.saveToHistory(newText);
     }
 
@@ -793,6 +900,10 @@ class TextFormatter {
 
     addDate() {
         const currentText = this.getCurrentEditorValue();
+
+        // 先保存当前状态到历史记录（操作前的状态）
+        this.saveToHistory(currentText);
+
         const date = new Date().toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
@@ -800,6 +911,8 @@ class TextFormatter {
         });
         const newText = currentText + '\n\n' + date;
         this.setCurrentEditorValue(newText);
+
+        // 再保存新的状态到历史记录（操作后的状态）
         this.saveToHistory(newText);
     }
 
