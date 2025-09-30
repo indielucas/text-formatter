@@ -166,6 +166,16 @@
             color: var(--card);
         }
 
+        /* Footer domain link dark mode fix */
+        .footer-domain-link {
+            color: var(--card) !important;
+            font-weight: 500;
+        }
+
+        [data-theme="dark"] .footer-domain-link {
+            color: var(--card) !important;
+        }
+
         /* Responsive grid improvements */
         @media (max-width: 640px) {
             .main-container {
@@ -585,7 +595,7 @@
             </div>
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
                 <p>&copy; 2025 Text Formatter. All rights reserved.</p>
-                <p class="mt-2 text-sm">Visit us at <a href="https://text-formatter.com" title="Online Text Formatter" class="text-white font-medium">text-formatter.com</a></p>
+                <p class="mt-2 text-sm">Visit us at <a href="https://text-formatter.com" title="Online Text Formatter" class="footer-domain-link">text-formatter.com</a></p>
             </div>
         </div>
     </footer>

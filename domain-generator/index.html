@@ -180,6 +180,28 @@
         [data-theme="dark"] .status-error { color: #f87171; }
         [data-theme="dark"] .status-warning { color: #fbbf24; }
         [data-theme="dark"] .status-info { color: #60a5fa; }
+
+        /* Modal styles */
+        .modal {
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            color: var(--card-foreground);
+        }
+
+        /* Footer domain link dark mode fix */
+        .footer-domain-link {
+            color: var(--card) !important;
+            font-weight: 500;
+        }
+
+        [data-theme="dark"] .footer-domain-link {
+            color: var(--card) !important;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -216,6 +238,15 @@
                             </svg>
                             <svg id="theme-icon-dark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 hidden">
                                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                        </button>
+
+                        <!-- Help/Usage Guide Button -->
+                        <button id="help-guide" class="p-2 text-gray-700 hover:text-primary transition-colors" title="Usage guide and tips">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
                             </svg>
                         </button>
 
@@ -453,6 +484,10 @@
                     <ul class="space-y-2 text-gray-400">
                         <li><a href="/" class="hover:text-white">Text Formatter</a></li>
                         <li><a href="/domain-generator/" class="hover:text-white">Domain Generator</a></li>
+                        <li><a href="../pages/facebook-text-formatter.html" class="hover:text-white">Facebook Text Formatter</a></li>
+                        <li><a href="../pages/linkedin-text-formatter.html" class="hover:text-white">LinkedIn Text Formatter</a></li>
+                        <li><a href="../pages/discord-text-formatter.html" class="hover:text-white">Discord Text Formatter</a></li>
+                        <li><a href="../pages/online-text-formatter.html" class="hover:text-white">Online Text Formatter</a></li>
                     </ul>
                 </div>
                 <div>
@@ -465,10 +500,176 @@
             </div>
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
                 <p>&copy; 2025 Text Formatter. All rights reserved.</p>
-                <p class="mt-2 text-sm">Visit us at <a href="https://text-formatter.com" title="Online Text Formatter" class="text-white font-medium">text-formatter.com</a></p>
+                <p class="mt-2 text-sm">Visit us at <a href="https://text-formatter.com" title="Online Text Formatter" class="footer-domain-link">text-formatter.com</a></p>
             </div>
         </div>
     </footer>
+
+    <!-- Usage Guide Modal -->
+    <div id="usage-guide-modal" class="modal fixed inset-0 z-50 hidden flex items-center justify-center">
+        <div class="modal-content max-w-4xl w-full mx-4 rounded-lg shadow-2xl p-6 max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Domain Generator Usage Guide</h2>
+                <button id="close-usage-guide-modal" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Quick Start -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3 text-primary">🚀 Quick Start</h3>
+                    <p class="text-gray-600 mb-3">Generate unique domain names in seconds:</p>
+                    <ol class="list-decimal list-inside space-y-1 text-sm text-gray-600">
+                        <li>Select one or two word libraries from the dropdowns</li>
+                        <li>Optionally add a prefix, separator, or suffix</li>
+                        <li>View generated results automatically</li>
+                        <li>Copy or export your favorite domain names</li>
+                    </ol>
+                </div>
+
+                <!-- Domain Generation Rules -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3 text-primary">📏 Domain Generation Rules</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-medium mb-2">🎯 Combination Logic</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li><strong>Pattern:</strong> Prefix + Word1 + Separator + Word2 + Suffix</li>
+                                <li><strong>Example:</strong> "my" + "smart" + "-" + "app" + ".com" = "my-smart-app.com"</li>
+                                <li>All parts are optional - use any combination you want</li>
+                                <li>Results auto-generate as you type</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">⚡ Performance Tips</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Large libraries generate more combinations</li>
+                                <li>Set length limits to filter results</li>
+                                <li>Use result limit to control output size</li>
+                                <li>Randomize results for variety</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Word Libraries Guide -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3 text-primary">📚 Word Libraries Guide</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-medium mb-2">🎨 Creative Options</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li><strong>Short Words:</strong> 3-letter words for memorable domains</li>
+                                <li><strong>Medium Words:</strong> 4-letter balanced terms</li>
+                                <li><strong>Memorable Combos:</strong> Handpicked catchy combinations</li>
+                                <li><strong>Animals:</strong> Friendly, approachable domain names</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">💼 Business Focused</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li><strong>Action Words:</strong> Endings like "builder", "maker"</li>
+                                <li><strong>Action Starters:</strong> Beginnings like "create", "build"</li>
+                                <li><strong>Tech Terms:</strong> Modern technology vocabulary</li>
+                                <li><strong>Business Tools:</strong> Office and productivity terms</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Word List -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3 text-primary">📝 Custom Word List Usage</h3>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-medium mb-2">How to Use Custom Words</h4>
+                        <ol class="list-decimal list-inside space-y-1 text-sm text-gray-600 mb-3">
+                            <li>Expand "Advanced Options" section</li>
+                            <li>Enter your words in the "Custom Word List" textarea</li>
+                            <li>Separate words with commas or line breaks</li>
+                            <li>Your custom list appears as "Custom Words" in the library dropdowns</li>
+                            <li>Select "Custom Words" in either First or Second Word Library</li>
+                        </ol>
+                        <div class="bg-white rounded border p-3">
+                            <p class="text-xs text-gray-500 mb-1">Example custom words:</p>
+                            <code class="text-xs">mycompany, brandname, startup, venture</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Features -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3 text-primary">🔧 Advanced Features</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-medium mb-2">📐 Length Control</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Set minimum and maximum length</li>
+                                <li>Perfect for domain length restrictions</li>
+                                <li>Helps focus on brandable lengths</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">🎲 Randomization</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Check "Randomize results" for variety</li>
+                                <li>Get different combinations each time</li>
+                                <li>Great for brainstorming sessions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export & Availability -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-3 text-primary">💾 Export & Domain Checking</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-medium mb-2">📊 Export Options</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li><strong>Copy:</strong> Copy all results to clipboard</li>
+                                <li><strong>Export CSV:</strong> Download as spreadsheet</li>
+                                <li><strong>Line Format:</strong> One domain per line</li>
+                                <li><strong>Comma Format:</strong> Comma-separated list</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium mb-2">🔍 Availability Checking</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                <li>Use URL pattern to check domain availability</li>
+                                <li>Default pattern uses Name.com</li>
+                                <li>Customize pattern for your preferred registrar</li>
+                                <li>Use <code>{result}</code> as placeholder</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tips for Success -->
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold mb-3 text-blue-800">💡 Pro Tips for Great Domains</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <ul class="list-disc list-inside space-y-1 text-sm text-blue-700">
+                            <li>Keep domains short and memorable</li>
+                            <li>Avoid hyphens when possible</li>
+                            <li>Mix descriptive + brandable elements</li>
+                            <li>Consider your target audience</li>
+                        </ul>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-blue-700">
+                            <li>Test pronunciation and spelling</li>
+                            <li>Check trademark conflicts</li>
+                            <li>Secure multiple extensions (.com, .net)</li>
+                            <li>Consider future business expansion</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-200">
+                <p class="text-sm text-gray-600">
+                    💡 Tip: Click on any word library card below to automatically select it in the generator. Press Escape to close this dialog.
+                </p>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Word Libraries - Optimized and merged similar categories
@@ -556,6 +757,7 @@
             updateCheckAvailabilityButton();
             setupThemeToggle();
             setupAdvancedOptionsToggle();
+            setupUsageGuideModal();
         });
 
         // Load dictionaries and populate selects
@@ -1192,6 +1394,41 @@
                 } else {
                     themeIconLight.classList.remove('hidden');
                     themeIconDark.classList.add('hidden');
+                }
+            });
+        }
+
+        // Usage Guide Modal functionality
+        function setupUsageGuideModal() {
+            const helpGuideBtn = document.getElementById('help-guide');
+            const usageGuideModal = document.getElementById('usage-guide-modal');
+            const closeUsageGuideModal = document.getElementById('close-usage-guide-modal');
+
+            // Open modal when help button is clicked
+            helpGuideBtn.addEventListener('click', () => {
+                usageGuideModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            });
+
+            // Close modal when close button is clicked
+            closeUsageGuideModal.addEventListener('click', () => {
+                usageGuideModal.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // Restore scrolling
+            });
+
+            // Close modal when clicking outside the modal content
+            usageGuideModal.addEventListener('click', (e) => {
+                if (e.target === usageGuideModal) {
+                    usageGuideModal.classList.add('hidden');
+                    document.body.style.overflow = 'auto'; // Restore scrolling
+                }
+            });
+
+            // Close modal when Escape key is pressed
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !usageGuideModal.classList.contains('hidden')) {
+                    usageGuideModal.classList.add('hidden');
+                    document.body.style.overflow = 'auto'; // Restore scrolling
                 }
             });
         }
