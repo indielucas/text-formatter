@@ -130,11 +130,56 @@
             color-scheme: dark;
         }
 
+        /* Dark theme support for word library cards */
+        [data-theme="dark"] .bg-gray-100 {
+            background-color: var(--muted) !important;
+            border-color: var(--border) !important;
+        }
+
+        [data-theme="dark"] .text-gray-900 {
+            color: var(--card-foreground) !important;
+        }
+
+        [data-theme="dark"] .text-gray-600 {
+            color: var(--muted-foreground) !important;
+        }
+
+        [data-theme="dark"] .text-gray-500 {
+            color: var(--muted-foreground) !important;
+        }
+
+        [data-theme="dark"] .text-gray-400 {
+            color: var(--muted-foreground) !important;
+        }
+
+        [data-theme="dark"] .bg-gray-200 {
+            background-color: var(--accent) !important;
+            color: var(--accent-foreground) !important;
+        }
+
+        [data-theme="dark"] .border-gray-300 {
+            border-color: var(--border) !important;
+        }
+
+        [data-theme="dark"] .border-gray-400 {
+            border-color: var(--border) !important;
+        }
+
+        [data-theme="dark"] .hover\:border-gray-400:hover {
+            border-color: var(--ring) !important;
+        }
+
         /* Status message styling */
         .status-success { color: #10b981; }
         .status-error { color: #ef4444; }
         .status-warning { color: #f59e0b; }
         .status-info { color: #3b82f6; }
+
+        /* Dark theme status message adjustments */
+        [data-theme="dark"] .status-success { color: #34d399; }
+        [data-theme="dark"] .status-error { color: #f87171; }
+        [data-theme="dark"] .status-warning { color: #fbbf24; }
+        [data-theme="dark"] .status-info { color: #60a5fa; }
     </style>
 </head>
 <body class="bg-gray-50">
