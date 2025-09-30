@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain Generator - Text Formatter</title>
+    <meta name="description" content="Generate unique domain names using multiple word libraries. Combine words, prefixes, and suffixes to create perfect domain names for your business or project.">
+    <meta name="keywords" content="domain name generator, domain names, business names, website names, domain creation tool">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Claude Design System Variables */
+        :root {
+          --background: oklch(0.9818 0.0054 95.0986);
+          --foreground: oklch(0.3438 0.0269 95.7226);
+          --card: oklch(0.9818 0.0054 95.0986);
+          --card-foreground: oklch(0.1908 0.0020 106.5859);
+          --popover: oklch(1.0000 0 0);
+          --popover-foreground: oklch(0.2671 0.0196 98.9390);
+          --primary: oklch(0.6171 0.1375 39.0427);
+          --primary-foreground: oklch(1.0000 0 0);
+          --secondary: oklch(0.9245 0.0138 92.9892);
+          --secondary-foreground: oklch(0.4334 0.0177 98.6048);
+          --muted: oklch(0.9341 0.0153 90.2390);
+          --muted-foreground: oklch(0.6059 0.0075 97.4233);
+          --accent: oklch(0.9245 0.0138 92.9892);
+          --accent-foreground: oklch(0.2671 0.0196 98.9390);
+          --border: oklch(0.8847 0.0069 97.3627);
+          --input: oklch(0.7621 0.0156 98.3528);
+          --ring: oklch(0.6171 0.1375 39.0427);
+          --radius: 0.5rem;
+          --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+        }
+
+        /* Dark Theme Variables - Claude Style */
+        [data-theme="dark"] {
+          --background: oklch(0.2679 0.0036 106.6427);
+          --foreground: oklch(0.8074 0.0142 93.0137);
+          --card: oklch(0.2679 0.0036 106.6427);
+          --card-foreground: oklch(0.9818 0.0054 95.0986);
+          --popover: oklch(0.3085 0.0035 106.6039);
+          --popover-foreground: oklch(0.9211 0.0040 106.4781);
+          --primary: oklch(0.6724 0.1308 38.7559);
+          --primary-foreground: oklch(1.0000 0 0);
+          --secondary: oklch(0.9818 0.0054 95.0986);
+          --secondary-foreground: oklch(0.3085 0.0035 106.6039);
+          --muted: oklch(0.2213 0.0038 106.7070);
+          --muted-foreground: oklch(0.7713 0.0169 99.0657);
+          --accent: oklch(0.2130 0.0078 95.4245);
+          --accent-foreground: oklch(0.9663 0.0080 98.8792);
+          --border: oklch(0.3618 0.0101 106.8928);
+          --input: oklch(0.4336 0.0113 100.2195);
+          --ring: oklch(0.6724 0.1308 38.7559);
+        }
+
+        /* Apply Claude Design System */
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: var(--font-sans);
+        }
+
+        /* Override Tailwind with Claude colors */
+        .bg-gray-50 { background-color: var(--background) !important; }
+        .bg-white { background-color: var(--card) !important; }
+        .text-gray-900 { color: var(--card-foreground) !important; }
+        .text-gray-700 { color: var(--foreground) !important; }
+        .text-gray-600 { color: var(--muted-foreground) !important; }
+        .border-gray-300 { border-color: var(--border) !important; }
+        .bg-gray-100 { background-color: var(--secondary) !important; }
+        .hover\:bg-gray-200:hover { background-color: var(--accent) !important; }
+
+        /* Primary button styles */
+        .bg-primary { background-color: var(--primary) !important; }
+        .text-white { color: var(--primary-foreground) !important; }
+        .hover\:bg-secondary:hover { background-color: oklch(0.5171 0.1375 39.0427) !important; }
+
+        /* Button improvements */
+        .transition-colors {
+            transition: all 0.2s ease-in-out;
+        }
+
+        button:focus {
+            outline: 2px solid var(--ring);
+            outline-offset: 2px;
+        }
+
+        /* Container width consistency */
+        .main-container {
+            max-width: 80rem; /* 1280px - same as tools section */
+        }
+
+        /* Card styling */
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 1px 2px -1px hsl(0 0% 0% / 0.10);
+        }
+
+        /* Format button styling */
+        .format-btn {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border: 1px solid var(--border);
+            border-radius: calc(var(--radius) - 2px);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .format-btn:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        /* Footer improvements */
+        .footer {
+            background-color: var(--card-foreground);
+            color: var(--card);
+        }
+
+        /* Dark theme improvements */
+        [data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        /* Status message styling */
+        .status-success { color: #10b981; }
+        .status-error { color: #ef4444; }
+        .status-warning { color: #f59e0b; }
+        .status-info { color: #3b82f6; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+                        <img src="../logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                    </a>
+                </div>
+                <nav class="flex items-center space-x-6">
+                    <div class="hidden md:flex space-x-8">
+                        <a href="/" class="text-gray-700 hover:text-primary">Home</a>
+                        <a href="/domain-generator/" class="text-primary font-medium">Domain Generator</a>
+                        <a href="/#features" class="text-gray-700 hover:text-primary">Features</a>
+                        <a href="/#faq" class="text-gray-700 hover:text-primary">FAQ</a>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- Theme Toggle -->
+                        <button id="theme-toggle" class="p-2 text-gray-700 hover:text-primary transition-colors" title="Toggle theme">
+                            <svg id="theme-icon-light" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                            <svg id="theme-icon-dark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 hidden">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                        </button>
+
+                        <a href="https://github.com/indielucas/text-formatter" target="_blank" rel="noopener noreferrer" class="text-gray-700 hover:text-primary transition-colors" title="View on GitHub">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="py-12">
+            <div class="main-container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Domain Name Generator</h2>
+                    <p class="text-lg text-gray-600">Generate unique domain names using our powerful combination engine. Mix and match from multiple word libraries to find the perfect name for your project.</p>
+                </div>
+
+                <!-- Generator Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                    <!-- Left Panel - Controls -->
+                    <div class="card p-6">
+                        <h3 class="text-xl font-semibold mb-6 text-gray-900">Generator Settings</h3>
+
+                        <form id="domainForm" class="space-y-5">
+                            <!-- Prefix -->
+                            <div>
+                                <label for="starts_with" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Prefix <span class="text-gray-400 text-xs">(optional)</span>
+                                </label>
+                                <input type="text" id="starts_with" name="starts_with"
+                                       placeholder="e.g., my, super, best"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+                            </div>
+
+                            <!-- Dictionary 1 -->
+                            <div>
+                                <label for="dict1" class="block text-sm font-medium text-gray-700 mb-2">
+                                    First Word Library <span class="text-gray-400 text-xs">(optional)</span>
+                                </label>
+                                <select id="dict1" name="dict1"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+                                    <option value="">Select first word library</option>
+                                </select>
+                            </div>
+
+                            <!-- Separator -->
+                            <div>
+                                <label for="separator" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Separator <span class="text-gray-400 text-xs">(optional)</span>
+                                </label>
+                                <input type="text" id="separator" name="separator"
+                                       placeholder="e.g., -, _, ."
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+                            </div>
+
+                            <!-- Dictionary 2 -->
+                            <div>
+                                <label for="dict2" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Second Word Library <span class="text-gray-400 text-xs">(optional)</span>
+                                </label>
+                                <select id="dict2" name="dict2"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+                                    <option value="">Select second word library</option>
+                                </select>
+                            </div>
+
+                            <!-- Suffix -->
+                            <div>
+                                <label for="ends_with" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Suffix <span class="text-gray-400 text-xs">(optional)</span>
+                                </label>
+                                <input type="text" id="ends_with" name="ends_with"
+                                       placeholder="e.g., .com, app, ly"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+                            </div>
+
+                            <!-- Advanced Options -->
+                            <div class="border-t border-gray-200 pt-5">
+                                <button type="button" id="advancedToggle" class="w-full flex items-center justify-between text-sm font-medium text-gray-700 mb-3 hover:text-primary transition-colors focus:outline-none">
+                                    <span>Advanced Options</span>
+                                    <svg id="advancedIcon" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div id="advancedContent" class="space-y-4">
+
+                                <!-- Length Range and Result Limit -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <!-- Length Range -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                                            Length Range <span class="text-gray-400 text-xs">(optional)</span>
+                                        </label>
+                                        <div class="flex gap-2">
+                                            <input type="number" id="min_length" name="min_length"
+                                                   placeholder="Min" min="1" max="63"
+                                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+                                            <span class="flex items-center px-1 text-gray-400 text-sm">to</span>
+                                            <input type="number" id="max_length" name="max_length"
+                                                   placeholder="Max" min="1" max="63"
+                                                   class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+                                        </div>
+                                    </div>
+
+                                    <!-- Result Limit -->
+                                    <div>
+                                        <label for="limit" class="block text-sm font-medium text-gray-700 mb-2">
+                                            Result Limit <span class="text-gray-400 text-xs">(default: 1000)</span>
+                                        </label>
+                                        <input type="number" id="limit" name="limit"
+                                               placeholder="Maximum results" min="1" max="10000"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
+                                    </div>
+                                </div>
+
+                                <!-- Custom Word List -->
+                                <div class="mb-4">
+                                    <label for="custom_words" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Custom Word List <span class="text-gray-400 text-xs">(optional)</span>
+                                    </label>
+                                    <textarea id="custom_words" name="custom_words" rows="4"
+                                              placeholder="Enter your custom words, separated by commas or line breaks&#10;Example: myword, custom, brand&#10;or one word per line"
+                                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors resize-none"></textarea>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        💡 This custom list will appear as "Custom Words" in the First Word Library and Second Word Library dropdowns above.
+                                    </p>
+                                </div>
+
+                                <!-- Random Order -->
+                                <div class="mb-4">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" id="random_order" name="random_order"
+                                               class="mr-3 rounded border-gray-300 text-primary focus:ring-primary/50">
+                                        <span class="text-sm font-medium text-gray-700">Randomize results</span>
+                                    </label>
+                                </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- Right Panel - Results -->
+                    <div class="card p-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-900">Generated Results</h3>
+
+                        <!-- Format Controls -->
+                        <div class="flex gap-2 mb-4">
+                            <button id="formatNewlineBtn" class="format-btn disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                Line Format
+                            </button>
+                            <button id="formatCommaBtn" class="format-btn disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                Comma Format
+                            </button>
+                        </div>
+
+                        <!-- Results Display -->
+                        <div class="mb-4">
+                            <textarea id="results" rows="16"
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors resize-none"
+                                      placeholder="Generated domain names will appear here..."></textarea>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex gap-2 mb-4">
+                            <button id="copyBtn" class="flex-1 bg-primary text-white py-2 px-3 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                Copy
+                            </button>
+                            <button id="exportBtn" class="flex-1 format-btn disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                Export CSV
+                            </button>
+                        </div>
+
+                        <!-- Availability Check Configuration -->
+                        <div class="border-t border-gray-200 pt-4">
+                            <h4 class="text-sm font-medium text-gray-700 mb-3">Check Availability</h4>
+
+                            <!-- URL Pattern Input -->
+                            <div class="mb-3">
+                                <label for="defaultPattern" class="block text-xs font-medium text-gray-600 mb-1">
+                                    URL Pattern <span class="text-gray-400">(use {result} as placeholder)</span>
+                                </label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="defaultPattern"
+                                           value="https://www.name.com/names/{result}"
+                                           placeholder="https://example.com/search?q={result}"
+                                           class="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary transition-colors">
+                                    <button id="checkAvailabilityBtn" type="button"
+                                            class="px-4 py-1 text-sm format-btn disabled:opacity-50 disabled:cursor-not-allowed"
+                                            disabled>
+                                        Check Availability
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div id="status" class="mt-4 text-sm text-gray-600"></div>
+                    </div>
+                </div>
+
+                <!-- Word Libraries Reference Section -->
+                <div class="card p-8 mb-16">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Available Word Libraries</h3>
+                    <p class="text-gray-600 mb-8">Choose from our curated collection of word libraries to create the perfect domain name combinations.</p>
+
+                    <div id="dictionaryReference" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Dictionary cards will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer py-12">
+        <div class="main-container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="../logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h3 class="text-lg font-bold">Text Formatter</h3>
+                    </div>
+                    <p class="text-gray-400">Professional online text formatting tool for all your text processing needs.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Tools</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/" class="hover:text-white">Text Formatter</a></li>
+                        <li><a href="/domain-generator/" class="hover:text-white">Domain Generator</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="../pages/privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="../pages/terms.html" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Text Formatter. All rights reserved.</p>
+                <p class="mt-2 text-sm">Visit us at <a href="https://text-formatter.com" title="Online Text Formatter" class="text-white font-medium">text-formatter.com</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Word Libraries - Optimized and merged similar categories
+        const WORD_LIBRARIES = {
+            "Numbers": ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+
+            "Chinese Sounds": ["a", "ai", "an", "ang", "ao", "ba", "bai", "ban", "bang", "bao", "bei", "ben", "beng", "bi", "bian", "biao", "bie", "bin", "bing", "bo", "bu", "ca", "cai", "can", "cang", "cao", "ce", "cen", "ceng", "cha", "chai", "chan", "chang", "chao", "che", "chen", "cheng", "chi", "chong", "chou", "chu", "chuai", "chuan", "chuang", "chui", "chun", "chuo", "ci", "cong", "cou", "cu", "cuan", "cui", "cun", "cuo", "da", "dai", "dan", "dang", "dao", "de", "dei", "deng", "di", "dia", "dian", "diao", "die", "ding", "diu", "dong", "dou", "du", "duan", "dui", "dun", "duo", "e", "ei", "en", "er", "fa", "fan", "fang", "fei", "fen", "feng", "fo", "fou", "fu", "ga", "gai", "gan", "gang", "gao", "ge", "gei", "gen", "geng", "gong", "gou", "gu", "gua", "guai", "guan", "guang", "gui", "gun", "guo", "ha", "hai", "han", "hang", "hao", "he", "hei", "hen", "heng", "hong", "hou", "hu", "hua", "huai", "huan", "huang", "hui", "hun", "huo", "ji", "jia", "jian", "jiang", "jiao", "jie", "jin", "jing", "jiong", "jiu", "ju", "juan", "jue", "jun", "ka", "kai", "kan", "kang", "kao", "ke", "ken", "keng", "kong", "kou", "ku", "kua", "kuai", "kuan", "kuang", "kui", "kun", "kuo", "la", "lai", "lan", "lang", "lao", "le", "lei", "leng", "li", "lian", "liang", "liao", "lie", "lin", "ling", "liu", "long", "lou", "lu", "luan", "lun", "luo", "lv", "lve", "lue", "ma", "mai", "man", "mang", "mao", "me", "mei", "men", "meng", "mi", "mian", "miao", "mie", "min", "ming", "miu", "mo", "mou", "mu", "na", "nai", "nan", "nang", "nao", "ne", "nei", "nen", "neng", "ni", "nian", "niang", "niao", "nie", "nin", "ning", "niu", "nong", "nou", "nu", "nuan", "nuo", "nv", "nve", "nue", "o", "ou", "pa", "pai", "pan", "pang", "pao", "pei", "pen", "peng", "pi", "pian", "piao", "pie", "pin", "ping", "po", "pou", "pu", "qi", "qia", "qian", "qiang", "qiao", "qie", "qin", "qing", "qiong", "qiu", "qu", "quan", "que", "qun", "ran", "rang", "rao", "re", "ren", "reng", "ri", "rong", "rou", "ru", "ruan", "rui", "run", "ruo", "sa", "sai", "san", "sang", "sao", "se", "sen", "seng", "sha", "shai", "shan", "shang", "shao", "she", "shen", "sheng", "shi", "shou", "shu", "shua", "shuai", "shuan", "shuang", "shui", "shun", "shuo", "si", "song", "sou", "su", "suan", "sui", "sun", "suo", "ta", "tai", "tan", "tang", "tao", "te", "teng", "ti", "tian", "tiao", "tie", "ting", "tong", "tou", "tu", "tuan", "tui", "tun", "tuo", "wa", "wai", "wan", "wang", "wei", "wen", "weng", "wo", "wu", "xi", "xia", "xian", "xiang", "xiao", "xie", "xin", "xing", "xiong", "xiu", "xu", "xuan", "xue", "xun", "ya", "yan", "yang", "yao", "ye", "yi", "yin", "ying", "yong", "you", "yu", "yuan", "yue", "yun", "za", "zai", "zan", "zang", "zao", "ze", "zei", "zen", "zeng", "zha", "zhai", "zhan", "zhang", "zhao", "zhe", "zhen", "zheng", "zhi", "zhong", "zhou", "zhu", "zhua", "zhuai", "zhuan", "zhuang", "zhui", "zhun", "zhuo", "zi", "zong", "zou", "zu", "zuan", "zui", "zun", "zuo"],
+
+            "Single Letters": ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
+
+            "Letter Pairs": ["aa", "ab", "ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq", "ar", "as", "at", "au", "av", "aw", "ax", "ay", "az", "ba", "bb", "bc", "bd", "be", "bf", "bg", "bh", "bi", "bj", "bk", "bl", "bm", "bn", "bo", "bp", "bq", "br", "bs", "bt", "bu", "bv", "bw", "bx", "by", "bz", "ca", "cb", "cc", "cd", "ce", "cf", "cg", "ch", "ci", "cj", "ck", "cl", "cm", "cn", "co", "cp", "cq", "cr", "cs", "ct", "cu", "cv", "cw", "cx", "cy", "cz"],
+
+            "Basic Words": ["a", "ability", "able", "about", "above", "accept", "account", "across", "act", "action", "active", "actual", "add", "address", "admit", "advance", "advantage", "after", "again", "against", "age", "agency", "ago", "ahead", "air", "all", "allow", "almost", "alone", "along", "already", "also", "although", "always", "among", "amount", "and", "animal", "another", "answer", "any", "anyone", "anything", "appear", "apply", "approve", "argue", "arm", "army", "around", "arrange", "arrive", "art", "article", "as", "ask", "at", "attack", "attempt", "attend", "attention", "audience", "average", "avoid", "away", "bad", "balance", "ball", "bank", "bar", "base", "basic", "basis", "battle", "be", "bear", "beat", "beauty", "because", "become", "bed", "before", "begin", "behavior", "behind", "believe", "below", "best", "better", "between", "beyond", "big", "bill", "bit", "black", "block", "blood", "blue", "board", "boat", "body", "book", "both", "bottle", "bottom", "boy", "break", "bridge", "bright", "bring", "broad", "brother", "build", "burn", "business", "but", "buy", "by", "call", "camp", "can", "capital", "captain", "car", "care", "carry", "case", "catch", "cattle", "cause", "cent", "center", "century", "certain", "chance", "change", "character", "charge", "check", "chief", "child", "choice", "choose", "church", "circle", "citizen", "city", "claim", "class", "clean", "clear", "close", "clothe", "club", "coat", "cold", "college", "color", "combine", "come", "comfort", "command", "committee", "common", "company", "compare", "complete", "compose", "concern", "condition", "conscious", "consider", "contain", "continue", "control", "cool", "corner", "cost", "could", "council", "count", "country", "course", "court", "cover", "critic", "cross", "crowd", "cry", "current", "cut", "daily", "dance", "danger", "dark", "date", "day", "dead", "deal", "death", "decide", "decision", "declare", "deep", "defense", "degree", "demand", "department", "depend", "dependent", "describe", "desire", "destroy", "detail", "determine", "develop", "die", "difference", "different", "difficult", "difficulty", "dinner", "direct", "direction", "director", "discover", "discuss", "discussion", "distance", "district", "division", "do", "doctor", "dog", "dollar", "door", "doubt", "down", "draw", "dream", "dress", "drink", "drive", "drop", "dry", "due", "during", "dust", "duty", "each", "early", "earth", "east", "easy", "eat", "edge", "education", "effect", "effective", "effort", "either", "election", "electric", "else", "employ", "employee", "encourage", "end", "enemy", "engineer", "English", "enjoy", "enough", "enter", "entire", "equal", "escape", "especially", "essential", "even", "evening", "event", "ever", "every", "everyone", "everything", "exact", "examine", "example", "except", "excite", "exercise", "exist", "existence", "expect", "expense", "experience", "experiment", "explain", "express", "extend", "extent", "extreme", "eye", "face", "fact", "fail", "fair", "faith", "fall", "fame", "familiar", "family", "far", "farm", "fast", "father", "favor", "fear", "feed", "feel", "few", "field", "fight", "figure", "fill", "film", "find", "fine", "finger", "finish", "fire", "firm", "first", "fit", "fix", "floor", "flow", "fly", "follow", "food", "foot", "for", "force", "foreign", "forget", "form", "former", "forward", "frame", "free", "freedom", "frequent", "friend", "from", "front", "full", "further", "future", "gain", "game", "garden", "gas", "general", "get", "girl", "give", "glass", "go", "god", "good", "govern", "governor", "great", "green", "ground", "group", "grow", "growth", "guest", "gun", "hair", "half", "hall", "hand", "handle", "hang", "happen", "happy", "hard", "hardly", "have", "he", "head", "health", "hear", "heart", "heat", "heavy", "help", "here", "high", "hill", "history", "hit", "hold", "hole", "home", "honor", "hope", "horse", "hospital", "hot", "hotel", "hour", "house", "how", "however", "human", "husband", "I", "idea", "ideal", "if", "imagine", "immediate", "importance", "important", "improve", "in", "inch", "include", "increase", "indeed", "industry", "influence", "inform", "inside", "instead", "interest", "international", "into", "island", "it", "join", "judge", "just", "justice", "keep", "kind", "king", "kitchen", "know", "knowledge", "lack", "lady", "land", "language", "large", "last", "late", "latter", "laugh", "law", "lay", "lead", "learn", "least", "leave", "left", "leg", "length", "less", "let", "letter", "level", "lie", "life", "light", "like", "likely", "limit", "line", "list", "listen", "literature", "little", "live", "load", "local", "lock", "long", "look", "lose", "loss", "lot", "love", "low", "machine", "main", "make", "man", "manage", "manner", "manufacture", "many", "mark", "market", "marriage", "marry", "mass", "master", "match", "material", "matter", "may", "maybe", "mean", "measure", "medical", "meet", "member", "memory", "mention", "mere", "middle", "might", "mile", "mind", "minute", "miss", "model", "modern", "moment", "money", "month", "moral", "more", "morning", "most", "mother", "motor", "mountain", "mouth", "move", "much", "murder", "music", "must", "name", "nation", "nature", "near", "necessary", "need", "neither", "never", "new", "news", "newspaper", "next", "night", "no", "none", "nor", "north", "not", "note", "nothing", "notice", "now", "number", "object", "observe", "occasion", "of", "off", "offer", "office", "officer", "official", "often", "oil", "old", "on", "once", "one", "only", "open", "operate", "operation", "opinion", "opportunity", "or", "order", "organize", "origin", "other", "out", "outside", "over", "own", "page", "pain", "paint", "paper", "parent", "park", "part", "particular", "party", "pass", "past", "patient", "pattern", "pay", "peace", "people", "per", "perfect", "perform", "performance", "perhaps", "permit", "person", "pick", "picture", "piece", "place", "plan", "plant", "play", "please", "poem", "poet", "point", "police", "political", "pool", "poor", "popular", "population", "position", "possible", "post", "pound", "power", "practical", "practice", "prepare", "present", "president", "press", "pressure", "pretty", "prevent", "price", "private", "probable", "problem", "produce", "product", "production", "profession", "program", "progress", "promise", "proper", "property", "propose", "prove", "provide", "public", "pull", "pure", "purpose", "push", "put", "quality", "question", "quick", "quiet", "quite", "race", "radio", "raise", "rapid", "rate", "rather", "reach", "read", "ready", "real", "realize", "reason", "reasonable", "receive", "recent", "recognize", "recommend", "record", "red", "reduce", "refer", "reflect", "refuse", "regard", "regular", "relate", "relation", "relative", "religion", "remain", "remark", "remember", "repeat", "replace", "reply", "report", "represent", "representative", "respect", "responsible", "rest", "result", "return", "ride", "right", "rise", "river", "road", "rock", "roll", "room", "round", "rule", "run", "sale", "same", "sample", "save", "say", "scene", "school", "science", "sea", "search", "season", "seat", "second", "secret", "secretary", "see", "seem", "sell", "send", "sense", "separate", "serious", "serve", "service", "set", "settle", "several", "shake", "shall", "shape", "share", "sharp", "she", "shelter", "ship", "shoot", "shop", "short", "should", "shoulder", "show", "side", "sight", "sign", "simple", "since", "sing", "single", "sit", "situation", "size", "skill", "sleep", "slight", "slow", "small", "smile", "so", "social", "society", "soft", "soldier", "solid", "some", "someone", "something", "sometimes", "son", "song", "soon", "sort", "sound", "south", "space", "speak", "special", "speed", "spend", "spirit", "spot", "spread", "spring", "square", "staff", "stage", "stand", "standard", "start", "state", "station", "stay", "step", "stick", "still", "stock", "stop", "store", "story", "straight", "strange", "street", "strength", "strike", "strong", "student", "study", "subject", "success", "such", "sudden", "suffer", "suggest", "suit", "summer", "supply", "support", "suppose", "sure", "surface", "surprise", "system", "table", "take", "talk", "tax", "teach", "tear", "telephone", "tell", "temperature", "tend", "term", "test", "than", "that", "the", "then", "there", "therefore", "these", "they", "thick", "thin", "thing", "think", "this", "those", "though", "through", "throw", "thus", "time", "tire", "title", "to", "today", "together", "too", "tooth", "top", "total", "touch", "toward", "town", "trade", "train", "travel", "treat", "tree", "trial", "trip", "trouble", "true", "truth", "try", "turn", "type", "under", "understand", "union", "unit", "unite", "university", "unless", "until", "up", "upon", "use", "usual", "value", "various", "very", "view", "visit", "vote", "wage", "wait", "walk", "wall", "want", "war", "warm", "wash", "watch", "water", "wave", "way", "we", "weak", "weapon", "wear", "week", "weight", "well", "west", "western", "what", "whatever", "when", "where", "whether", "which", "while", "white", "who", "whole", "why", "wide", "wife", "will", "win", "wind", "window", "wine", "wish", "with", "within", "without", "woman", "wonder", "word", "work", "world", "worry", "worth", "would", "write", "wrong", "yard", "year", "yes", "yet", "you", "young", "youth"],
+
+            "Short Words": ['see', 'dog', 'cat', 'sky', 'car', 'run', 'sun', 'bat', 'fox', 'bee', 'zen', 'cut', 'fix', 'tea', 'bug', 'ant', 'mix', 'max', 'joy', 'gum', 'mud', 'app', 'doc', 'com', 'row', 'bot', 'css', 'tie', 'hat', 'box', 'lip', 'net', 'ice', 'ink', 'kid', 'nut', 'rib', 'saw', 'vet', 'web', 'zip', 'aim', 'bit', 'cap', 'dig', 'fit', 'hop', 'jet', 'key', 'log', 'map', 'nap', 'red', 'sip', 'top', 'use', 'van', 'win', 'yet', 'zoo', 'api', 'ram', 'seo', 'gif', 'pdf', 'ppt', 'cms', 'sem', 'crm', 'iot', 'btc', 'eth', 'mac', 'get', 'git', 'all', 'the', 'hot', 'uni', 'hex', 'eco', 'out', 'pro', 'tag', 'pin', 'tap', 'ing', 'ify', 'ize'],
+
+            "Medium Words": ['base', 'supa', 'ship', 'mall', 'text', 'hair', 'last', 'girl', 'busy', 'fine', 'ring', 'four', 'game', 'face', 'kick', 'love', 'bend', 'fell', 'iron', 'come', 'roll', 'crow', 'move', 'city', 'cash', 'gold', 'fact', 'each', 'calm', 'like', 'open', 'even', 'mild', 'pain', 'have', 'call', 'card', 'fire', 'jump', 'wild', 'mind', 'fair', 'rain', 'bird', 'fish', 'rule', 'sing', 'past', 'back', 'baby', 'bank', 'poll', 'code', 'nose', 'node', 'toll', 'rust', 'pull', 'life', 'into', 'only', 'ever', 'five', 'dark', 'feel', 'dust', 'cook', 'here', 'sale', 'more', 'main', 'sell', 'lady', 'near', 'bell', 'cool', 'fall', 'meet', 'fast', 'evil', 'hear', 'tall', 'chat', 'push', 'kill', 'able', 'also', 'army', 'away', 'ball', 'bear', 'beat', 'best', 'bill', 'blue', 'boat', 'body', 'book', 'both', 'burn', 'camp', 'care', 'case', 'cent', 'club', 'coat', 'cold', 'cost', 'date', 'dead', 'deal', 'deep', 'door', 'down', 'draw', 'drop', 'duty', 'east', 'easy', 'edge', 'else', 'fail', 'fame', 'farm', 'fear', 'feed', 'fill', 'film', 'find', 'firm', 'flow', 'food', 'foot', 'form', 'free', 'from', 'full', 'gain', 'give', 'good', 'grow', 'half', 'hall', 'hand', 'hang', 'hard', 'head', 'heat', 'help', 'high', 'hill', 'hold', 'hole', 'home', 'hope', 'hour', 'idea', 'inch', 'join', 'just', 'keep', 'kind', 'king', 'know', 'lack', 'land', 'late', 'lead', 'left', 'less', 'line', 'list', 'live', 'load', 'lock', 'long', 'look', 'lose', 'loss', 'make', 'many', 'mark', 'mass', 'mean', 'mere', 'mile', 'miss', 'most', 'much', 'must', 'name', 'need', 'news', 'next', 'none', 'note', 'once', 'over', 'page', 'park', 'part', 'pass', 'pick', 'plan', 'play', 'poem', 'poet', 'pool', 'poor', 'post', 'pure', 'race', 'rate', 'read', 'real', 'rest', 'ride', 'rise', 'road', 'rock', 'room', 'same', 'save', 'seat', 'seem', 'send', 'shop', 'show', 'side', 'sign', 'size', 'slow', 'soft', 'some', 'song', 'soon', 'sort', 'spot', 'stay', 'step', 'stop', 'such', 'suit', 'sure', 'take', 'talk', 'tear', 'tell', 'tend', 'term', 'test', 'than', 'that', 'then', 'they', 'thin', 'this', 'thus', 'time', 'tire', 'town', 'tree', 'trip', 'true', 'turn', 'type', 'unit', 'upon', 'very', 'view', 'vote', 'wage', 'wait', 'walk', 'wall', 'want', 'warm', 'wash', 'wave', 'weak', 'wear', 'week', 'well', 'west', 'what', 'when', 'wide', 'wife', 'will', 'wind', 'wine', 'wish', 'with', 'word', 'work', 'yard', 'year'],
+
+            "Memorable Combos": ['ai', 'an', 'im', 'in', 'io', 'mi', 'mo', 'ni', 'ui', 'it', 'to', 'do', 'no', 'or', 'co', 'xo', 'ux', 'de', 'di', 're', 'kk', 'we', 'wu', 'ca', 'so', 'su', 'la', 'ok', 'ro', 'hi'],
+
+            "Crypto & Finance": ['meta', 'coin', 'bit', 'btc', 'eth', 'crypto', 'chain', 'wallet', 'token', 'defi', 'nft', 'dao', 'pay', 'bank', 'cash', 'trade', 'fund', 'invest'],
+
+            "Animals": ["bee", "cat", "fox", "dog", "duck", "bear", "fish", "lion", "bird", "wolf", "owl", "cow", "pig", "goat", "deer", "elk"],
+
+            "File Types": ["binary", "json", "xml", "png", "jpg", "html", "js", "css", "yaml", "txt", "text", "csv", "table", "xlsx", "doc", "ppt", "pdf", "zip", "mp3", "wav", "webp", "svg", "ico", "icon"],
+
+            "Business Tools": ['icon', 'slide', 'voice', 'logo', 'code', 'gif', 'pdf', 'word', 'text', 'mind', 'image', 'photo', 'video', 'table', 'excel', 'ppt', 'chart', 'doc', 'note', 'plan', 'task', 'todo', 'work', 'flow'],
+
+            "Tech Terms": ['ai', 'app', 'cloud', 'open', 'cms', 'seo', 'sem', 'crm', 'com', 'net', 'tech', 'code', 'node', 'api', 'web', 'dev', 'data', 'auto', 'smart', 'cyber', 'nano', 'micro'],
+
+            "Action Words": ["translator", "processor", "designer", "compiler", "analyzer", "evaluator", "validator", "sender", "receiver", "interpreter", "uploader", "calculator", "generator", "sample", "template", "formatter", "minifier", "minify", "builder", "schema", "pattern", "checker", "detector", "scraper", "manager", "example", "explorer", "dashboard", "planner", "tracker", "recorder", "optimizer", "scheduler", "converter", "viewer", "extractor", "convert", "monitor", "notifier", "verifier", "simulator", "assistant", "constructor", "comparator", "navigator", "syncer", "connector", "online", "cataloger", "responder", "downloader", "maker", "creator", "editor", "taker", "cleaner"],
+
+            "Action Starters": ["convert", "edit", "make", "build", "create", "delete", "update", "read", "write", "execute", "compile", "analyze", "evaluate", "optimize", "track", "plan", "record", "upload", "download", "sync", "monitor", "notify", "verify", "simulate", "compare", "navigate", "connect", "respond", "extract", "generate", "calculate", "format", "design", "manage", "explore", "check", "detect", "scrape", "schedule", "view", "assist", "construct", "organize", "guide", "render", "filter", "sort", "merge", "split", "transform", "store", "retrieve", "search", "replace", "validate", "publish", "share"],
+
+            "Common Prefixes": ['get', 'git', 'solo', 'talk', 'flow', 're', 'all', 'we', 'the', 'me', 'my', 'mono', 'best', 'smart', 'hot', 'cool', 'fast', 'uni', 'hex', 'eco', 'micro', 'bit', 'x', 'i', 'mini', 'life', 'up', 'on', 'out', 'omni', 'trend', 'tech', 'info', 'nano', 'cyber', 'pro', 'free', 'cut', 'net', 'fix', 'map', 'run', 'mix', 'tag', 'auto', 'zip', 'web', 'pin', 'tap', 'sort', 'scan', 'flip', 'data', 'cloud'],
+
+            "Common Endings": ['er', 'mall', 'shop', 'ix', 'or', 'ing', 'ify', 'ize', 'ment', 'ware', 'bot', 'cast', 'ly', 'app', 'hub', 'lab', 'zone', 'space']
+        };
+
+        // Library descriptions for better user understanding
+        const LIBRARY_DESCRIPTIONS = {
+            "Numbers": "Single digits 0-9, perfect for numbered versions or simple numeric domains.",
+            "Chinese Sounds": "Complete Chinese pinyin syllables for international or Chinese market targeting.",
+            "Single Letters": "Single letters A-Z, ideal for ultra-short domains and abbreviations.",
+            "Letter Pairs": "Two-letter combinations, excellent for abbreviations and brand initials.",
+            "Basic Words": "Common everyday English words for natural-sounding domains.",
+            "Short Words": "Concise 3-letter words for memorable and brandable domains.",
+            "Medium Words": "Four-letter words offering good balance of length and meaning.",
+            "Memorable Combos": "Handpicked letter combinations that sound good and are easy to pronounce.",
+            "Crypto & Finance": "Blockchain, cryptocurrency, and financial terms for fintech projects.",
+            "Animals": "Common animal names for friendly, memorable domains.",
+            "File Types": "File format extensions for tech-focused domains and developer tools.",
+            "Business Tools": "Office and productivity-related terms for business applications.",
+            "Tech Terms": "Modern technology vocabulary for startups and digital services.",
+            "Action Words": "Words that work well as domain endings (builder, maker, etc.).",
+            "Action Starters": "Words that work well as domain beginnings (create, build, etc.).",
+            "Common Prefixes": "Popular prefix words to enhance your main domain concept.",
+            "Common Endings": "Popular suffix words to add professional endings to domains."
+        };
+
+        // Global variables
+        let currentResults = [];
+
+        // DOM elements
+        const domainForm = document.getElementById('domainForm');
+        const dict1Select = document.getElementById('dict1');
+        const dict2Select = document.getElementById('dict2');
+        const resultsTextarea = document.getElementById('results');
+        const copyBtn = document.getElementById('copyBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const formatNewlineBtn = document.getElementById('formatNewlineBtn');
+        const formatCommaBtn = document.getElementById('formatCommaBtn');
+        const statusDiv = document.getElementById('status');
+        const dictionaryReference = document.getElementById('dictionaryReference');
+        const defaultPatternInput = document.getElementById('defaultPattern');
+        const checkAvailabilityBtn = document.getElementById('checkAvailabilityBtn');
+        const customWordsTextarea = document.getElementById('custom_words');
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDictionaries();
+            setupEventListeners();
+            loadUrlPattern();
+            loadCustomWords();
+            updateCheckAvailabilityButton();
+            setupThemeToggle();
+            setupAdvancedOptionsToggle();
+        });
+
+        // Load dictionaries and populate selects
+        function loadDictionaries() {
+            populateDictionarySelects();
+            populateDictionaryReference();
+            showStatus('Word libraries loaded successfully', 'success');
+        }
+
+        // Populate dictionary select options
+        function populateDictionarySelects() {
+            // Clear existing options (except the first placeholder option)
+            dict1Select.innerHTML = '<option value="">Select first word library</option>';
+            dict2Select.innerHTML = '<option value="">Select second word library</option>';
+
+            // Add custom words option if available
+            const customWords = getCustomWords();
+            if (customWords.length > 0) {
+                const customOptionText = 'Custom Words (' + customWords.length + ' words)';
+
+                // Add to dict1 select
+                const customOption1 = document.createElement('option');
+                customOption1.value = 'Custom Words';
+                customOption1.textContent = customOptionText;
+                customOption1.title = 'Examples: ' + customWords.slice(0, 5).join(', ');
+                dict1Select.appendChild(customOption1);
+
+                // Add to dict2 select
+                const customOption2 = document.createElement('option');
+                customOption2.value = 'Custom Words';
+                customOption2.textContent = customOptionText;
+                customOption2.title = 'Examples: ' + customWords.slice(0, 5).join(', ');
+                dict2Select.appendChild(customOption2);
+            }
+
+            // Add dictionary options
+            Object.keys(WORD_LIBRARIES).forEach(dictName => {
+                const dict = WORD_LIBRARIES[dictName];
+                const optionText = dictName + ' (' + dict.length + ' words)';
+
+                // Add to dict1 select
+                const option1 = document.createElement('option');
+                option1.value = dictName;
+                option1.textContent = optionText;
+                option1.title = 'Examples: ' + dict.slice(0, 5).join(', ');
+                dict1Select.appendChild(option1);
+
+                // Add to dict2 select
+                const option2 = document.createElement('option');
+                option2.value = dictName;
+                option2.textContent = optionText;
+                option2.title = 'Examples: ' + dict.slice(0, 5).join(', ');
+                dict2Select.appendChild(option2);
+            });
+        }
+
+        // Populate dictionary reference section
+        function populateDictionaryReference() {
+            dictionaryReference.innerHTML = '';
+
+            Object.keys(WORD_LIBRARIES).forEach(dictName => {
+                const dict = WORD_LIBRARIES[dictName];
+                const description = LIBRARY_DESCRIPTIONS[dictName] || "A collection of related terms for domain generation.";
+
+                const card = document.createElement('div');
+                card.className = 'bg-gray-100 rounded-lg p-5 border border-gray-300 hover:border-gray-400 hover:shadow-sm transition-all duration-200 cursor-pointer';
+
+                card.innerHTML =
+                    '<h4 class="font-semibold text-gray-900 mb-2">' + dictName + '</h4>' +
+                    '<p class="text-sm text-gray-600 mb-3 leading-relaxed">' + description + '</p>' +
+                    '<div class="flex items-center justify-between text-xs text-gray-500 mb-2">' +
+                        '<span class="font-medium bg-gray-200 px-2 py-1 rounded">' + dict.length + ' words</span>' +
+                        '<span class="text-gray-400">Click to use in generator</span>' +
+                    '</div>' +
+                    '<div class="text-xs text-gray-500">' +
+                        '<span class="font-medium">Examples:</span> ' +
+                        '<span class="italic">' + dict.slice(0, 5).join(', ') + '</span>' +
+                    '</div>';
+
+                // Add click handler to auto-select in dropdowns
+                card.addEventListener('click', () => {
+                    // If dict1 is empty, select this dictionary for dict1
+                    if (!dict1Select.value) {
+                        dict1Select.value = dictName;
+                        showStatus('Selected "' + dictName + '" as first library', 'success');
+                    }
+                    // If dict1 is filled but dict2 is empty, select for dict2
+                    else if (!dict2Select.value) {
+                        dict2Select.value = dictName;
+                        showStatus('Selected "' + dictName + '" as second library', 'success');
+                    }
+                    // If both are filled, replace dict1
+                    else {
+                        dict1Select.value = dictName;
+                        showStatus('Replaced first library with "' + dictName + '"', 'success');
+                    }
+
+                    // Scroll to top to show the form
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+
+                dictionaryReference.appendChild(card);
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Auto-generate on any input change
+            setupAutoGeneration();
+
+            // Copy button
+            copyBtn.addEventListener('click', copyResults);
+
+            // Export CSV button
+            exportBtn.addEventListener('click', exportToCSV);
+
+            // Format buttons
+            formatNewlineBtn.addEventListener('click', () => formatResults('newline'));
+            formatCommaBtn.addEventListener('click', () => formatResults('comma'));
+
+            // Check availability button
+            checkAvailabilityBtn.addEventListener('click', checkAvailability);
+
+            // URL pattern input - save to localStorage on every change
+            defaultPatternInput.addEventListener('input', () => {
+                saveUrlPattern();
+                updateCheckAvailabilityButton();
+            });
+
+            // Update button state when textarea content changes
+            resultsTextarea.addEventListener('input', () => {
+                updateCheckAvailabilityButton();
+            });
+        }
+
+        // Setup auto-generation on input changes
+        function setupAutoGeneration() {
+            const inputs = [
+                document.getElementById('starts_with'),
+                document.getElementById('dict1'),
+                document.getElementById('separator'),
+                document.getElementById('dict2'),
+                document.getElementById('ends_with'),
+                document.getElementById('min_length'),
+                document.getElementById('max_length'),
+                document.getElementById('limit'),
+                document.getElementById('random_order'),
+                document.getElementById('custom_words')
+            ];
+
+            inputs.forEach(input => {
+                if (input) {
+                    if (input.type === 'checkbox') {
+                        input.addEventListener('change', handleAutoGeneration);
+                    } else {
+                        input.addEventListener('input', handleAutoGeneration);
+                    }
+                } else {
+                    console.warn('Auto-generation input element not found:', input);
+                }
+            });
+
+            // Explicit event listener for separator to ensure it works
+            const separatorInput = document.getElementById('separator');
+            if (separatorInput) {
+                separatorInput.addEventListener('input', handleAutoGeneration);
+            }
+
+            // Special handling for custom words textarea
+            customWordsTextarea.addEventListener('input', () => {
+                saveCustomWords();
+
+                // Only refresh dropdowns if Custom Words is not currently selected
+                const dict1Selected = dict1Select.value === 'Custom Words';
+                const dict2Selected = dict2Select.value === 'Custom Words';
+
+                if (!dict1Selected && !dict2Selected) {
+                    populateDictionarySelects(); // Refresh dropdowns only if Custom Words is not selected
+                } else {
+                    // If Custom Words is selected, just update the option text without changing selection
+                    updateCustomWordsOptions();
+                }
+
+                handleAutoGeneration();
+            });
+        }
+
+        // Handle auto-generation with debouncing
+        let generationTimeout;
+        function handleAutoGeneration() {
+            clearTimeout(generationTimeout);
+            generationTimeout = setTimeout(() => {
+                generateDomains();
+            }, 300); // 300ms debounce
+        }
+
+        // Domain generation function (replaces server.py logic)
+        function searchWords(dict1, dict2, startsWith, separator, endsWith, minLength, maxLength, limit, randomOrder) {
+            // Get word arrays
+            let dict1Words, dict2Words;
+
+            if (dict1 === 'Custom Words') {
+                dict1Words = getCustomWords();
+            } else if (dict1 && WORD_LIBRARIES[dict1]) {
+                dict1Words = WORD_LIBRARIES[dict1];
+            } else {
+                dict1Words = [""];
+            }
+
+            if (dict2 === 'Custom Words') {
+                dict2Words = getCustomWords();
+            } else if (dict2 && WORD_LIBRARIES[dict2]) {
+                dict2Words = WORD_LIBRARIES[dict2];
+            } else {
+                dict2Words = [""];
+            }
+
+            let fullList = [];
+
+            // Use dictionaries in correct order - no swapping needed
+            let finalDict1Words = [...dict1Words];
+            let finalDict2Words = [...dict2Words];
+
+            if (randomOrder) {
+                finalDict1Words = shuffleArray(finalDict1Words);
+                finalDict2Words = shuffleArray(finalDict2Words);
+            }
+
+            // Ensure we always generate at least one result, even with empty inputs
+            if (finalDict1Words.length === 0) finalDict1Words = [""];
+            if (finalDict2Words.length === 0) finalDict2Words = [""];
+
+            for (let i = 0; i < finalDict1Words.length && fullList.length < limit; i++) {
+                const word1 = finalDict1Words[i];
+                for (let j = 0; j < finalDict2Words.length && fullList.length < limit; j++) {
+                    const word2 = finalDict2Words[j];
+
+                    // Always generate domain - combine all parts regardless of content
+                    let domain = startsWith + word1 + separator + word2 + endsWith;
+
+                    // Only check length constraints, allow any content (even empty)
+                    if (domain.length >= minLength && domain.length <= maxLength) {
+                        fullList.push(domain);
+                    }
+                }
+            }
+
+            // If random order is requested and we have results, shuffle them again
+            if (randomOrder && fullList.length > 0) {
+                fullList = shuffleArray(fullList);
+            }
+
+            return fullList;
+        }
+
+        // Utility function to shuffle array
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Generate domains automatically
+        function generateDomains() {
+            const formData = new FormData(domainForm);
+            const dict1 = formData.get('dict1') || '';
+            const dict2 = formData.get('dict2') || '';
+
+            // Get all parameters
+            const startsWith = formData.get('starts_with') || '';
+            const separator = formData.get('separator') || '';
+            const endsWith = formData.get('ends_with') || '';
+            const minLength = parseInt(formData.get('min_length')) || 1;
+            const maxLength = parseInt(formData.get('max_length')) || 63;
+            const limit = parseInt(formData.get('limit')) || 1000;
+            const randomOrder = formData.get('random_order') === 'on';
+
+            // Always generate results regardless of input - no checks needed
+
+            // Validate length parameters
+            if (minLength > maxLength) {
+                showStatus('Minimum length cannot be greater than maximum length', 'error');
+                return;
+            }
+
+            try {
+                const results = searchWords(dict1, dict2, startsWith, separator, endsWith, minLength, maxLength, limit, randomOrder);
+                displayResults(results);
+
+            } catch (error) {
+                console.error('Error generating domains:', error);
+                showStatus('Failed to generate domains: ' + error.message, 'error');
+            }
+        }
+
+        // Display results in the textarea
+        function displayResults(results) {
+            currentResults = results;
+
+            if (results.length === 0) {
+                resultsTextarea.value = 'Generated domain names will appear here...';
+                copyBtn.disabled = true;
+                exportBtn.disabled = true;
+                formatNewlineBtn.disabled = true;
+                formatCommaBtn.disabled = true;
+                updateCheckAvailabilityButton();
+                statusDiv.textContent = '';
+            } else {
+                resultsTextarea.value = results.join('\n');
+                copyBtn.disabled = false;
+                exportBtn.disabled = false;
+                formatNewlineBtn.disabled = false;
+                formatCommaBtn.disabled = false;
+                updateCheckAvailabilityButton();
+                showStatus('Generated ' + results.length + ' domain names', 'success');
+            }
+        }
+
+        // Copy results to clipboard
+        async function copyResults() {
+            try {
+                // Check if clipboard API is available
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(resultsTextarea.value);
+                    showStatus('Results copied to clipboard', 'success');
+                } else {
+                    // Fallback for older browsers
+                    copyToClipboardFallback();
+                }
+
+                // Temporarily change button text
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+
+            } catch (error) {
+                console.error('Error copying to clipboard:', error);
+                copyToClipboardFallback();
+            }
+        }
+
+        // Fallback copy method for older browsers
+        function copyToClipboardFallback() {
+            try {
+                resultsTextarea.select();
+                resultsTextarea.setSelectionRange(0, 99999); // For mobile devices
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showStatus('Results copied to clipboard', 'success');
+                } else {
+                    showStatus('Copy failed. Please select and copy manually', 'warning');
+                }
+            } catch (error) {
+                showStatus('Copy failed. Please select and copy manually', 'warning');
+            }
+        }
+
+        // Load URL pattern from localStorage
+        function loadUrlPattern() {
+            try {
+                const saved = localStorage.getItem('domainGeneratorUrlPattern');
+                if (saved) {
+                    defaultPatternInput.value = saved;
+                }
+            } catch (error) {
+                console.error('Error loading URL pattern:', error);
+            }
+        }
+
+        // Save URL pattern to localStorage
+        function saveUrlPattern() {
+            try {
+                localStorage.setItem('domainGeneratorUrlPattern', defaultPatternInput.value);
+            } catch (error) {
+                console.error('Error saving URL pattern:', error);
+            }
+        }
+
+        // Check availability using the URL pattern
+        function checkAvailability() {
+            const pattern = defaultPatternInput.value.trim();
+            const resultsText = resultsTextarea.value.trim();
+
+            if (!pattern) {
+                showStatus('Please enter a URL pattern', 'warning');
+                return;
+            }
+
+            if (!resultsText) {
+                showStatus('No domains to check', 'warning');
+                return;
+            }
+
+            if (!pattern.includes('{result}')) {
+                showStatus('URL pattern must include {result} placeholder', 'error');
+                return;
+            }
+
+            const domains = resultsText.split(/[\n,]+/).map(d => d.trim()).filter(d => d);
+            if (domains.length === 0) {
+                showStatus('No valid domains found', 'warning');
+                return;
+            }
+
+            const domainsToCheck = domains.slice(0, 50);
+            const url = pattern.replace('{result}', domainsToCheck.join(','));
+
+            window.open(url, '_blank');
+            showStatus('Checking availability for ' + domainsToCheck.length + ' domains...', 'info');
+        }
+
+        // Update check availability button state
+        function updateCheckAvailabilityButton() {
+            const hasPattern = defaultPatternInput.value.trim() && defaultPatternInput.value.includes('{result}');
+            const hasResults = resultsTextarea.value.trim();
+            checkAvailabilityBtn.disabled = !hasPattern || !hasResults;
+        }
+
+        // Format results display
+        function formatResults(format) {
+            if (currentResults.length === 0) {
+                showStatus('No results to format', 'warning');
+                return;
+            }
+
+            let formattedText;
+            if (format === 'newline') {
+                formattedText = currentResults.join('\n');
+                showStatus('Converted to line format', 'success');
+            } else if (format === 'comma') {
+                formattedText = currentResults.join(', ');
+                showStatus('Converted to comma format', 'success');
+            }
+
+            resultsTextarea.value = formattedText;
+        }
+
+        // Export results to CSV
+        function exportToCSV() {
+            if (currentResults.length === 0) {
+                showStatus('No data to export', 'warning');
+                return;
+            }
+
+            try {
+                // Create CSV content
+                const csvContent = 'domain\n' + currentResults.join('\n');
+
+                // Create blob and download
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+
+                if (link.download !== undefined) {
+                    // Create download link
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', 'domains_' + new Date().toISOString().slice(0, 10) + '.csv');
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    showStatus('Exported ' + currentResults.length + ' domains to CSV file', 'success');
+                } else {
+                    showStatus('Browser does not support file download', 'error');
+                }
+            } catch (error) {
+                console.error('Error exporting CSV:', error);
+                showStatus('Failed to export CSV: ' + error.message, 'error');
+            }
+        }
+
+        // Show status message
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+
+            // Remove existing status classes
+            statusDiv.classList.remove('status-success', 'status-error', 'status-warning', 'status-info');
+
+            // Add appropriate color class based on type
+            switch (type) {
+                case 'success':
+                    statusDiv.classList.add('status-success');
+                    break;
+                case 'warning':
+                    statusDiv.classList.add('status-warning');
+                    break;
+                case 'error':
+                    statusDiv.classList.add('status-error');
+                    break;
+                default:
+                    statusDiv.classList.add('status-info');
+            }
+
+            // Auto-clear status after 5 seconds for non-error messages
+            if (type !== 'error') {
+                setTimeout(() => {
+                    if (statusDiv.textContent === message) {
+                        statusDiv.textContent = '';
+                    }
+                }, 5000);
+            }
+        }
+
+        // Update Custom Words options in dropdowns without changing selection
+        function updateCustomWordsOptions() {
+            const customWords = getCustomWords();
+            const customOptionText = customWords.length > 0
+                ? 'Custom Words (' + customWords.length + ' words)'
+                : 'Custom Words (empty)';
+
+            // Update dict1 option
+            const dict1Option = dict1Select.querySelector('option[value="Custom Words"]');
+            if (dict1Option) {
+                dict1Option.textContent = customOptionText;
+                dict1Option.title = customWords.length > 0
+                    ? 'Examples: ' + customWords.slice(0, 5).join(', ')
+                    : 'No custom words entered';
+            }
+
+            // Update dict2 option
+            const dict2Option = dict2Select.querySelector('option[value="Custom Words"]');
+            if (dict2Option) {
+                dict2Option.textContent = customOptionText;
+                dict2Option.title = customWords.length > 0
+                    ? 'Examples: ' + customWords.slice(0, 5).join(', ')
+                    : 'No custom words entered';
+            }
+        }
+
+        // Custom words functionality
+        function getCustomWords() {
+            const customText = customWordsTextarea.value.trim();
+            if (!customText) return [];
+
+            // Split by commas or line breaks and filter empty strings
+            let words = customText.split(/[,\n\r]+/)
+                .map(word => word.trim())
+                .filter(word => word.length > 0);
+
+            return words;
+        }
+
+        function loadCustomWords() {
+            try {
+                const saved = localStorage.getItem('domainGeneratorCustomWords');
+                if (saved) {
+                    customWordsTextarea.value = saved;
+                    // Refresh dropdowns after loading custom words
+                    populateDictionarySelects();
+                }
+            } catch (error) {
+                console.error('Error loading custom words:', error);
+            }
+        }
+
+        function saveCustomWords() {
+            try {
+                localStorage.setItem('domainGeneratorCustomWords', customWordsTextarea.value);
+            } catch (error) {
+                console.error('Error saving custom words:', error);
+            }
+        }
+
+        // Advanced Options toggle functionality
+        function setupAdvancedOptionsToggle() {
+            const advancedToggle = document.getElementById('advancedToggle');
+            const advancedContent = document.getElementById('advancedContent');
+            const advancedIcon = document.getElementById('advancedIcon');
+
+            // Get saved state or default to collapsed
+            const isExpanded = localStorage.getItem('advancedOptionsExpanded') === 'true';
+
+            // Set initial state
+            if (isExpanded) {
+                advancedContent.style.display = 'block';
+                advancedIcon.style.transform = 'rotate(180deg)';
+            } else {
+                advancedContent.style.display = 'none';
+                advancedIcon.style.transform = 'rotate(0deg)';
+            }
+
+            // Toggle functionality
+            advancedToggle.addEventListener('click', () => {
+                const isCurrentlyExpanded = advancedContent.style.display !== 'none';
+
+                if (isCurrentlyExpanded) {
+                    // Collapse
+                    advancedContent.style.display = 'none';
+                    advancedIcon.style.transform = 'rotate(0deg)';
+                    localStorage.setItem('advancedOptionsExpanded', 'false');
+                } else {
+                    // Expand
+                    advancedContent.style.display = 'block';
+                    advancedIcon.style.transform = 'rotate(180deg)';
+                    localStorage.setItem('advancedOptionsExpanded', 'true');
+                }
+            });
+        }
+
+        // Theme toggle functionality
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+
+            // Get saved theme or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+
+            // Apply saved theme
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIconLight.classList.add('hidden');
+                themeIconDark.classList.remove('hidden');
+            }
+
+            // Toggle theme on click
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+
+                // Toggle icons
+                if (newTheme === 'dark') {
+                    themeIconLight.classList.add('hidden');
+                    themeIconDark.classList.remove('hidden');
+                } else {
+                    themeIconLight.classList.remove('hidden');
+                    themeIconDark.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

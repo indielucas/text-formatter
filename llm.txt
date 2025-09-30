@@ -1,0 +1,40 @@
+# Text Formatter - LLM Information
+
+## About
+Text Formatter is a free online text formatting tool that provides various text manipulation features for social media platforms and general text editing.
+
+## Website URL
+https://text-formatter.pages.dev/
+
+## Main Features
+- Text formatting for Facebook, LinkedIn, Discord
+- Online text editor with Monaco and WYSIWYG support
+- Find and replace functionality with regex support
+- Text transformations: add line numbers, remove empty lines, case conversion
+- Remove emojis and special characters
+- Add timestamps and dates
+- Merge lines and text manipulation
+
+## Target Audience
+- Social media content creators
+- Developers and writers
+- Anyone needing quick text formatting tools
+
+## Key Pages
+- Homepage: https://text-formatter.pages.dev/
+- Online Text Formatter: https://text-formatter.pages.dev/pages/online-text-formatter.html
+- Facebook Text Formatter: https://text-formatter.pages.dev/pages/facebook-text-formatter.html
+- LinkedIn Text Formatter: https://text-formatter.pages.dev/pages/linkedin-text-formatter.html
+- Discord Text Formatter: https://text-formatter.pages.dev/pages/discord-text-formatter.html
+
+## Technology
+- Frontend: HTML, CSS, JavaScript
+- Editor: Monaco Editor
+- Hosting: Cloudflare Pages
+- Framework: Vanilla JavaScript with Tailwind CSS
+
+## Content Policy
+This is a text formatting utility tool. All content processing is done client-side for privacy and security.
+
+## Contact
+For support or inquiries, please visit our website.
