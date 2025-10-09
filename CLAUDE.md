@@ -25,6 +25,17 @@ wrangler pages deploy ./ --project-name=text-formatter
 - 项目中已配置好相关脚本
 - 不需要 GitHub 集成，除非用户明确要求
 
+## 主域名配置
+
+### 生产域名设置
+**主域名：** `https://text-formatter.com/`
+
+**重要提醒：**
+- 所有配置文件（sitemap.xml、robots.txt、llm.txt）都必须使用主域名 `https://text-formatter.com/`
+- 不使用 `text-formatter.pages.dev` 作为主域名
+- 确保所有内部链接和引用都使用主域名
+- sitemap.xml 中的所有 URL 都以 `https://text-formatter.com/` 开头
+
 ## 项目特性
 
 ### 查找替换功能

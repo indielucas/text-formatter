@@ -4,7 +4,7 @@
 Text Formatter is a comprehensive free online text formatting tool with 20+ advanced features for text manipulation, data conversion, and content optimization. Perfect for developers, content creators, social media managers, and anyone needing professional text formatting tools.
 
 ## Website URL
-https://text-formatter.pages.dev/
+https://text-formatter.com/
 
 ## Main Features
 ### Text Formatting
@@ -41,17 +41,17 @@ https://text-formatter.pages.dev/
 - Anyone needing text processing tools
 
 ## Key Pages
-- Homepage: https://text-formatter.pages.dev/
-- Online Text Formatter: https://text-formatter.pages.dev/pages/online-text-formatter.html
-- HTML Tag Remover: https://text-formatter.pages.dev/pages/html-tag-remover.html
-- URL Encoder Decoder: https://text-formatter.pages.dev/pages/url-encoder-decoder.html
-- Base64 Encoder Decoder: https://text-formatter.pages.dev/pages/base64-encoder-decoder.html
-- JSON Formatter: https://text-formatter.pages.dev/pages/json-formatter.html
-- Text Statistics: https://text-formatter.pages.dev/pages/text-statistics.html
-- Facebook Text Formatter: https://text-formatter.pages.dev/pages/facebook-text-formatter.html
-- LinkedIn Text Formatter: https://text-formatter.pages.dev/pages/linkedin-text-formatter.html
-- Discord Text Formatter: https://text-formatter.pages.dev/pages/discord-text-formatter.html
-- Domain Generator: https://text-formatter.pages.dev/domain-generator/
+- Homepage: https://text-formatter.com/
+- Online Text Formatter: https://text-formatter.com/pages/online-text-formatter.html
+- HTML Tag Remover: https://text-formatter.com/pages/html-tag-remover.html
+- URL Encoder Decoder: https://text-formatter.com/pages/url-encoder-decoder.html
+- Base64 Encoder Decoder: https://text-formatter.com/pages/base64-encoder-decoder.html
+- JSON Formatter: https://text-formatter.com/pages/json-formatter.html
+- Text Statistics: https://text-formatter.com/pages/text-statistics.html
+- Facebook Text Formatter: https://text-formatter.com/pages/facebook-text-formatter.html
+- LinkedIn Text Formatter: https://text-formatter.com/pages/linkedin-text-formatter.html
+- Discord Text Formatter: https://text-formatter.com/pages/discord-text-formatter.html
+- Domain Generator: https://text-formatter.com/domain-generator/
 
 ## Technology
 - Frontend: HTML, CSS, JavaScript

@@ -15,7 +15,7 @@ Disallow: /.DS_Store
 Disallow: /node_modules/
 
 # Sitemap location
-Sitemap: https://text-formatter.pages.dev/sitemap.xml
+Sitemap: https://text-formatter.com/sitemap.xml
 
 # Crawl delay (optional, in seconds)
 Crawl-delay: 1
