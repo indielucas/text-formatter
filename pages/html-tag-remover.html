@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Tag Remover - Remove HTML Tags Online | Text Formatter</title>
+    <meta name="description" content="Free HTML tag remover tool. Remove HTML and XML tags from text online. Clean copied web content and strip formatting codes instantly. No registration required.">
+    <meta name="keywords" content="HTML tag remover, remove HTML tags, strip HTML, HTML cleaner, remove XML tags, clean HTML text, text cleaner, format text online">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Inherit styles from main site */
+        :root {
+          --background: oklch(0.9818 0.0054 95.0986);
+          --foreground: oklch(0.3438 0.0269 95.7226);
+          --card: oklch(0.9818 0.0054 95.0986);
+          --card-foreground: oklch(0.1908 0.0020 106.5859);
+          --primary: oklch(0.6171 0.1375 39.0427);
+          --primary-foreground: oklch(1.0000 0 0);
+          --border: oklch(0.8847 0.0069 97.3627);
+        }
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10);
+        }
+        .format-btn {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-radius: 0.375rem;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+        .format-btn:hover {
+            opacity: 0.9;
+        }
+        textarea {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            color: var(--foreground);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+                        <img src="/logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                    </a>
+                </div>
+                <nav class="flex items-center space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-primary">Home</a>
+                    <a href="/domain-generator/" class="text-gray-700 hover:text-primary">Domain Generator</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">HTML Tag Remover - Remove HTML Tags Online</h2>
+                <p class="text-lg text-gray-600">Remove HTML and XML tags from your text instantly. Clean copied web content and strip formatting codes with our free HTML tag remover tool.</p>
+            </div>
+
+            <!-- Tool Interface -->
+            <div class="card p-6 mb-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Input -->
+                    <div>
+                        <label for="input-text" class="block text-lg font-medium text-gray-900 mb-3">Input Text (with HTML tags)</label>
+                        <textarea id="input-text" rows="12" class="w-full p-4 border border-gray-300 rounded-lg" placeholder="Paste your HTML content here...
+
+Example:
+<h1>Welcome to our site</h1>
+<p>This is a <strong>bold</strong> paragraph with <a href='#'>links</a>.</p>
+<div class='container'>Content inside div</div>"></textarea>
+                    </div>
+
+                    <!-- Output -->
+                    <div>
+                        <label for="output-text" class="block text-lg font-medium text-gray-900 mb-3">Clean Text (HTML tags removed)</label>
+                        <textarea id="output-text" rows="12" class="w-full p-4 border border-gray-300 rounded-lg bg-gray-50" readonly placeholder="Clean text will appear here..."></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <button id="remove-tags" class="format-btn">🏷️ Remove HTML Tags</button>
+                    <button id="copy-result" class="format-btn">📋 Copy Result</button>
+                    <button id="clear-all" class="format-btn">🗑️ Clear All</button>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">🏷️ Remove All HTML Tags</h3>
+                    <p class="text-gray-600">Strips all HTML and XML tags including div, span, p, h1-h6, a, strong, em, and more.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">🚀 Instant Processing</h3>
+                    <p class="text-gray-600">Real-time processing with immediate results. No server uploads - everything happens in your browser.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">🔒 Privacy Focused</h3>
+                    <p class="text-gray-600">Your text never leaves your browser. Complete privacy and security for sensitive content.</p>
+                </div>
+            </div>
+
+            <!-- How to Use -->
+            <div class="card p-6 mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">How to Remove HTML Tags</h3>
+                <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                    <li>Paste your HTML content into the input text area</li>
+                    <li>Click "Remove HTML Tags" to clean the text</li>
+                    <li>Copy the clean text from the output area</li>
+                    <li>Use the cleaned text wherever you need it</li>
+                </ol>
+            </div>
+
+            <!-- FAQ -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-gray-900">Frequently Asked Questions</h3>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">What HTML tags can this tool remove?</h4>
+                    <p class="text-gray-600">This HTML tag remover can remove all HTML and XML tags including div, span, p, h1-h6, a, strong, em, img, table, tr, td, and all other standard and custom tags.</p>
+                </div>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">Is this HTML tag remover free to use?</h4>
+                    <p class="text-gray-600">Yes, our HTML tag remover is completely free with no registration required. Remove HTML tags from unlimited text without any restrictions.</p>
+                </div>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">Does this tool work with XML tags too?</h4>
+                    <p class="text-gray-600">Yes! The tag removal algorithm works with both HTML and XML tags, making it perfect for cleaning any markup language content.</p>
+                </div>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">Will this preserve my text formatting?</h4>
+                    <p class="text-gray-600">The tool removes only the HTML tags while preserving the actual text content and line breaks, giving you clean readable text.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Text Formatter. All rights reserved.</p>
+            <p class="mt-2"><a href="/" class="hover:text-gray-300">Back to Text Formatter</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('remove-tags').addEventListener('click', function() {
+            const input = document.getElementById('input-text').value;
+            const output = input.replace(/<[^>]*>/g, '');
+            document.getElementById('output-text').value = output;
+        });
+
+        document.getElementById('copy-result').addEventListener('click', async function() {
+            const output = document.getElementById('output-text').value;
+            try {
+                await navigator.clipboard.writeText(output);
+                this.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    this.textContent = '📋 Copy Result';
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+        });
+
+        document.getElementById('clear-all').addEventListener('click', function() {
+            document.getElementById('input-text').value = '';
+            document.getElementById('output-text').value = '';
+        });
+
+        // Auto-process on input
+        document.getElementById('input-text').addEventListener('input', function() {
+            const input = this.value;
+            const output = input.replace(/<[^>]*>/g, '');
+            document.getElementById('output-text').value = output;
+        });
+    </script>
+</body>
+</html>

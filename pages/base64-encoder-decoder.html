@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Encoder Decoder - Encode Decode Base64 Online | Text Formatter</title>
+    <meta name="description" content="Free Base64 encoder and decoder tool. Encode and decode Base64 strings online for data conversion. Perfect for developers and data processing. No registration required.">
+    <meta name="keywords" content="Base64 encoder, Base64 decoder, encode Base64, decode Base64, Base64 online, data encoding, data conversion, format text online">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+          --background: oklch(0.9818 0.0054 95.0986);
+          --foreground: oklch(0.3438 0.0269 95.7226);
+          --card: oklch(0.9818 0.0054 95.0986);
+          --card-foreground: oklch(0.1908 0.0020 106.5859);
+          --primary: oklch(0.6171 0.1375 39.0427);
+          --primary-foreground: oklch(1.0000 0 0);
+          --border: oklch(0.8847 0.0069 97.3627);
+        }
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10);
+        }
+        .format-btn {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-radius: 0.375rem;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+        .format-btn:hover {
+            opacity: 0.9;
+        }
+        textarea {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            color: var(--foreground);
+        }
+        .toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: #10b981;
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            z-index: 1000;
+            transition: opacity 0.3s;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+                        <img src="/logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                    </a>
+                </div>
+                <nav class="flex items-center space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-primary">Home</a>
+                    <a href="/domain-generator/" class="text-gray-700 hover:text-primary">Domain Generator</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Base64 Encoder Decoder - Encode & Decode Base64 Online</h2>
+                <p class="text-lg text-gray-600">Free Base64 encoder and decoder for data conversion. Encode text to Base64 format and decode Base64 strings back to readable text instantly.</p>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box mb-8">
+                <h3 class="text-lg font-semibold mb-2">💡 What is Base64?</h3>
+                <p class="text-sm opacity-90">Base64 is a binary-to-text encoding scheme that represents binary data as ASCII text. It's commonly used in email, web development, and data storage to encode binary data for safe transmission over text-based protocols.</p>
+            </div>
+
+            <!-- Tool Interface -->
+            <div class="card p-6 mb-8">
+                <!-- Input Section -->
+                <div class="mb-6">
+                    <label for="input-text" class="block text-lg font-medium text-gray-900 mb-3">Input Text or Base64</label>
+                    <textarea id="input-text" rows="6" class="w-full p-4 border border-gray-300 rounded-lg" placeholder="Enter text to encode or Base64 string to decode...
+
+Examples:
+Text: Hello World! 🌍
+Base64: SGVsbG8gV29ybGQhIPCfjI0=
+
+Binary data representation: Lorem ipsum dolor sit amet"></textarea>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex flex-wrap gap-3 mb-6">
+                    <button id="encode-base64" class="format-btn">🔐 Base64 Encode</button>
+                    <button id="decode-base64" class="format-btn">🔓 Base64 Decode</button>
+                    <button id="copy-result" class="format-btn">📋 Copy Result</button>
+                    <button id="clear-all" class="format-btn">🗑️ Clear All</button>
+                </div>
+
+                <!-- Output Section -->
+                <div>
+                    <label for="output-text" class="block text-lg font-medium text-gray-900 mb-3">Result</label>
+                    <textarea id="output-text" rows="6" class="w-full p-4 border border-gray-300 rounded-lg bg-gray-50" readonly placeholder="Encoded/decoded result will appear here..."></textarea>
+                </div>
+
+                <!-- Character Count -->
+                <div class="mt-4 text-sm text-gray-600">
+                    <div class="flex justify-between">
+                        <span>Input length: <span id="input-length">0</span> characters</span>
+                        <span>Output length: <span id="output-length">0</span> characters</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">🔐 Secure Encoding</h3>
+                    <p class="text-gray-600">Safe Base64 encoding and decoding with proper UTF-8 character support for all text types.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">🌍 Unicode Support</h3>
+                    <p class="text-gray-600">Full support for Unicode characters including emojis, international text, and special symbols.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">⚡ Instant Results</h3>
+                    <p class="text-gray-600">Real-time encoding and decoding with immediate results. Perfect for development and testing.</p>
+                </div>
+            </div>
+
+            <!-- Use Cases -->
+            <div class="card p-6 mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Common Base64 Use Cases</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Web Development</h4>
+                        <ul class="list-disc list-inside space-y-1 text-gray-600">
+                            <li>Embedding images in CSS/HTML</li>
+                            <li>API authentication tokens</li>
+                            <li>Data URLs for small files</li>
+                            <li>JWT token encoding</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Data Processing</h4>
+                        <ul class="list-disc list-inside space-y-1 text-gray-600">
+                            <li>Email attachment encoding</li>
+                            <li>Configuration file storage</li>
+                            <li>Binary data transmission</li>
+                            <li>Database text storage</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How to Use -->
+            <div class="card p-6 mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">How to Use Base64 Encoder Decoder</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Base64 Encoding</h4>
+                        <ol class="list-decimal list-inside space-y-1 text-gray-600">
+                            <li>Enter your text in the input area</li>
+                            <li>Click "Base64 Encode" button</li>
+                            <li>Copy the Base64 encoded result</li>
+                            <li>Use in your application or storage</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">Base64 Decoding</h4>
+                        <ol class="list-decimal list-inside space-y-1 text-gray-600">
+                            <li>Paste your Base64 string</li>
+                            <li>Click "Base64 Decode" button</li>
+                            <li>Copy the decoded readable text</li>
+                            <li>Use the original content</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-gray-900">Frequently Asked Questions</h3>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">What is Base64 encoding used for?</h4>
+                    <p class="text-gray-600">Base64 encoding is used to convert binary data into ASCII text format. It's essential for email attachments, embedding images in HTML/CSS, API tokens, and safely transmitting binary data over text-based protocols.</p>
+                </div>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">Is Base64 encoding secure?</h4>
+                    <p class="text-gray-600">Base64 is not encryption - it's just encoding. Anyone can decode Base64 text, so don't use it for security purposes. Use proper encryption for sensitive data.</p>
+                </div>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">Can I decode any Base64 string?</h4>
+                    <p class="text-gray-600">You can decode any valid Base64 string. If the string is invalid or corrupted, the decoder will show an error message.</p>
+                </div>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">Does this tool support large files?</h4>
+                    <p class="text-gray-600">This tool is designed for text content. For large files or binary data, consider using specialized tools or programming libraries for better performance.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Text Formatter. All rights reserved.</p>
+            <p class="mt-2"><a href="/" class="hover:text-gray-300">Back to Text Formatter</a></p>
+        </div>
+    </footer>
+
+    <script>
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 2000);
+        }
+
+        function updateCharCount() {
+            const input = document.getElementById('input-text').value;
+            const output = document.getElementById('output-text').value;
+            document.getElementById('input-length').textContent = input.length;
+            document.getElementById('output-length').textContent = output.length;
+        }
+
+        document.getElementById('encode-base64').addEventListener('click', function() {
+            const input = document.getElementById('input-text').value;
+            try {
+                const output = btoa(unescape(encodeURIComponent(input)));
+                document.getElementById('output-text').value = output;
+                updateCharCount();
+            } catch (e) {
+                showToast('❌ Encoding failed');
+            }
+        });
+
+        document.getElementById('decode-base64').addEventListener('click', function() {
+            const input = document.getElementById('input-text').value;
+            try {
+                const output = decodeURIComponent(escape(atob(input)));
+                document.getElementById('output-text').value = output;
+                updateCharCount();
+            } catch (e) {
+                showToast('❌ Decoding failed - invalid Base64 format');
+            }
+        });
+
+        document.getElementById('copy-result').addEventListener('click', async function() {
+            const output = document.getElementById('output-text').value;
+            try {
+                await navigator.clipboard.writeText(output);
+                showToast('✅ Copied to clipboard!');
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                showToast('❌ Copy failed');
+            }
+        });
+
+        document.getElementById('clear-all').addEventListener('click', function() {
+            document.getElementById('input-text').value = '';
+            document.getElementById('output-text').value = '';
+            updateCharCount();
+        });
+
+        // Update character count on input
+        document.getElementById('input-text').addEventListener('input', updateCharCount);
+        document.getElementById('output-text').addEventListener('input', updateCharCount);
+
+        // Initialize character count
+        updateCharCount();
+    </script>
+</body>
+</html>

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Formatter - Online Text Formatting Tool</title>
-    <meta name="description" content="Free online text formatter for Facebook, LinkedIn, Discord. Format text with bold, italic, line numbers, remove empty lines, and more.">
-    <meta name="keywords" content="Text Formatter, Facebook Text Formatter, Linkedin Text Formatter, Discord Text Formatter, Online Text Formatter">
+    <title>Text Formatter - Online Text Formatting Tool | Format Text Online</title>
+    <meta name="description" content="Free online text formatter with 20+ tools. Format text for Facebook, LinkedIn, Discord. Remove HTML tags, encode URLs, format JSON, remove duplicates, sort lines, and more. Professional text formatting made easy.">
+    <meta name="keywords" content="text formatter, format text online, online text formatting, text formatting tool, remove HTML tags, URL encoder, Base64 encoder, JSON formatter, text cleaner, duplicate remover, line sorter, text converter">
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -339,8 +339,8 @@
         <section class="py-12">
             <div class="main-container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Online Text Formatter</h2>
-                    <p class="text-lg text-gray-600">Format your text for Facebook, LinkedIn, Discord and more with our powerful online text formatting tool</p>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Online Text Formatter - Format Text Online</h2>
+                    <p class="text-lg text-gray-600">Powerful online text formatting tool with 20+ features. Format text for Facebook, LinkedIn, Discord. Remove HTML tags, encode URLs, format JSON, remove duplicates, sort lines and more.</p>
                 </div>
 
                 <!-- Tool Interface -->
@@ -380,6 +380,36 @@
                             </button>
                             <button id="titleCase" class="format-btn">
                                 🏷️ Title Case
+                            </button>
+                            <button id="removeHtmlTags" class="format-btn">
+                                🏷️ Strip HTML
+                            </button>
+                            <button id="removeDuplicateLines" class="format-btn">
+                                🔄 Remove Duplicates
+                            </button>
+                            <button id="sortLines" class="format-btn">
+                                📊 Sort Lines
+                            </button>
+                            <button id="reverseText" class="format-btn">
+                                🔄 Reverse Text
+                            </button>
+                            <button id="urlEncode" class="format-btn">
+                                🔗 URL Encode
+                            </button>
+                            <button id="urlDecode" class="format-btn">
+                                🔗 URL Decode
+                            </button>
+                            <button id="base64Encode" class="format-btn">
+                                🔐 Base64 Encode
+                            </button>
+                            <button id="base64Decode" class="format-btn">
+                                🔐 Base64 Decode
+                            </button>
+                            <button id="wordCount" class="format-btn">
+                                📊 Word Count
+                            </button>
+                            <button id="formatJson" class="format-btn">
+                                📋 Format JSON
                             </button>
                         </div>
                     </div>
@@ -498,13 +528,13 @@
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">About Text Formatter</h2>
                     <div class="mx-auto text-gray-600 space-y-4">
                         <p>
-                            Text Formatter is a powerful online text formatting tool designed to help you format text for various social media platforms including Facebook, LinkedIn, Discord, and more. Whether you're a content creator, social media manager, or just someone who wants to make their text look more professional, our tool provides all the essential formatting features you need.
+                            Text Formatter is a comprehensive online text formatting tool with 20+ advanced features designed to format text online for various social media platforms including Facebook, LinkedIn, Discord, and more. Whether you're a content creator, developer, social media manager, or just someone who wants professional text formatting, our tool provides all the essential features you need.
                         </p>
                         <p>
-                            Our comprehensive text formatter includes features like adding line numbers, removing empty lines, joining text into single lines, removing unnecessary whitespace and emojis, adding current dates, and converting text case (uppercase, lowercase, sentence case, and title case). The intuitive interface makes it easy to format your text exactly how you want it.
+                            Our powerful text formatter includes basic formatting like adding line numbers, removing empty lines, joining text, removing whitespace and emojis, case conversion (uppercase, lowercase, sentence case, title case), plus advanced features like HTML tag removal, URL encoding/decoding, Base64 encoding/decoding, JSON formatting, duplicate line removal, text sorting, line reversal, and detailed text statistics.
                         </p>
                         <p>
-                            With real-time preview functionality, you can see your changes instantly before copying the formatted text. The built-in undo and redo system ensures you never lose your work, and all processing happens locally in your browser for maximum privacy and speed. Perfect for Facebook text formatting, LinkedIn post formatting, Discord message formatting, and any other online text formatting needs.
+                            With real-time preview functionality, you can see your changes instantly before copying the formatted text. The built-in undo and redo system ensures you never lose your work, and all text processing happens locally in your browser for maximum privacy and speed. Perfect for Facebook text formatting, LinkedIn post formatting, Discord message formatting, web development, data cleaning, and any other online text formatting needs.
                         </p>
                     </div>
                 </div>
@@ -558,6 +588,26 @@
                         <h3 class="text-lg font-medium text-gray-900 mb-2">Is this online text formatter free to use?</h3>
                         <p class="text-gray-600">Yes, our text formatter is completely free to use with no registration required. All features are available at no cost, and there are no limits on how much text you can format.</p>
                     </div>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Can I remove HTML tags from my text?</h3>
+                        <p class="text-gray-600">Yes! Our HTML tag removal feature strips all HTML and XML tags from your text, leaving only the clean content. Perfect for cleaning copied web content or removing formatting codes.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Does the tool support URL and Base64 encoding?</h3>
+                        <p class="text-gray-600">Absolutely! We provide both URL encoding/decoding for web development and Base64 encoding/decoding for data conversion. These tools are essential for web developers and data processing tasks.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Can I format and validate JSON with this tool?</h3>
+                        <p class="text-gray-600">Yes, our JSON formatter can beautify and validate JSON data with proper indentation and formatting. It will show an error message if your JSON is invalid, making it perfect for developers and data analysts.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">How do I remove duplicate lines from my text?</h3>
+                        <p class="text-gray-600">Use the "Remove Duplicates" button to automatically detect and remove duplicate lines from your text, keeping only unique entries. Great for cleaning lists and removing redundant content.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Can I get detailed statistics about my text?</h3>
+                        <p class="text-gray-600">Yes! The "Word Count" feature provides comprehensive text statistics including character count (with and without spaces), word count, line count, and paragraph count - perfect for content creators and writers.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -583,6 +633,11 @@
                         <li><a href="pages/linkedin-text-formatter.html" class="hover:text-white">LinkedIn Text Formatter</a></li>
                         <li><a href="pages/discord-text-formatter.html" class="hover:text-white">Discord Text Formatter</a></li>
                         <li><a href="pages/online-text-formatter.html" class="hover:text-white">Online Text Formatter</a></li>
+                        <li><a href="pages/html-tag-remover.html" class="hover:text-white">HTML Tag Remover</a></li>
+                        <li><a href="pages/url-encoder-decoder.html" class="hover:text-white">URL Encoder Decoder</a></li>
+                        <li><a href="pages/base64-encoder-decoder.html" class="hover:text-white">Base64 Encoder</a></li>
+                        <li><a href="pages/json-formatter.html" class="hover:text-white">JSON Formatter</a></li>
+                        <li><a href="pages/text-statistics.html" class="hover:text-white">Text Statistics</a></li>
                     </ul>
                 </div>
                 <div>

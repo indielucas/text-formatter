@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Statistics - Word Count & Character Count Online | Text Formatter</title>
+    <meta name="description" content="Free text statistics tool. Count words, characters, paragraphs, and lines online. Detailed text analysis for writers, students, and content creators. Real-time character counter.">
+    <meta name="keywords" content="word count, character count, text statistics, text analyzer, paragraph count, line count, writing tools, format text online">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+          --background: oklch(0.9818 0.0054 95.0986);
+          --foreground: oklch(0.3438 0.0269 95.7226);
+          --card: oklch(0.9818 0.0054 95.0986);
+          --card-foreground: oklch(0.1908 0.0020 106.5859);
+          --primary: oklch(0.6171 0.1375 39.0427);
+          --primary-foreground: oklch(1.0000 0 0);
+          --border: oklch(0.8847 0.0069 97.3627);
+        }
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10);
+        }
+        .format-btn {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-radius: 0.375rem;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+        .format-btn:hover {
+            opacity: 0.9;
+        }
+        textarea {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            color: var(--foreground);
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        .reading-time {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .speaking-time {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #3b82f6);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+                        <img src="/logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                    </a>
+                </div>
+                <nav class="flex items-center space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-primary">Home</a>
+                    <a href="/domain-generator/" class="text-gray-700 hover:text-primary">Domain Generator</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Text Statistics - Word Count & Character Count Online</h2>
+                <p class="text-lg text-gray-600">Free text statistics tool with real-time analysis. Count words, characters, paragraphs, and get reading time estimates for your content.</p>
+            </div>
+
+            <!-- Text Input -->
+            <div class="card p-6 mb-8">
+                <label for="text-input" class="block text-lg font-medium text-gray-900 mb-3">Enter Your Text</label>
+                <textarea id="text-input" rows="12" class="w-full p-4 border border-gray-300 rounded-lg" placeholder="Paste or type your text here to get real-time statistics...
+
+This tool will count:
+- Words and characters
+- Paragraphs and sentences
+- Reading and speaking time
+- Most common words
+- Text density metrics"></textarea>
+
+                <div class="mt-4 flex flex-wrap gap-3">
+                    <button id="clear-text" class="format-btn">🗑️ Clear Text</button>
+                    <button id="load-sample" class="format-btn">📝 Load Sample Text</button>
+                </div>
+            </div>
+
+            <!-- Main Statistics -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card">
+                    <div class="stat-number" id="word-count">0</div>
+                    <div class="text-sm opacity-90">Words</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="char-count">0</div>
+                    <div class="text-sm opacity-90">Characters</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="char-no-spaces">0</div>
+                    <div class="text-sm opacity-90">Characters (no spaces)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="paragraph-count">0</div>
+                    <div class="text-sm opacity-90">Paragraphs</div>
+                </div>
+            </div>
+
+            <!-- Detailed Statistics -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">📊 Detailed Counts</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span>Lines:</span>
+                            <span class="font-semibold" id="line-count">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Sentences:</span>
+                            <span class="font-semibold" id="sentence-count">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Average words per sentence:</span>
+                            <span class="font-semibold" id="avg-words-sentence">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Average characters per word:</span>
+                            <span class="font-semibold" id="avg-chars-word">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 reading-time">
+                    <h3 class="text-lg font-semibold mb-4">📖 Reading Time</h3>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold mb-2" id="reading-time">0 min</div>
+                        <div class="text-sm opacity-90">At 200 words per minute</div>
+                        <div class="mt-4">
+                            <div class="text-sm opacity-90 mb-1">Progress for 5-minute read</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="reading-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 speaking-time">
+                    <h3 class="text-lg font-semibold mb-4">🎤 Speaking Time</h3>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold mb-2" id="speaking-time">0 min</div>
+                        <div class="text-sm opacity-90">At 150 words per minute</div>
+                        <div class="mt-4">
+                            <div class="text-sm opacity-90 mb-1">Progress for 5-minute speech</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="speaking-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Word Frequency -->
+            <div class="card p-6 mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">🔤 Most Common Words</h3>
+                <div id="word-frequency" class="text-gray-600">
+                    Type some text to see word frequency analysis...
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">📊 Real-time Analysis</h3>
+                    <p class="text-gray-600">Get instant statistics as you type, with live updates for all metrics including word count and reading time.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">⏱️ Time Estimates</h3>
+                    <p class="text-gray-600">Calculate reading and speaking time based on industry-standard rates for content planning and presentation timing.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">🔍 Word Analysis</h3>
+                    <p class="text-gray-600">Discover the most common words in your text, helping with SEO optimization and content analysis.</p>
+                </div>
+            </div>
+
+            <!-- Use Cases -->
+            <div class="card p-6 mb-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Perfect for</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">✍️ Writers</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>Track word count goals</li>
+                            <li>Analyze writing style</li>
+                            <li>Optimize content length</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">🎓 Students</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>Meet essay requirements</li>
+                            <li>Check assignment length</li>
+                            <li>Plan reading time</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">📱 Content Creators</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>Social media post limits</li>
+                            <li>Blog post optimization</li>
+                            <li>SEO content analysis</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">🎤 Speakers</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>Time speech length</li>
+                            <li>Plan presentation flow</li>
+                            <li>Practice pacing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-gray-900">Frequently Asked Questions</h3>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">How accurate is the word count?</h4>
+                    <p class="text-gray-600">Our word count follows industry standards, counting words separated by spaces. It handles multiple spaces, line breaks, and punctuation correctly for accurate results.</p>
+                </div>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">How is reading time calculated?</h4>
+                    <p class="text-gray-600">Reading time is calculated at 200 words per minute, which is the average reading speed for adults. Speaking time uses 150 words per minute, the typical pace for presentations.</p>
+                </div>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">Does this tool work offline?</h4>
+                    <p class="text-gray-600">Yes! All text analysis happens in your browser, so you can use this tool offline once the page loads. Your text never leaves your device.</p>
+                </div>
+
+                <div class="card p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-2">Can I analyze text in other languages?</h4>
+                    <p class="text-gray-600">Yes, this tool supports Unicode text and works with all languages. However, reading times are based on English reading speeds and may vary for other languages.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Text Formatter. All rights reserved.</p>
+            <p class="mt-2"><a href="/" class="hover:text-gray-300">Back to Text Formatter</a></p>
+        </div>
+    </footer>
+
+    <script>
+        function analyzeText() {
+            const text = document.getElementById('text-input').value;
+
+            // Basic counts
+            const chars = text.length;
+            const charsNoSpaces = text.replace(/\s/g, '').length;
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+            const lines = text.split('\n').length;
+            const paragraphs = text.trim() ? text.split(/\n\s*\n/).filter(p => p.trim()).length : 0;
+
+            // Sentence count (rough estimation)
+            const sentences = text.trim() ? text.split(/[.!?]+/).filter(s => s.trim()).length : 0;
+
+            // Averages
+            const avgWordsPerSentence = sentences > 0 ? Math.round(words / sentences * 10) / 10 : 0;
+            const avgCharsPerWord = words > 0 ? Math.round(charsNoSpaces / words * 10) / 10 : 0;
+
+            // Time calculations
+            const readingTime = Math.ceil(words / 200); // 200 WPM
+            const speakingTime = Math.ceil(words / 150); // 150 WPM
+
+            // Reading progress (for 5-minute target)
+            const readingProgress = Math.min((words / 1000) * 100, 100); // 1000 words = 5 min read
+            const speakingProgress = Math.min((words / 750) * 100, 100); // 750 words = 5 min speech
+
+            // Update DOM
+            document.getElementById('word-count').textContent = words.toLocaleString();
+            document.getElementById('char-count').textContent = chars.toLocaleString();
+            document.getElementById('char-no-spaces').textContent = charsNoSpaces.toLocaleString();
+            document.getElementById('paragraph-count').textContent = paragraphs;
+            document.getElementById('line-count').textContent = lines;
+            document.getElementById('sentence-count').textContent = sentences;
+            document.getElementById('avg-words-sentence').textContent = avgWordsPerSentence;
+            document.getElementById('avg-chars-word').textContent = avgCharsPerWord;
+
+            // Time displays
+            document.getElementById('reading-time').textContent = readingTime === 1 ? '1 min' : `${readingTime} min`;
+            document.getElementById('speaking-time').textContent = speakingTime === 1 ? '1 min' : `${speakingTime} min`;
+
+            // Progress bars
+            document.getElementById('reading-progress').style.width = readingProgress + '%';
+            document.getElementById('speaking-progress').style.width = speakingProgress + '%';
+
+            // Word frequency
+            analyzeWordFrequency(text);
+        }
+
+        function analyzeWordFrequency(text) {
+            const words = text.toLowerCase()
+                .replace(/[^\w\s]/g, '')
+                .split(/\s+/)
+                .filter(word => word.length > 2); // Only words longer than 2 characters
+
+            if (words.length === 0) {
+                document.getElementById('word-frequency').textContent = 'Type some text to see word frequency analysis...';
+                return;
+            }
+
+            const frequency = {};
+            words.forEach(word => {
+                frequency[word] = (frequency[word] || 0) + 1;
+            });
+
+            const sorted = Object.entries(frequency)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            const frequencyHTML = sorted.map(([word, count]) =>
+                `<span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm mr-2 mb-2">
+                    ${word} (${count})
+                </span>`
+            ).join('');
+
+            document.getElementById('word-frequency').innerHTML = frequencyHTML || 'No common words found.';
+        }
+
+        // Event listeners
+        document.getElementById('text-input').addEventListener('input', analyzeText);
+
+        document.getElementById('clear-text').addEventListener('click', function() {
+            document.getElementById('text-input').value = '';
+            analyzeText();
+        });
+
+        document.getElementById('load-sample').addEventListener('click', function() {
+            const sampleText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.`;
+
+            document.getElementById('text-input').value = sampleText;
+            analyzeText();
+        });
+
+        // Initialize
+        analyzeText();
+    </script>
+</body>
+</html>

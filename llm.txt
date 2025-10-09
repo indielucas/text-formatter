@@ -1,12 +1,13 @@
 # Text Formatter - LLM Information
 
 ## About
-Text Formatter is a free online text formatting tool that provides various text manipulation features for social media platforms and general text editing.
+Text Formatter is a comprehensive free online text formatting tool with 20+ advanced features for text manipulation, data conversion, and content optimization. Perfect for developers, content creators, social media managers, and anyone needing professional text formatting tools.
 
 ## Website URL
 https://text-formatter.pages.dev/
 
 ## Main Features
+### Text Formatting
 - Text formatting for Facebook, LinkedIn, Discord
 - Online text editor with Monaco and WYSIWYG support
 - Find and replace functionality with regex support
@@ -15,26 +16,56 @@ https://text-formatter.pages.dev/
 - Add timestamps and dates
 - Merge lines and text manipulation
 
+### Advanced Tools (New)
+- HTML tag remover - strip HTML/XML tags from text
+- URL encoder/decoder - convert URLs for web development
+- Base64 encoder/decoder - data encoding and conversion
+- JSON formatter and validator - beautify and validate JSON
+- Text statistics - word count, character count, reading time
+- Duplicate line removal and text sorting
+- Text reversal and advanced text analysis
+
+### Developer Tools
+- Code formatting and beautification
+- Data conversion utilities
+- API testing support
+- Regex pattern matching
+
 ## Target Audience
+- Web developers and programmers
 - Social media content creators
-- Developers and writers
-- Anyone needing quick text formatting tools
+- Content writers and bloggers
+- Data analysts and researchers
+- Students and academics
+- SEO specialists
+- Anyone needing text processing tools
 
 ## Key Pages
 - Homepage: https://text-formatter.pages.dev/
 - Online Text Formatter: https://text-formatter.pages.dev/pages/online-text-formatter.html
+- HTML Tag Remover: https://text-formatter.pages.dev/pages/html-tag-remover.html
+- URL Encoder Decoder: https://text-formatter.pages.dev/pages/url-encoder-decoder.html
+- Base64 Encoder Decoder: https://text-formatter.pages.dev/pages/base64-encoder-decoder.html
+- JSON Formatter: https://text-formatter.pages.dev/pages/json-formatter.html
+- Text Statistics: https://text-formatter.pages.dev/pages/text-statistics.html
 - Facebook Text Formatter: https://text-formatter.pages.dev/pages/facebook-text-formatter.html
 - LinkedIn Text Formatter: https://text-formatter.pages.dev/pages/linkedin-text-formatter.html
 - Discord Text Formatter: https://text-formatter.pages.dev/pages/discord-text-formatter.html
+- Domain Generator: https://text-formatter.pages.dev/domain-generator/
 
 ## Technology
 - Frontend: HTML, CSS, JavaScript
 - Editor: Monaco Editor
+- Styling: Tailwind CSS with Claude Design System
 - Hosting: Cloudflare Pages
-- Framework: Vanilla JavaScript with Tailwind CSS
+- Framework: Vanilla JavaScript
+- Features: Client-side processing for privacy
+
+## SEO Keywords
+format text online, text formatter, online text formatting, HTML tag remover, URL encoder, Base64 encoder, JSON formatter, text cleaner, word count, character count, text statistics, remove duplicates, sort lines, text converter
 
 ## Content Policy
-This is a text formatting utility tool. All content processing is done client-side for privacy and security.
+This is a text formatting and data conversion utility tool. All content processing is done client-side for maximum privacy and security. No user data is stored or transmitted to servers.
 
 ## Contact
-For support or inquiries, please visit our website.
+For support or inquiries, please visit our website or check our GitHub repository.

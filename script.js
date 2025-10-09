@@ -589,6 +589,18 @@ class TextFormatter {
         document.getElementById('sentenceCase').addEventListener('click', () => this.toSentenceCase());
         document.getElementById('titleCase').addEventListener('click', () => this.toTitleCase());
 
+        // New enhanced format buttons
+        document.getElementById('removeHtmlTags').addEventListener('click', () => this.removeHtmlTags());
+        document.getElementById('removeDuplicateLines').addEventListener('click', () => this.removeDuplicateLines());
+        document.getElementById('sortLines').addEventListener('click', () => this.sortLines());
+        document.getElementById('reverseText').addEventListener('click', () => this.reverseText());
+        document.getElementById('urlEncode').addEventListener('click', () => this.urlEncode());
+        document.getElementById('urlDecode').addEventListener('click', () => this.urlDecode());
+        document.getElementById('base64Encode').addEventListener('click', () => this.base64Encode());
+        document.getElementById('base64Decode').addEventListener('click', () => this.base64Decode());
+        document.getElementById('wordCount').addEventListener('click', () => this.showWordCount());
+        document.getElementById('formatJson').addEventListener('click', () => this.formatJson());
+
         // Editor toggle button
         document.getElementById('toggleEditor').addEventListener('click', () => this.toggleEditor());
 
@@ -933,6 +945,108 @@ class TextFormatter {
     toTitleCase() {
         this.formatText((text) => {
             return text.toLowerCase().replace(/\b\w/g, (match) => match.toUpperCase());
+        });
+    }
+
+    // Enhanced formatting functions
+    removeHtmlTags() {
+        this.formatText((text) => {
+            return text.replace(/<[^>]*>/g, '');
+        });
+    }
+
+    removeDuplicateLines() {
+        this.formatText((text) => {
+            const lines = text.split('\n');
+            const uniqueLines = [...new Set(lines)];
+            return uniqueLines.join('\n');
+        });
+    }
+
+    sortLines() {
+        this.formatText((text) => {
+            const lines = text.split('\n');
+            return lines.sort().join('\n');
+        });
+    }
+
+    reverseText() {
+        this.formatText((text) => {
+            return text.split('\n').reverse().join('\n');
+        });
+    }
+
+    urlEncode() {
+        this.formatText((text) => {
+            try {
+                return encodeURIComponent(text);
+            } catch (e) {
+                this.showToast('❌ URL encoding failed');
+                return text;
+            }
+        });
+    }
+
+    urlDecode() {
+        this.formatText((text) => {
+            try {
+                return decodeURIComponent(text);
+            } catch (e) {
+                this.showToast('❌ URL decoding failed');
+                return text;
+            }
+        });
+    }
+
+    base64Encode() {
+        this.formatText((text) => {
+            try {
+                return btoa(unescape(encodeURIComponent(text)));
+            } catch (e) {
+                this.showToast('❌ Base64 encoding failed');
+                return text;
+            }
+        });
+    }
+
+    base64Decode() {
+        this.formatText((text) => {
+            try {
+                return decodeURIComponent(escape(atob(text)));
+            } catch (e) {
+                this.showToast('❌ Base64 decoding failed - invalid format');
+                return text;
+            }
+        });
+    }
+
+    showWordCount() {
+        const text = this.getCurrentEditorValue();
+        const chars = text.length;
+        const charsNoSpaces = text.replace(/\s/g, '').length;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        const lines = text.split('\n').length;
+        const paragraphs = text.trim() ? text.split(/\n\s*\n/).length : 0;
+
+        const stats = `📊 Text Statistics:\n\n` +
+                     `Characters: ${chars}\n` +
+                     `Characters (no spaces): ${charsNoSpaces}\n` +
+                     `Words: ${words}\n` +
+                     `Lines: ${lines}\n` +
+                     `Paragraphs: ${paragraphs}`;
+
+        this.showToast(stats, 5000);
+    }
+
+    formatJson() {
+        this.formatText((text) => {
+            try {
+                const parsed = JSON.parse(text);
+                return JSON.stringify(parsed, null, 2);
+            } catch (e) {
+                this.showToast('❌ Invalid JSON format');
+                return text;
+            }
         });
     }
 
