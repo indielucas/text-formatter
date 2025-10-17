@@ -14,6 +14,13 @@ class TextFormatter {
         this.autoSaveDebounceTime = 500; // 500ms debounce
         this.autoSaveTimeout = null;
         this.isUndoRedoOperation = false; // Flag to prevent auto-save during undo/redo
+
+        // Operation History configuration
+        this.operationHistory = [];
+        this.maxOperationHistory = 5;
+        this.operationHistoryKey = 'textFormatter_operationHistory';
+        this.isExecutingFromHistory = false; // Flag to prevent duplicate history entries
+
         this.initializeSettings();
         this.init();
     }
@@ -31,6 +38,7 @@ class TextFormatter {
 
     init() {
         this.loadHistory();
+        this.loadOperationHistory();
 
         // Initialize Monaco editor with proper timing
         if (document.readyState === 'loading') {
@@ -389,7 +397,9 @@ class TextFormatter {
             copyDropdown.style.display = 'inline-block';
 
             this.currentEditor = 'wysiwyg';
-            toggleButton.textContent = '⌨️ Code';
+            toggleButton.innerHTML = '<i data-lucide=\"code\" class=\"w-3 h-3\"></i> Code';
+            // Re-initialize Lucide icons for the updated button
+            lucide.createIcons();
             toggleButton.title = 'Switch to Markdown editor';
 
             // Auto-save the current content
@@ -416,7 +426,9 @@ class TextFormatter {
             copyDropdown.style.display = 'none';
 
             this.currentEditor = 'monaco';
-            toggleButton.textContent = '📝 WYSIWYG';
+            toggleButton.innerHTML = '<i data-lucide="edit" class="w-3 h-3"></i> WYSIWYG';
+            // Re-initialize Lucide icons for the updated button
+            lucide.createIcons();
             toggleButton.title = 'Switch to WYSIWYG editor';
 
             // Auto-save the current content
@@ -598,11 +610,14 @@ class TextFormatter {
         document.getElementById('urlDecode').addEventListener('click', () => this.urlDecode());
         document.getElementById('base64Encode').addEventListener('click', () => this.base64Encode());
         document.getElementById('base64Decode').addEventListener('click', () => this.base64Decode());
-        document.getElementById('wordCount').addEventListener('click', () => this.showWordCount());
         document.getElementById('formatJson').addEventListener('click', () => this.formatJson());
+        document.getElementById('redditFormatter').addEventListener('click', () => this.redditFormatter());
 
         // Editor toggle button
         document.getElementById('toggleEditor').addEventListener('click', () => this.toggleEditor());
+
+        // Clear editor button
+        document.getElementById('clearEditor').addEventListener('click', () => this.clearEditor());
 
         // Editor toolbar buttons
         document.getElementById('bold').addEventListener('click', () => this.handleFormatButton('bold'));
@@ -672,6 +687,13 @@ class TextFormatter {
             }
         });
 
+        // Operation History buttons
+        document.getElementById('clear-history').addEventListener('click', () => this.clearOperationHistory());
+        document.getElementById('execute-all-history').addEventListener('click', () => this.executeAllHistory());
+
+        // Toggle Tools button
+        document.getElementById('toggle-tools').addEventListener('click', () => this.toggleFormattingTools());
+
         // Setup advanced keyboard shortcuts
         this.setupAdvancedShortcuts();
     }
@@ -709,6 +731,9 @@ class TextFormatter {
 
         const formattedText = this.parseMarkdown(text);
         document.getElementById('preview').innerHTML = formattedText;
+
+        // Update real-time word count
+        this.updateWordCount(text);
     }
 
     parseMarkdown(text) {
@@ -756,6 +781,11 @@ class TextFormatter {
     }
 
     saveToHistory(text) {
+        // Don't save to history during undo/redo operations or when executing from history
+        if (this.isUndoRedoOperation || this.isExecutingFromHistory) {
+            return;
+        }
+
         // Remove any history after current index
         this.history = this.history.slice(0, this.historyIndex + 1);
 
@@ -774,20 +804,30 @@ class TextFormatter {
     }
 
     undo() {
-        if (this.historyIndex > 0) {
+        if (this.historyIndex > 0 && this.history.length > 0) {
             this.historyIndex--;
             this.isUndoRedoOperation = true;
-            this.setCurrentEditorValue(this.history[this.historyIndex]);
+
+            // Ensure we have a valid history entry
+            if (this.history[this.historyIndex] !== undefined) {
+                this.setCurrentEditorValue(this.history[this.historyIndex]);
+            }
+
             this.isUndoRedoOperation = false;
             this.updateUndoRedoButtons();
         }
     }
 
     redo() {
-        if (this.historyIndex < this.history.length - 1) {
+        if (this.historyIndex < this.history.length - 1 && this.history.length > 0) {
             this.historyIndex++;
             this.isUndoRedoOperation = true;
-            this.setCurrentEditorValue(this.history[this.historyIndex]);
+
+            // Ensure we have a valid history entry
+            if (this.history[this.historyIndex] !== undefined) {
+                this.setCurrentEditorValue(this.history[this.historyIndex]);
+            }
+
             this.isUndoRedoOperation = false;
             this.updateUndoRedoButtons();
         }
@@ -868,13 +908,13 @@ class TextFormatter {
     formatText(formatter) {
         const currentText = this.getCurrentEditorValue();
 
-        // 先保存当前状态到历史记录（操作前的状态）
+        // Save current state to history (before operation)
         this.saveToHistory(currentText);
 
         const newText = formatter(currentText);
         this.setCurrentEditorValue(newText);
 
-        // 再保存新的状态到历史记录（操作后的状态）
+        // Save the new state to history (after operation)
         this.saveToHistory(newText);
     }
 
@@ -883,24 +923,28 @@ class TextFormatter {
             const lines = text.split('\n');
             return lines.map((line, index) => `${index + 1}. ${line}`).join('\n');
         });
+        this.addToOperationHistory('addLineNumbers', 'addLineNumbers');
     }
 
     removeEmptyLines() {
         this.formatText((text) => {
             return text.split('\n').filter(line => line.trim() !== '').join('\n');
         });
+        this.addToOperationHistory('removeEmptyLines', 'removeEmptyLines');
     }
 
     joinLines() {
         this.formatText((text) => {
             return text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
         });
+        this.addToOperationHistory('joinLines', 'joinLines');
     }
 
     removeWhitespace() {
         this.formatText((text) => {
             return text.replace(/\s+/g, ' ').trim();
         });
+        this.addToOperationHistory('removeWhitespace', 'removeWhitespace');
     }
 
     removeEmoji() {
@@ -908,12 +952,13 @@ class TextFormatter {
             // Remove emojis using regex
             return text.replace(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '');
         });
+        this.addToOperationHistory('removeEmoji', 'removeEmoji');
     }
 
     addDate() {
         const currentText = this.getCurrentEditorValue();
 
-        // 先保存当前状态到历史记录（操作前的状态）
+        // Save current state to history (before operation)
         this.saveToHistory(currentText);
 
         const date = new Date().toLocaleDateString('en-US', {
@@ -924,28 +969,33 @@ class TextFormatter {
         const newText = currentText + '\n\n' + date;
         this.setCurrentEditorValue(newText);
 
-        // 再保存新的状态到历史记录（操作后的状态）
+        // Save the new state to history (after operation)
         this.saveToHistory(newText);
+        this.addToOperationHistory('addDate', 'addDate');
     }
 
     toUpperCase() {
         this.formatText((text) => text.toUpperCase());
+        this.addToOperationHistory('uppercase', 'toUpperCase');
     }
 
     toLowerCase() {
         this.formatText((text) => text.toLowerCase());
+        this.addToOperationHistory('lowercase', 'toLowerCase');
     }
 
     toSentenceCase() {
         this.formatText((text) => {
             return text.toLowerCase().replace(/(^\w|\.\s+\w)/g, (match) => match.toUpperCase());
         });
+        this.addToOperationHistory('sentenceCase', 'toSentenceCase');
     }
 
     toTitleCase() {
         this.formatText((text) => {
             return text.toLowerCase().replace(/\b\w/g, (match) => match.toUpperCase());
         });
+        this.addToOperationHistory('titleCase', 'toTitleCase');
     }
 
     // Enhanced formatting functions
@@ -953,6 +1003,7 @@ class TextFormatter {
         this.formatText((text) => {
             return text.replace(/<[^>]*>/g, '');
         });
+        this.addToOperationHistory('removeHtmlTags', 'removeHtmlTags');
     }
 
     removeDuplicateLines() {
@@ -961,6 +1012,7 @@ class TextFormatter {
             const uniqueLines = [...new Set(lines)];
             return uniqueLines.join('\n');
         });
+        this.addToOperationHistory('removeDuplicateLines', 'removeDuplicateLines');
     }
 
     sortLines() {
@@ -968,12 +1020,14 @@ class TextFormatter {
             const lines = text.split('\n');
             return lines.sort().join('\n');
         });
+        this.addToOperationHistory('sortLines', 'sortLines');
     }
 
     reverseText() {
         this.formatText((text) => {
             return text.split('\n').reverse().join('\n');
         });
+        this.addToOperationHistory('reverseText', 'reverseText');
     }
 
     urlEncode() {
@@ -985,6 +1039,7 @@ class TextFormatter {
                 return text;
             }
         });
+        this.addToOperationHistory('urlEncode', 'urlEncode');
     }
 
     urlDecode() {
@@ -996,6 +1051,7 @@ class TextFormatter {
                 return text;
             }
         });
+        this.addToOperationHistory('urlDecode', 'urlDecode');
     }
 
     base64Encode() {
@@ -1007,6 +1063,7 @@ class TextFormatter {
                 return text;
             }
         });
+        this.addToOperationHistory('base64Encode', 'base64Encode');
     }
 
     base64Decode() {
@@ -1018,6 +1075,23 @@ class TextFormatter {
                 return text;
             }
         });
+        this.addToOperationHistory('base64Decode', 'base64Decode');
+    }
+
+    updateWordCount(text) {
+        const chars = text.length;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+        // Update the display elements
+        const charCountElement = document.getElementById('char-count');
+        const wordCountElement = document.getElementById('word-count-num');
+
+        if (charCountElement) {
+            charCountElement.textContent = chars;
+        }
+        if (wordCountElement) {
+            wordCountElement.textContent = words;
+        }
     }
 
     showWordCount() {
@@ -1028,7 +1102,7 @@ class TextFormatter {
         const lines = text.split('\n').length;
         const paragraphs = text.trim() ? text.split(/\n\s*\n/).length : 0;
 
-        const stats = `📊 Text Statistics:\n\n` +
+        const stats = `Text Statistics:\n\n` +
                      `Characters: ${chars}\n` +
                      `Characters (no spaces): ${charsNoSpaces}\n` +
                      `Words: ${words}\n` +
@@ -1048,6 +1122,66 @@ class TextFormatter {
                 return text;
             }
         });
+        this.addToOperationHistory('formatJson', 'formatJson');
+    }
+
+    redditFormatter() {
+        this.formatText((text) => {
+            let formattedText = text;
+
+            // 1. Remove extra spaces (multiple spaces become single space)
+            formattedText = formattedText.replace(/[ \t]+/g, ' ');
+
+            // 2. Standardize line breaks (convert different line breaks to single \n)
+            formattedText = formattedText.replace(/\r\n/g, '\n');
+            formattedText = formattedText.replace(/\r/g, '\n');
+
+            // 3. Remove multiple consecutive empty lines (keep max 1 empty line between content)
+            formattedText = formattedText.replace(/\n{3,}/g, '\n\n');
+
+            // 4. Fix punctuation spacing
+            // Add space after periods, commas, colons, semicolons if missing
+            formattedText = formattedText.replace(/([.,:;])([^\s\n])/g, '$1 $2');
+            // Remove space before punctuation
+            formattedText = formattedText.replace(/\s+([.,:;!?])/g, '$1');
+
+            // 5. Fix quotes - convert to standard quotes
+            formattedText = formattedText.replace(/[""]/g, '"');
+            formattedText = formattedText.replace(/['']/g, "'");
+
+            // 6. Trim whitespace at start and end of lines
+            formattedText = formattedText.split('\n').map(line => line.trim()).join('\n');
+
+            // 7. Remove leading and trailing empty lines
+            formattedText = formattedText.replace(/^\n+/, '').replace(/\n+$/, '');
+
+            // 8. Convert encoding issues common in Reddit
+            formattedText = formattedText.replace(/â€™/g, "'");
+            formattedText = formattedText.replace(/â€œ/g, '"');
+            formattedText = formattedText.replace(/â€\u009d/g, '"');
+            formattedText = formattedText.replace(/â€"/g, '—');
+            formattedText = formattedText.replace(/â€¦/g, '...');
+
+            this.showToast('✅ Reddit formatting applied!');
+            return formattedText;
+        });
+        this.addToOperationHistory('redditFormatter', 'redditFormatter');
+    }
+
+    clearEditor() {
+        const currentText = this.getCurrentEditorValue();
+
+        // Save current state to history before clearing
+        this.saveToHistory(currentText);
+
+        // Clear the editor content
+        this.setCurrentEditorValue('');
+
+        // Save the cleared state to history
+        this.saveToHistory('');
+
+        // Show confirmation toast
+        this.showToast('Editor cleared!');
     }
 
     async copyPreview() {
@@ -1091,7 +1225,7 @@ class TextFormatter {
 
             await navigator.clipboard.write([clipboardItem]);
 
-            this.showCopySuccess('📄 Rich text copied!');
+            this.showCopySuccess('Rich text copied!');
         } catch (err) {
             console.error('Rich text copy failed, falling back to plain text: ', err);
 
@@ -1122,7 +1256,7 @@ class TextFormatter {
         try {
             const plainText = this.htmlToMarkdown(this.wysiwygEditor.innerHTML);
             await navigator.clipboard.writeText(plainText);
-            this.showCopySuccess('📝 Markdown copied!');
+            this.showCopySuccess('Markdown copied!');
         } catch (err) {
             console.error('Failed to copy markdown: ', err);
             alert('Failed to copy text. Please try again.');
@@ -1544,9 +1678,217 @@ class TextFormatter {
             });
         }
     }
+
+    // Operation History Management Methods
+    loadOperationHistory() {
+        try {
+            const saved = localStorage.getItem(this.operationHistoryKey);
+            this.operationHistory = saved ? JSON.parse(saved) : [];
+            this.renderOperationHistory();
+        } catch (error) {
+            console.warn('Failed to load operation history:', error);
+            this.operationHistory = [];
+        }
+    }
+
+    saveOperationHistory() {
+        try {
+            localStorage.setItem(this.operationHistoryKey, JSON.stringify(this.operationHistory));
+        } catch (error) {
+            console.warn('Failed to save operation history:', error);
+        }
+    }
+
+    addToOperationHistory(operationName, operationFunction) {
+        // Don't add to history if we're executing from history
+        if (this.isExecutingFromHistory) {
+            return;
+        }
+
+        // Remove if already exists (avoid duplicates)
+        this.operationHistory = this.operationHistory.filter(op => op.name !== operationName);
+
+        // Add to beginning of array
+        this.operationHistory.unshift({
+            name: operationName,
+            function: operationFunction,
+            timestamp: Date.now()
+        });
+
+        // Keep only the last maxOperationHistory items
+        if (this.operationHistory.length > this.maxOperationHistory) {
+            this.operationHistory = this.operationHistory.slice(0, this.maxOperationHistory);
+        }
+
+        this.saveOperationHistory();
+        this.renderOperationHistory();
+    }
+
+    renderOperationHistory() {
+        const container = document.getElementById('history-items');
+        const placeholder = document.getElementById('history-placeholder');
+
+        if (!container || !placeholder) return;
+
+        // Clear existing items
+        container.innerHTML = '';
+
+        if (this.operationHistory.length === 0) {
+            placeholder.style.display = 'block';
+            container.classList.add('hidden');
+            return;
+        }
+
+        placeholder.style.display = 'none';
+        container.classList.remove('hidden');
+
+        // Create history items
+        this.operationHistory.forEach((operation, index) => {
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            item.innerHTML = `
+                <span>${this.getOperationDisplayName(operation.name)}</span>
+                <button class="history-item-delete" onclick="textFormatter.removeFromOperationHistory(${index})" title="Remove from history">
+                    ×
+                </button>
+            `;
+
+            // Add click handler for executing single operation
+            item.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('history-item-delete')) {
+                    this.executeOperation(operation);
+                }
+            });
+
+            container.appendChild(item);
+        });
+    }
+
+    getOperationDisplayName(operationName) {
+        const displayNames = {
+            'addLineNumbers': 'Line Numbers',
+            'removeEmptyLines': 'Remove Empty',
+            'joinLines': 'Join Lines',
+            'removeWhitespace': 'Trim Space',
+            'removeEmoji': 'Remove Emoji',
+            'addDate': 'Add Date',
+            'uppercase': 'UPPERCASE',
+            'lowercase': 'lowercase',
+            'sentenceCase': 'Sentence',
+            'titleCase': 'Title Case',
+            'removeHtmlTags': 'Strip HTML',
+            'removeDuplicateLines': 'Remove Duplicates',
+            'sortLines': 'Sort Lines',
+            'reverseText': 'Reverse Text',
+            'urlEncode': 'URL Encode',
+            'urlDecode': 'URL Decode',
+            'base64Encode': 'Base64 Encode',
+            'base64Decode': 'Base64 Decode',
+            'formatJson': 'Format JSON',
+            'redditFormatter': 'Reddit Format'
+        };
+
+        return displayNames[operationName] || operationName;
+    }
+
+    executeOperation(operation) {
+        if (typeof this[operation.function] === 'function') {
+            this.isExecutingFromHistory = true; // Set flag to prevent adding to history again
+            this[operation.function]();
+            this.isExecutingFromHistory = false; // Reset flag
+            this.showToast(`Executed: ${this.getOperationDisplayName(operation.name)}`);
+        }
+    }
+
+    removeFromOperationHistory(index) {
+        if (index >= 0 && index < this.operationHistory.length) {
+            this.operationHistory.splice(index, 1);
+            this.saveOperationHistory();
+            this.renderOperationHistory();
+            this.showToast('Operation removed from history');
+        }
+    }
+
+    clearOperationHistory() {
+        this.operationHistory = [];
+        this.saveOperationHistory();
+        this.renderOperationHistory();
+        this.showToast('Operation history cleared');
+    }
+
+    executeAllHistory() {
+        if (this.operationHistory.length === 0) {
+            this.showToast('No operations in history');
+            return;
+        }
+
+        const operations = [...this.operationHistory].reverse(); // Execute in the order they were added
+        let executedCount = 0;
+
+        operations.forEach((operation, index) => {
+            setTimeout(() => {
+                if (typeof this[operation.function] === 'function') {
+                    this.isExecutingFromHistory = true; // Set flag to prevent adding to history again
+                    this[operation.function]();
+                    this.isExecutingFromHistory = false; // Reset flag
+                    executedCount++;
+                }
+
+                // Show completion message after all operations
+                if (index === operations.length - 1) {
+                    this.showToast(`Executed ${executedCount} operations from history`);
+                }
+            }, index * 100); // Small delay between operations
+        });
+    }
+
+    showToast(message) {
+        // Create toast notification
+        const toast = document.createElement('div');
+        toast.className = 'toast bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg';
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }
+
+    // Toggle Formatting Tools visibility
+    toggleFormattingTools() {
+        const grid = document.getElementById('formatting-tools-grid');
+        const icon = document.getElementById('toggle-tools-icon');
+        const text = document.getElementById('toggle-tools-text');
+
+        if (!grid || !icon || !text) return;
+
+        const isCollapsed = grid.style.maxHeight === '48px' || grid.style.maxHeight === '';
+
+        if (isCollapsed) {
+            // Expand
+            grid.style.maxHeight = 'none';
+            icon.setAttribute('data-lucide', 'chevron-up');
+            text.textContent = 'Collapse';
+        } else {
+            // Collapse
+            grid.style.maxHeight = '48px';
+            icon.setAttribute('data-lucide', 'chevron-down');
+            text.textContent = 'Expand';
+        }
+
+        // Re-initialize Lucide icons after changing the attribute
+        lucide.createIcons();
+    }
 }
+
+// Global reference for TextFormatter instance
+let textFormatter;
 
 // Initialize the text formatter when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new TextFormatter();
+    textFormatter = new TextFormatter();
 });

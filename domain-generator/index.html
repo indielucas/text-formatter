@@ -12,6 +12,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         /* Claude Design System Variables */
         :root {
@@ -167,6 +168,24 @@
 
         [data-theme="dark"] .hover\:border-gray-400:hover {
             border-color: var(--ring) !important;
+        }
+
+        /* Lucide icon alignment */
+        .lucide {
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        /* Better icon alignment for buttons */
+        .format-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+
+        .format-btn .lucide {
+            flex-shrink: 0;
         }
 
         /* Status message styling */
@@ -471,7 +490,7 @@
     <!-- Footer -->
     <footer class="footer py-12">
         <div class="main-container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <div class="flex items-center mb-4">
                         <img src="../logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
@@ -487,7 +506,20 @@
                         <li><a href="../pages/facebook-text-formatter.html" class="hover:text-white">Facebook Text Formatter</a></li>
                         <li><a href="../pages/linkedin-text-formatter.html" class="hover:text-white">LinkedIn Text Formatter</a></li>
                         <li><a href="../pages/discord-text-formatter.html" class="hover:text-white">Discord Text Formatter</a></li>
+                        <li><a href="../pages/reddit-text-formatter.html" class="hover:text-white">Reddit Text Formatter</a></li>
                         <li><a href="../pages/online-text-formatter.html" class="hover:text-white">Online Text Formatter</a></li>
+                        <li><a href="../pages/html-tag-remover.html" class="hover:text-white">HTML Tag Remover</a></li>
+                        <li><a href="../pages/url-encoder-decoder.html" class="hover:text-white">URL Encoder Decoder</a></li>
+                        <li><a href="../pages/base64-encoder-decoder.html" class="hover:text-white">Base64 Encoder</a></li>
+                        <li><a href="../pages/json-formatter.html" class="hover:text-white">JSON Formatter</a></li>
+                        <li><a href="../pages/text-statistics.html" class="hover:text-white">Text Statistics</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="https://aicrop.app" target="_blank" rel="dofollow" class="hover:text-white">AI Image Cropper</a></li>
+                        <li><a href="https://wordtry.com" target="_blank" rel="dofollow" class="hover:text-white">5-Letter Game</a></li>
                     </ul>
                 </div>
                 <div>
@@ -516,7 +548,7 @@
             <div class="space-y-6">
                 <!-- Quick Start -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-3 text-primary">🚀 Quick Start</h3>
+                    <h3 class="text-lg font-semibold mb-3 text-primary"><i data-lucide="rocket" class="w-5 h-5 inline mr-2"></i>Quick Start</h3>
                     <p class="text-gray-600 mb-3">Generate unique domain names in seconds:</p>
                     <ol class="list-decimal list-inside space-y-1 text-sm text-gray-600">
                         <li>Select one or two word libraries from the dropdowns</li>
@@ -528,10 +560,10 @@
 
                 <!-- Domain Generation Rules -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-3 text-primary">📏 Domain Generation Rules</h3>
+                    <h3 class="text-lg font-semibold mb-3 text-primary"><i data-lucide="ruler" class="w-5 h-5 inline mr-2"></i>Domain Generation Rules</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <h4 class="font-medium mb-2">🎯 Combination Logic</h4>
+                            <h4 class="font-medium mb-2"><i data-lucide="target" class="w-4 h-4 inline mr-2"></i>Combination Logic</h4>
                             <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
                                 <li><strong>Pattern:</strong> Prefix + Word1 + Separator + Word2 + Suffix</li>
                                 <li><strong>Example:</strong> "my" + "smart" + "-" + "app" + ".com" = "my-smart-app.com"</li>
@@ -540,7 +572,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h4 class="font-medium mb-2">⚡ Performance Tips</h4>
+                            <h4 class="font-medium mb-2"><i data-lucide="zap" class="w-4 h-4 inline mr-2"></i>Performance Tips</h4>
                             <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
                                 <li>Large libraries generate more combinations</li>
                                 <li>Set length limits to filter results</li>
@@ -553,10 +585,10 @@
 
                 <!-- Word Libraries Guide -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-3 text-primary">📚 Word Libraries Guide</h3>
+                    <h3 class="text-lg font-semibold mb-3 text-primary"><i data-lucide="book" class="w-5 h-5 inline mr-2"></i>Word Libraries Guide</h3>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <div>
-                            <h4 class="font-medium mb-2">🎨 Creative Options</h4>
+                            <h4 class="font-medium mb-2"><i data-lucide="palette" class="w-4 h-4 inline mr-2"></i>Creative Options</h4>
                             <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
                                 <li><strong>Short Words:</strong> 3-letter words for memorable domains</li>
                                 <li><strong>Medium Words:</strong> 4-letter balanced terms</li>
@@ -565,7 +597,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h4 class="font-medium mb-2">💼 Business Focused</h4>
+                            <h4 class="font-medium mb-2"><i data-lucide="briefcase" class="w-4 h-4 inline mr-2"></i>Business Focused</h4>
                             <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
                                 <li><strong>Action Words:</strong> Endings like "builder", "maker"</li>
                                 <li><strong>Action Starters:</strong> Beginnings like "create", "build"</li>
@@ -578,7 +610,7 @@
 
                 <!-- Custom Word List -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-3 text-primary">📝 Custom Word List Usage</h3>
+                    <h3 class="text-lg font-semibold mb-3 text-primary"><i data-lucide="edit-3" class="w-5 h-5 inline mr-2"></i>Custom Word List Usage</h3>
                     <div class="bg-gray-50 rounded-lg p-4">
                         <h4 class="font-medium mb-2">How to Use Custom Words</h4>
                         <ol class="list-decimal list-inside space-y-1 text-sm text-gray-600 mb-3">
@@ -620,10 +652,10 @@
 
                 <!-- Export & Availability -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-3 text-primary">💾 Export & Domain Checking</h3>
+                    <h3 class="text-lg font-semibold mb-3 text-primary"><i data-lucide="save" class="w-5 h-5 inline mr-2"></i>Export & Domain Checking</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <h4 class="font-medium mb-2">📊 Export Options</h4>
+                            <h4 class="font-medium mb-2"><i data-lucide="bar-chart-3" class="w-4 h-4 inline mr-2"></i>Export Options</h4>
                             <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
                                 <li><strong>Copy:</strong> Copy all results to clipboard</li>
                                 <li><strong>Export CSV:</strong> Download as spreadsheet</li>
@@ -632,7 +664,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h4 class="font-medium mb-2">🔍 Availability Checking</h4>
+                            <h4 class="font-medium mb-2"><i data-lucide="search" class="w-4 h-4 inline mr-2"></i>Availability Checking</h4>
                             <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
                                 <li>Use URL pattern to check domain availability</li>
                                 <li>Default pattern uses Name.com</li>
@@ -1432,6 +1464,12 @@
                 }
             });
         }
+    </script>
+    <script>
+        // Initialize Lucide icons after page load
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+        });
     </script>
 </body>
 </html>

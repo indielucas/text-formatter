@@ -6,12 +6,14 @@
     <title>Text Formatter - Online Text Formatting Tool | Format Text Online</title>
     <meta name="description" content="Free online text formatter with 20+ tools. Format text for Facebook, LinkedIn, Discord. Remove HTML tags, encode URLs, format JSON, remove duplicates, sort lines, and more. Professional text formatting made easy.">
     <meta name="keywords" content="text formatter, format text online, online text formatting, text formatting tool, remove HTML tags, URL encoder, Base64 encoder, JSON formatter, text cleaner, duplicate remover, line sorter, text converter">
+    <meta name="yandex-verification" content="a5a3b10fb3da0e86" />
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <style>
         /* Claude Design System Variables */
         :root {
@@ -274,6 +276,103 @@
             color: var(--foreground);
         }
 
+        /* Word count display styling */
+        #word-count-display {
+            backdrop-filter: blur(4px);
+            z-index: 10;
+        }
+
+        [data-theme="dark"] #word-count-display {
+            background-color: var(--card);
+            border-color: var(--border);
+            color: var(--muted-foreground);
+        }
+
+        /* Lucide icon alignment */
+        .lucide {
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        /* Better icon alignment for buttons */
+        .format-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+
+        .format-btn .lucide {
+            flex-shrink: 0;
+        }
+
+        /* Operation History Styles */
+        .history-item {
+            position: relative;
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border: 1px solid var(--border);
+            border-radius: calc(var(--radius) - 2px);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            padding-right: 2rem; /* Space for delete button */
+        }
+
+        .history-item:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-item-delete {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 16px;
+            height: 16px;
+            background-color: var(--muted-foreground);
+            color: var(--background);
+            border: none;
+            border-radius: 50%;
+            font-size: 10px;
+            line-height: 1;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .history-item-delete:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        #history-placeholder {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Dark theme adjustments for history items */
+        [data-theme="dark"] .history-item {
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+            border-color: var(--border);
+        }
+
+        [data-theme="dark"] .history-item:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        [data-theme="dark"] #history-items-container {
+            background-color: var(--muted);
+            border-color: var(--border);
+        }
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 </head>
@@ -336,81 +435,83 @@
     <!-- Main Content -->
     <main>
         <!-- Text Formatter Tool -->
-        <section class="py-12">
+        <section class="py-6">
             <div class="main-container mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Online Text Formatter - Format Text Online</h2>
-                    <p class="text-lg text-gray-600">Powerful online text formatting tool with 20+ features. Format text for Facebook, LinkedIn, Discord. Remove HTML tags, encode URLs, format JSON, remove duplicates, sort lines and more.</p>
-                </div>
-
                 <!-- Tool Interface -->
                 <div class="card p-6">
                     <!-- Global Action Buttons -->
                     <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Text Formatting Tools</h3>
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
+                            <h3 class="text-lg font-semibold text-gray-900">Text Formatting Tools</h3>
+                            <button id="toggle-tools" class="px-3 py-1 format-btn text-xs self-start sm:self-auto" title="Expand/Collapse formatting tools">
+                                <i id="toggle-tools-icon" data-lucide="chevron-down" class="w-3 h-3"></i> <span id="toggle-tools-text">Expand</span>
+                            </button>
+                        </div>
 
                         <!-- Formatting Functions -->
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-12">
+                        <div id="formatting-tools-container" class="mb-12">
+                            <div id="formatting-tools-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 overflow-hidden transition-all duration-300" style="max-height: 48px;">
                             <button id="addLineNumbers" class="format-btn">
-                                📝 Line Numbers
+                                <i data-lucide="list-ordered" class="w-4 h-4"></i> Line Numbers
                             </button>
                             <button id="removeEmptyLines" class="format-btn">
-                                🗑️ Remove Empty
+                                <i data-lucide="trash-2" class="w-4 h-4"></i> Remove Empty
                             </button>
                             <button id="joinLines" class="format-btn">
-                                📄 Join Lines
+                                <i data-lucide="merge" class="w-4 h-4"></i> Join Lines
                             </button>
                             <button id="removeWhitespace" class="format-btn">
-                                ✂️ Trim Space
+                                <i data-lucide="scissors" class="w-4 h-4"></i> Trim Space
                             </button>
                             <button id="removeEmoji" class="format-btn">
-                                🚫 Remove Emoji
+                                <i data-lucide="ban" class="w-4 h-4"></i> Remove Emoji
                             </button>
                             <button id="addDate" class="format-btn">
-                                📅 Add Date
+                                <i data-lucide="calendar" class="w-4 h-4"></i> Add Date
                             </button>
                             <button id="uppercase" class="format-btn">
-                                ⬆️ UPPERCASE
+                                <i data-lucide="arrow-up" class="w-4 h-4"></i> UPPERCASE
                             </button>
                             <button id="lowercase" class="format-btn">
-                                ⬇️ lowercase
+                                <i data-lucide="arrow-down" class="w-4 h-4"></i> lowercase
                             </button>
                             <button id="sentenceCase" class="format-btn">
-                                📝 Sentence
+                                <i data-lucide="type" class="w-4 h-4"></i> Sentence
                             </button>
                             <button id="titleCase" class="format-btn">
-                                🏷️ Title Case
+                                <i data-lucide="heading" class="w-4 h-4"></i> Title Case
                             </button>
                             <button id="removeHtmlTags" class="format-btn">
-                                🏷️ Strip HTML
+                                <i data-lucide="code" class="w-4 h-4"></i> Strip HTML
                             </button>
                             <button id="removeDuplicateLines" class="format-btn">
-                                🔄 Remove Duplicates
+                                <i data-lucide="copy-x" class="w-4 h-4"></i> Remove Duplicates
                             </button>
                             <button id="sortLines" class="format-btn">
-                                📊 Sort Lines
+                                <i data-lucide="arrow-up-down" class="w-4 h-4"></i> Sort Lines
                             </button>
                             <button id="reverseText" class="format-btn">
-                                🔄 Reverse Text
+                                <i data-lucide="arrow-left-right" class="w-4 h-4"></i> Reverse Text
                             </button>
                             <button id="urlEncode" class="format-btn">
-                                🔗 URL Encode
+                                <i data-lucide="link" class="w-4 h-4"></i> URL Encode
                             </button>
                             <button id="urlDecode" class="format-btn">
-                                🔗 URL Decode
+                                <i data-lucide="unlink" class="w-4 h-4"></i> URL Decode
                             </button>
                             <button id="base64Encode" class="format-btn">
-                                🔐 Base64 Encode
+                                <i data-lucide="lock" class="w-4 h-4"></i> Base64 Encode
                             </button>
                             <button id="base64Decode" class="format-btn">
-                                🔐 Base64 Decode
-                            </button>
-                            <button id="wordCount" class="format-btn">
-                                📊 Word Count
+                                <i data-lucide="unlock" class="w-4 h-4"></i> Base64 Decode
                             </button>
                             <button id="formatJson" class="format-btn">
-                                📋 Format JSON
+                                <i data-lucide="braces" class="w-4 h-4"></i> Format JSON
                             </button>
+                            <button id="redditFormatter" class="format-btn">
+                                <i data-lucide="message-square" class="w-4 h-4"></i> Reddit Format
+                            </button>
+                            </div>
                         </div>
                     </div>
 
@@ -422,38 +523,46 @@
                                 <h3 class="text-lg font-medium text-gray-900">Text Editor</h3>
 
                                 <!-- Editor Toolbar -->
-                                <div class="flex gap-2 justify-center sm:justify-end">
-                                    <button id="toggleEditor" class="px-3 py-1 format-btn text-sm" title="Toggle between Markdown and WYSIWYG editor">
-                                        📝 WYSIWYG
-                                    </button>
-
-                                    <button id="undo" class="px-3 py-1 format-btn text-sm">
-                                        ↶ Undo
-                                    </button>
-                                    <button id="redo" class="px-3 py-1 format-btn text-sm">
-                                        ↷ Redo
-                                    </button>
-
-                                    <button id="bold" class="px-3 py-1 format-btn text-sm" title="Bold (Cmd+B / Ctrl+B)">
-                                        <span class="font-bold">B</span>
-                                    </button>
-                                    <button id="italic" class="px-3 py-1 format-btn text-sm" title="Italic (Cmd+I / Ctrl+I)">
-                                        <span class="italic">I</span>
-                                    </button>
-                                    <button id="underline" class="px-3 py-1 format-btn text-sm" title="Underline (Cmd+U / Ctrl+U)">
-                                        <span class="underline">U</span>
-                                    </button>
-                                    <button id="strikethrough" class="px-3 py-1 format-btn text-sm" title="Strikethrough (Cmd+Shift+S / Ctrl+Shift+S)">
-                                        <span class="line-through">S</span>
-                                    </button>
-
-                                    <div id="copy-dropdown" class="relative" style="display: none;">
-                                        <button id="copyWysiwyg" class="px-3 py-1 format-btn text-sm" title="Copy WYSIWYG content">
-                                            📋 Copy ▼
+                                <div class="flex flex-col sm:flex-row gap-2 justify-center sm:justify-end">
+                                    <!-- Row 1: Editor controls -->
+                                    <div class="flex gap-2 justify-center sm:justify-end order-2 sm:order-1">
+                                        <button id="toggleEditor" class="px-2 py-1 format-btn text-xs" title="Toggle between Markdown and WYSIWYG editor">
+                                            <i data-lucide="edit" class="w-3 h-3"></i> WYSIWYG
                                         </button>
-                                        <div id="copy-menu" class="absolute right-0 top-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10 min-w-48" style="display: none;">
-                                            <button id="copyRichText" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm">📄 Copy Rich Text</button>
-                                            <button id="copyMarkdown" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm">📝 Copy as Markdown</button>
+                                        <button id="clearEditor" class="px-2 py-1 format-btn text-xs" title="Clear all text">
+                                            <i data-lucide="trash-2" class="w-3 h-3"></i> Clear
+                                        </button>
+                                        <button id="undo" class="px-2 py-1 format-btn text-xs">
+                                            <i data-lucide="undo" class="w-3 h-3"></i> Undo
+                                        </button>
+                                        <button id="redo" class="px-2 py-1 format-btn text-xs">
+                                            <i data-lucide="redo" class="w-3 h-3"></i> Redo
+                                        </button>
+                                    </div>
+
+                                    <!-- Row 2: Format controls -->
+                                    <div class="flex gap-2 justify-center sm:justify-end order-1 sm:order-2">
+                                        <button id="bold" class="px-2 py-1 format-btn text-xs" title="Bold (Cmd+B / Ctrl+B)">
+                                            <span class="font-bold">B</span>
+                                        </button>
+                                        <button id="italic" class="px-2 py-1 format-btn text-xs" title="Italic (Cmd+I / Ctrl+I)">
+                                            <span class="italic">I</span>
+                                        </button>
+                                        <button id="underline" class="px-2 py-1 format-btn text-xs" title="Underline (Cmd+U / Ctrl+U)">
+                                            <span class="underline">U</span>
+                                        </button>
+                                        <button id="strikethrough" class="px-2 py-1 format-btn text-xs" title="Strikethrough (Cmd+Shift+S / Ctrl+Shift+S)">
+                                            <span class="line-through">S</span>
+                                        </button>
+
+                                        <div id="copy-dropdown" class="relative" style="display: none;">
+                                            <button id="copyWysiwyg" class="px-2 py-1 format-btn text-xs" title="Copy WYSIWYG content">
+                                                <i data-lucide="copy" class="w-3 h-3"></i> Copy <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                                            </button>
+                                            <div id="copy-menu" class="absolute right-0 top-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10 min-w-48" style="display: none;">
+                                                <button id="copyRichText" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm flex items-center gap-2"><i data-lucide="file-text" class="w-4 h-4"></i>Copy Rich Text</button>
+                                                <button id="copyMarkdown" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm flex items-center gap-2"><i data-lucide="hash" class="w-4 h-4"></i>Copy as Markdown</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -467,6 +576,10 @@
                                      style="display: none; min-height: 300px; line-height: 1.5;"
                                      placeholder="Start typing your text here...">
                                 </div>
+                                <!-- Real-time word count display -->
+                                <div id="word-count-display" class="absolute bottom-2 right-2 bg-gray-100 border border-gray-300 rounded px-2 py-1 text-xs text-gray-600 font-mono select-none opacity-75 hover:opacity-100 transition-opacity">
+                                    <span id="char-count">0</span> chars | <span id="word-count-num">0</span> words
+                                </div>
                             </div>
                         </div>
 
@@ -474,8 +587,8 @@
                         <div id="preview-column" class="flex flex-col h-full">
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
                                 <h3 class="text-lg font-medium text-gray-900">Preview</h3>
-                                <button id="copyPreview" class="px-3 py-1 format-btn text-sm">
-                                    📋 Copy to Clipboard
+                                <button id="copyPreview" class="px-3 py-1 format-btn text-xs">
+                                    <i data-lucide="clipboard" class="w-3 h-3"></i> Copy to Clipboard
                                 </button>
                             </div>
                             <div id="preview" class="border border-gray-300 rounded-lg p-4 bg-gray-50 font-mono text-sm whitespace-pre-wrap flex-1 overflow-y-auto">
@@ -485,7 +598,7 @@
                     </div>
 
                     <!-- Find and Replace Section -->
-                    <div id="find-replace-section" class="mt-6 p-4 bg-gray-50 border border-gray-300 rounded-lg">
+                    <div id="find-replace-section" class="mt-6 mb-6 p-4 bg-gray-50 border border-gray-300 rounded-lg">
                         <div class="flex flex-col lg:flex-row gap-4">
                             <div class="flex-1">
                                 <label for="find-input" class="block text-sm font-medium text-gray-700 mb-1">Find</label>
@@ -517,12 +630,51 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Operation History Section -->
+                    <div id="operation-history-section" class="mb-6">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-2">
+                            <h3 class="text-lg font-semibold text-gray-900">Operation History</h3>
+
+                            <!-- History Controls -->
+                            <div class="flex gap-2">
+                                <button id="clear-history" class="px-3 py-1 format-btn text-xs">
+                                    <i data-lucide="trash" class="w-3 h-3"></i> Clear
+                                </button>
+                                <button id="execute-all-history" class="px-3 py-1 format-btn text-xs">
+                                    <i data-lucide="play" class="w-3 h-3"></i> Execute All
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- History Items Container -->
+                        <div id="history-items-container" class="min-h-[80px] border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50">
+                            <div id="history-placeholder" class="text-center text-gray-500">
+                                <div class="text-gray-400 mb-2"><i data-lucide="file-text" class="w-6 h-6"></i></div>
+                                <p class="text-sm">Operation history will appear here</p>
+                                <p class="text-xs text-gray-400">Use the formatting buttons above to start building your workflow</p>
+                            </div>
+                            <div id="history-items" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 hidden">
+                                <!-- History items will be dynamically added here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Title and Description Section -->
+        <section class="py-12 bg-white">
+            <div class="main-container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Online Text Formatter - Format Text Online</h2>
+                    <p class="text-lg text-gray-600">Powerful online text formatting tool with 20+ features. Format text for Facebook, LinkedIn, Discord. Remove HTML tags, encode URLs, format JSON, remove duplicates, sort lines and more.</p>
                 </div>
             </div>
         </section>
 
         <!-- Features Section -->
-        <section id="features" class="py-16 bg-white">
+        <section id="features" class="py-16 bg-gray-50">
             <div class="main-container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">About Text Formatter</h2>
@@ -531,7 +683,7 @@
                             Text Formatter is a comprehensive online text formatting tool with 20+ advanced features designed to format text online for various social media platforms including Facebook, LinkedIn, Discord, and more. Whether you're a content creator, developer, social media manager, or just someone who wants professional text formatting, our tool provides all the essential features you need.
                         </p>
                         <p>
-                            Our powerful text formatter includes basic formatting like adding line numbers, removing empty lines, joining text, removing whitespace and emojis, case conversion (uppercase, lowercase, sentence case, title case), plus advanced features like HTML tag removal, URL encoding/decoding, Base64 encoding/decoding, JSON formatting, duplicate line removal, text sorting, line reversal, and detailed text statistics.
+                            Our powerful text formatter includes basic formatting like adding line numbers, removing empty lines, joining text, removing whitespace and emojis, case conversion (uppercase, lowercase, sentence case, title case), plus advanced features like HTML tag removal, URL encoding/decoding, Base64 encoding/decoding, JSON formatting, duplicate line removal, text sorting, line reversal, one-click Reddit formatting for professional posts and comments, and detailed text statistics.
                         </p>
                         <p>
                             With real-time preview functionality, you can see your changes instantly before copying the formatted text. The built-in undo and redo system ensures you never lose your work, and all text processing happens locally in your browser for maximum privacy and speed. Perfect for Facebook text formatting, LinkedIn post formatting, Discord message formatting, web development, data cleaning, and any other online text formatting needs.
@@ -608,6 +760,10 @@
                         <h3 class="text-lg font-medium text-gray-900 mb-2">Can I get detailed statistics about my text?</h3>
                         <p class="text-gray-600">Yes! The "Word Count" feature provides comprehensive text statistics including character count (with and without spaces), word count, line count, and paragraph count - perfect for content creators and writers.</p>
                     </div>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">What does the Reddit Format button do?</h3>
+                        <p class="text-gray-600">The Reddit Format button applies multiple formatting improvements in one click: removes extra spaces, standardizes line breaks, fixes punctuation spacing, corrects encoding issues, and trims whitespace. Perfect for creating professional Reddit posts and comments.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -616,7 +772,7 @@
     <!-- Footer -->
     <footer class="footer py-12">
         <div class="main-container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
                     <div class="flex items-center mb-4">
                         <img src="logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
@@ -632,12 +788,20 @@
                         <li><a href="pages/facebook-text-formatter.html" class="hover:text-white">Facebook Text Formatter</a></li>
                         <li><a href="pages/linkedin-text-formatter.html" class="hover:text-white">LinkedIn Text Formatter</a></li>
                         <li><a href="pages/discord-text-formatter.html" class="hover:text-white">Discord Text Formatter</a></li>
+                        <li><a href="pages/reddit-text-formatter.html" class="hover:text-white">Reddit Text Formatter</a></li>
                         <li><a href="pages/online-text-formatter.html" class="hover:text-white">Online Text Formatter</a></li>
                         <li><a href="pages/html-tag-remover.html" class="hover:text-white">HTML Tag Remover</a></li>
                         <li><a href="pages/url-encoder-decoder.html" class="hover:text-white">URL Encoder Decoder</a></li>
                         <li><a href="pages/base64-encoder-decoder.html" class="hover:text-white">Base64 Encoder</a></li>
                         <li><a href="pages/json-formatter.html" class="hover:text-white">JSON Formatter</a></li>
                         <li><a href="pages/text-statistics.html" class="hover:text-white">Text Statistics</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="https://aicrop.app" target="_blank" rel="dofollow" class="hover:text-white">AI Image Cropper</a></li>
+                        <li><a href="https://wordtry.com" target="_blank" rel="dofollow" class="hover:text-white">5-Letter Game</a></li>
                     </ul>
                 </div>
                 <div>
@@ -766,5 +930,11 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // Initialize Lucide icons after page load
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+        });
+    </script>
 </body>
 </html>
