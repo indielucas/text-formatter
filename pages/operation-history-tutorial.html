@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operation History Tutorial - Create Custom Text Formatting Workflows | Text Formatter</title>
+    <meta name="description" content="Learn how to create custom text formatting workflows using Operation History. Build reusable sequences, save time with automation, and master advanced text processing techniques.">
+    <meta name="keywords" content="operation history, text formatting workflow, custom automation, text processing sequences, batch operations, formatting combinations, workflow automation">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* Inherit styles from main site */
+        :root {
+          --background: oklch(0.9818 0.0054 95.0986);
+          --foreground: oklch(0.3438 0.0269 95.7226);
+          --card: oklch(0.9818 0.0054 95.0986);
+          --card-foreground: oklch(0.1908 0.0020 106.5859);
+          --primary: oklch(0.6171 0.1375 39.0427);
+          --primary-foreground: oklch(1.0000 0 0);
+          --border: oklch(0.8847 0.0069 97.3627);
+          --muted: oklch(0.9341 0.0153 90.2390);
+          --muted-foreground: oklch(0.6059 0.0075 97.4233);
+          --secondary: oklch(0.9245 0.0138 92.9892);
+          --accent: oklch(0.9245 0.0138 92.9892);
+        }
+
+        /* Dark theme support */
+        [data-theme="dark"] {
+          --background: oklch(0.2679 0.0036 106.6427);
+          --foreground: oklch(0.8074 0.0142 93.0137);
+          --card: oklch(0.2679 0.0036 106.6427);
+          --card-foreground: oklch(0.9818 0.0054 95.0986);
+          --border: oklch(0.3618 0.0101 106.8928);
+          --muted: oklch(0.2213 0.0038 106.7070);
+          --muted-foreground: oklch(0.7713 0.0169 99.0657);
+          --secondary: oklch(0.9818 0.0054 95.0986);
+          --accent: oklch(0.2130 0.0078 95.4245);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10);
+        }
+        .format-btn {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-radius: 0.375rem;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        .format-btn:hover {
+            opacity: 0.9;
+        }
+        .history-btn {
+            background-color: var(--secondary);
+            color: var(--foreground);
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .history-btn:hover {
+            background-color: var(--accent);
+        }
+        .lucide {
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .code-block {
+            background-color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .step-box {
+            background-color: var(--muted);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .workflow-demo {
+            border: 2px dashed var(--border);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            background-color: var(--muted);
+        }
+        .operation-sequence {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        .operation-item {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .arrow {
+            color: var(--muted-foreground);
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+                        <img src="/logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                    </a>
+                </div>
+                <nav class="flex items-center space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-primary">Home</a>
+                    <a href="/domain-generator/" class="text-gray-700 hover:text-primary">Domain Generator</a>
+                    <button id="theme-toggle" class="p-2 text-gray-700 hover:text-primary transition-colors" title="Toggle theme">
+                        <i data-lucide="sun" class="w-5 h-5"></i>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Hero Section -->
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Operation History Tutorial</h2>
+                <p class="text-xl text-gray-600">Master the art of creating custom text formatting workflows with Operation History. Build reusable sequences and automate repetitive tasks.</p>
+            </div>
+
+            <!-- Quick Access -->
+            <div class="card p-6 mb-8 text-center">
+                <h3 class="text-lg font-semibold mb-4">Try Operation History Now</h3>
+                <a href="/" class="format-btn inline-flex">
+                    <i data-lucide="workflow" class="w-4 h-4"></i>
+                    Open Text Formatter
+                </a>
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="card p-6 mb-8">
+                <h3 class="text-xl font-semibold mb-4">Tutorial Contents</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <ul class="space-y-2 text-blue-600">
+                        <li><a href="#what-is-operation-history" class="hover:underline">1. What is Operation History?</a></li>
+                        <li><a href="#getting-started" class="hover:underline">2. Getting Started</a></li>
+                        <li><a href="#basic-workflows" class="hover:underline">3. Basic Workflows</a></li>
+                        <li><a href="#advanced-combinations" class="hover:underline">4. Advanced Combinations</a></li>
+                    </ul>
+                    <ul class="space-y-2 text-blue-600">
+                        <li><a href="#real-world-examples" class="hover:underline">5. Real-World Examples</a></li>
+                        <li><a href="#tips-and-tricks" class="hover:underline">6. Tips & Tricks</a></li>
+                        <li><a href="#troubleshooting" class="hover:underline">7. Troubleshooting</a></li>
+                        <li><a href="#best-practices" class="hover:underline">8. Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Section 1: What is Operation History -->
+            <section id="what-is-operation-history" class="card p-6 mb-8">
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                    <i data-lucide="info" class="w-6 h-6 mr-2 text-primary"></i>
+                    What is Operation History?
+                </h3>
+
+                <p class="text-gray-600 mb-4">
+                    Operation History is a powerful feature that tracks every formatting operation you perform and allows you to create custom workflows by combining multiple operations into reusable sequences.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <i data-lucide="check-circle" class="w-5 h-5 mr-2 text-green-600"></i>
+                            Key Features
+                        </h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>• Automatic operation tracking</li>
+                            <li>• One-click workflow execution</li>
+                            <li>• Reusable operation sequences</li>
+                            <li>• Visual workflow representation</li>
+                            <li>• Individual operation replay</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <i data-lucide="zap" class="w-5 h-5 mr-2 text-yellow-600"></i>
+                            Benefits
+                        </h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>• Save time on repetitive tasks</li>
+                            <li>• Ensure consistent formatting</li>
+                            <li>• Reduce human error</li>
+                            <li>• Share workflows with team</li>
+                            <li>• Build complex transformations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="workflow-demo">
+                    <h4 class="font-semibold mb-3">Example: Email List Cleanup Workflow</h4>
+                    <div class="operation-sequence">
+                        <div class="operation-item">
+                            <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
+                            Remove Empty Lines
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="operation-item">
+                            <i data-lucide="scissors" class="w-4 h-4 text-blue-500"></i>
+                            Trim Space
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="operation-item">
+                            <i data-lucide="copy-x" class="w-4 h-4 text-green-500"></i>
+                            Remove Duplicates
+                        </div>
+                        <span class="arrow">→</span>
+                        <div class="operation-item">
+                            <i data-lucide="arrow-up-down" class="w-4 h-4 text-purple-500"></i>
+                            Sort Lines
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">This workflow cleans and organizes email lists in one click!</p>
+                </div>
+            </section>
+
+            <!-- Section 2: Getting Started -->
+            <section id="getting-started" class="card p-6 mb-8">
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                    <i data-lucide="play-circle" class="w-6 h-6 mr-2 text-primary"></i>
+                    Getting Started with Operation History
+                </h3>
+
+                <div class="space-y-6">
+                    <div class="step-box">
+                        <h4 class="font-semibold mb-2 flex items-center">
+                            <span class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">1</span>
+                            Locate the Operation History Section
+                        </h4>
+                        <p class="text-gray-600 mb-2">Find the "Operation History" section below the text editor on the main Text Formatter page.</p>
+                        <div class="bg-blue-50 border border-blue-200 rounded p-3 text-sm">
+                            <p><strong>Tip:</strong> The Operation History section is visible by default and shows a placeholder message when empty.</p>
+                        </div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4 class="font-semibold mb-2 flex items-center">
+                            <span class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">2</span>
+                            Perform Your First Operation
+                        </h4>
+                        <p class="text-gray-600 mb-2">Try any formatting operation (e.g., "Remove Empty Lines" or "UPPERCASE") to see it appear in the history.</p>
+                        <div class="code-block">Example: Click "Remove Empty Lines" button
+↓
+Operation appears as a clickable button in Operation History</div>
+                    </div>
+
+                    <div class="step-box">
+                        <h4 class="font-semibold mb-2 flex items-center">
+                            <span class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">3</span>
+                            Understanding the Interface
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h5 class="font-medium mb-2">History Controls:</h5>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• <strong>Clear:</strong> Remove all history items</li>
+                                    <li>• <strong>Execute All:</strong> Run entire sequence</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-medium mb-2">Individual Items:</h5>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>• <strong>Click:</strong> Re-run that operation</li>
+                                    <li>• <strong>× Button:</strong> Remove from history</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Basic Workflows -->
+            <section id="basic-workflows" class="card p-6 mb-8">
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                    <i data-lucide="layers" class="w-6 h-6 mr-2 text-primary"></i>
+                    Basic Workflow Examples
+                </h3>
+
+                <div class="space-y-8">
+                    <!-- Workflow 1 -->
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="text-xl font-semibold mb-3 flex items-center">
+                            <i data-lucide="mail" class="w-5 h-5 mr-2 text-blue-500"></i>
+                            Email List Cleaner
+                        </h4>
+                        <p class="text-gray-600 mb-4">Perfect for cleaning imported email lists or contact data.</p>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="font-medium mb-2">Step-by-step:</h5>
+                                <ol class="space-y-2 text-sm">
+                                    <li class="flex items-center"><span class="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2">1</span>Paste messy email list</li>
+                                    <li class="flex items-center"><span class="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2">2</span>Click "Remove Empty Lines"</li>
+                                    <li class="flex items-center"><span class="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2">3</span>Click "Trim Space"</li>
+                                    <li class="flex items-center"><span class="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2">4</span>Click "Remove Duplicates"</li>
+                                    <li class="flex items-center"><span class="bg-blue-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2">5</span>Click "Sort Lines"</li>
+                                </ol>
+                            </div>
+                            <div>
+                                <h5 class="font-medium mb-2">Before & After:</h5>
+                                <div class="text-xs">
+                                    <div class="code-block mb-2">john@example.com
+
+jane@company.com
+   john@example.com
+mike@business.com</div>
+                                    <div class="text-center my-2">↓ After workflow ↓</div>
+                                    <div class="code-block">jane@company.com
+john@example.com
+mike@business.com</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-green-50 border border-green-200 rounded">
+                            <p class="text-sm text-green-800"><strong>Tip:</strong> Save this workflow by clicking "Execute All" on future email lists!</p>
+                        </div>
+                    </div>
+
+                    <!-- Workflow 2 -->
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="text-xl font-semibold mb-3 flex items-center">
+                            <i data-lucide="file-text" class="w-5 h-5 mr-2 text-green-500"></i>
+                            Document Formatter
+                        </h4>
+                        <p class="text-gray-600 mb-4">Format copied text from various sources into clean, numbered content.</p>
+
+                        <div class="operation-sequence mb-4">
+                            <div class="operation-item">
+                                <i data-lucide="code" class="w-4 h-4 text-orange-500"></i>
+                                Strip HTML
+                            </div>
+                            <span class="arrow">→</span>
+                            <div class="operation-item">
+                                <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
+                                Remove Empty Lines
+                            </div>
+                            <span class="arrow">→</span>
+                            <div class="operation-item">
+                                <i data-lucide="type" class="w-4 h-4 text-blue-500"></i>
+                                Sentence Case
+                            </div>
+                            <span class="arrow">→</span>
+                            <div class="operation-item">
+                                <i data-lucide="list-ordered" class="w-4 h-4 text-purple-500"></i>
+                                Add Line Numbers
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 border border-yellow-200 rounded p-3">
+                            <p class="text-sm text-yellow-800"><strong>Use case:</strong> Perfect for creating numbered lists from web content or messy copied text.</p>
+                        </div>
+                    </div>
+
+                    <!-- Workflow 3 -->
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="text-xl font-semibold mb-3 flex items-center">
+                            <i data-lucide="database" class="w-5 h-5 mr-2 text-purple-500"></i>
+                            Data Standardizer
+                        </h4>
+                        <p class="text-gray-600 mb-4">Standardize data formats for import into databases or spreadsheets.</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="text-center">
+                                <h5 class="font-medium mb-2">Phase 1: Clean</h5>
+                                <div class="operation-item mb-1">
+                                    <i data-lucide="scissors" class="w-4 h-4"></i>
+                                    Trim Space
+                                </div>
+                                <div class="operation-item">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    Remove Empty
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <h5 class="font-medium mb-2">Phase 2: Standardize</h5>
+                                <div class="operation-item mb-1">
+                                    <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                                    lowercase
+                                </div>
+                                <div class="operation-item">
+                                    <i data-lucide="copy-x" class="w-4 h-4"></i>
+                                    Remove Duplicates
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <h5 class="font-medium mb-2">Phase 3: Organize</h5>
+                                <div class="operation-item mb-1">
+                                    <i data-lucide="arrow-up-down" class="w-4 h-4"></i>
+                                    Sort Lines
+                                </div>
+                                <div class="operation-item">
+                                    <i data-lucide="list-ordered" class="w-4 h-4"></i>
+                                    Add Numbers
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Advanced Combinations -->
+            <section id="advanced-combinations" class="card p-6 mb-8">
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                    <i data-lucide="settings" class="w-6 h-6 mr-2 text-primary"></i>
+                    Advanced Workflow Combinations
+                </h3>
+
+                <div class="space-y-6">
+                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <i data-lucide="globe" class="w-5 h-5 mr-2 text-blue-600"></i>
+                            Web Content Processor
+                        </h4>
+                        <p class="text-sm text-blue-700 mb-3">Transform messy web content into clean, formatted text.</p>
+
+                        <div class="workflow-demo">
+                            <div class="operation-sequence">
+                                <div class="operation-item bg-white">
+                                    <i data-lucide="code" class="w-4 h-4 text-orange-500"></i>
+                                    Strip HTML
+                                </div>
+                                <span class="arrow">→</span>
+                                <div class="operation-item bg-white">
+                                    <i data-lucide="unlink" class="w-4 h-4 text-blue-500"></i>
+                                    URL Decode
+                                </div>
+                                <span class="arrow">→</span>
+                                <div class="operation-item bg-white">
+                                    <i data-lucide="scissors" class="w-4 h-4 text-green-500"></i>
+                                    Trim Space
+                                </div>
+                                <span class="arrow">→</span>
+                                <div class="operation-item bg-white">
+                                    <i data-lucide="trash-2" class="w-4 h-4 text-red-500"></i>
+                                    Remove Empty
+                                </div>
+                                <span class="arrow">→</span>
+                                <div class="operation-item bg-white">
+                                    <i data-lucide="type" class="w-4 h-4 text-purple-500"></i>
+                                    Sentence Case
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <i data-lucide="shield" class="w-5 h-5 mr-2 text-green-600"></i>
+                            Security Data Formatter
+                        </h4>
+                        <p class="text-sm text-green-700 mb-3">Process logs and security data for analysis.</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h5 class="font-medium mb-2">Log Processing:</h5>
+                                <div class="space-y-1">
+                                    <div class="operation-item text-xs">
+                                        <i data-lucide="copy-x" class="w-3 h-3"></i>
+                                        Remove Duplicates
+                                    </div>
+                                    <div class="operation-item text-xs">
+                                        <i data-lucide="arrow-up-down" class="w-3 h-3"></i>
+                                        Sort Lines
+                                    </div>
+                                    <div class="operation-item text-xs">
+                                        <i data-lucide="list-ordered" class="w-3 h-3"></i>
+                                        Add Line Numbers
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h5 class="font-medium mb-2">Data Encoding:</h5>
+                                <div class="space-y-1">
+                                    <div class="operation-item text-xs">
+                                        <i data-lucide="link" class="w-3 h-3"></i>
+                                        URL Encode
+                                    </div>
+                                    <div class="operation-item text-xs">
+                                        <i data-lucide="lock" class="w-3 h-3"></i>
+                                        Base64 Encode
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <i data-lucide="braces" class="w-5 h-5 mr-2 text-purple-600"></i>
+                            Developer Workflow
+                        </h4>
+                        <p class="text-sm text-purple-700 mb-3">Format and process development-related data.</p>
+
+                        <div class="workflow-demo">
+                            <h5 class="font-medium mb-2">API Response Cleaner:</h5>
+                            <div class="operation-sequence">
+                                <div class="operation-item bg-white">
+                                    <i data-lucide="braces" class="w-4 h-4 text-purple-500"></i>
+                                    Format JSON
+                                </div>
+                                <span class="arrow">→</span>
+                                <div class="operation-item bg-white">
+                                    <i data-lucide="copy-x" class="w-4 h-4 text-red-500"></i>
+                                    Remove Duplicates
+                                </div>
+                                <span class="arrow">→</span>
+                                <div class="operation-item bg-white">
+                                    <i data-lucide="unlock" class="w-4 h-4 text-blue-500"></i>
+                                    Base64 Decode
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Real-World Examples -->
+            <section id="real-world-examples" class="card p-6 mb-8">
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                    <i data-lucide="briefcase" class="w-6 h-6 mr-2 text-primary"></i>
+                    Real-World Workflow Examples
+                </h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <i data-lucide="shopping-cart" class="w-5 h-5 mr-2 text-blue-500"></i>
+                            E-commerce Product Import
+                        </h4>
+                        <p class="text-sm text-gray-600 mb-3">Clean product data from suppliers before database import.</p>
+
+                        <div class="bg-gray-50 p-3 rounded text-xs mb-3">
+                            <div class="font-medium mb-1">Challenge:</div>
+                            <p>Supplier sends product list with HTML formatting, duplicate entries, and inconsistent casing.</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="operation-item text-xs">1. Strip HTML</div>
+                            <div class="operation-item text-xs">2. Trim Space</div>
+                            <div class="operation-item text-xs">3. Title Case</div>
+                            <div class="operation-item text-xs">4. Remove Duplicates</div>
+                            <div class="operation-item text-xs">5. Sort Lines</div>
+                        </div>
+
+                        <div class="mt-3 p-2 bg-green-50 border border-green-200 rounded text-xs">
+                            <strong>Result:</strong> Clean, standardized product list ready for import.
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <i data-lucide="users" class="w-5 h-5 mr-2 text-green-500"></i>
+                            Event Registration Processing
+                        </h4>
+                        <p class="text-sm text-gray-600 mb-3">Process attendee lists from multiple registration sources.</p>
+
+                        <div class="bg-gray-50 p-3 rounded text-xs mb-3">
+                            <div class="font-medium mb-1">Challenge:</div>
+                            <p>Multiple registration platforms, duplicate entries, mixed name formats.</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="operation-item text-xs">1. Remove Empty Lines</div>
+                            <div class="operation-item text-xs">2. Trim Space</div>
+                            <div class="operation-item text-xs">3. lowercase</div>
+                            <div class="operation-item text-xs">4. Remove Duplicates</div>
+                            <div class="operation-item text-xs">5. Title Case</div>
+                            <div class="operation-item text-xs">6. Sort Lines</div>
+                        </div>
+
+                        <div class="mt-3 p-2 bg-green-50 border border-green-200 rounded text-xs">
+                            <strong>Result:</strong> Unified attendee list with proper formatting.
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <i data-lucide="newspaper" class="w-5 h-5 mr-2 text-purple-500"></i>
+                            Content Research Workflow
+                        </h4>
+                        <p class="text-sm text-gray-600 mb-3">Process research sources into clean reference lists.</p>
+
+                        <div class="space-y-2">
+                            <div class="operation-item text-xs">1. Strip HTML</div>
+                            <div class="operation-item text-xs">2. Remove Empty Lines</div>
+                            <div class="operation-item text-xs">3. Sentence Case</div>
+                            <div class="operation-item text-xs">4. Remove Duplicates</div>
+                            <div class="operation-item text-xs">5. Add Line Numbers</div>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-3 flex items-center">
+                            <i data-lucide="mail" class="w-5 h-5 mr-2 text-red-500"></i>
+                            Newsletter Subscriber Management
+                        </h4>
+                        <p class="text-sm text-gray-600 mb-3">Merge and clean subscriber lists from multiple sources.</p>
+
+                        <div class="space-y-2">
+                            <div class="operation-item text-xs">1. Remove Empty Lines</div>
+                            <div class="operation-item text-xs">2. Trim Space</div>
+                            <div class="operation-item text-xs">3. lowercase</div>
+                            <div class="operation-item text-xs">4. Remove Duplicates</div>
+                            <div class="operation-item text-xs">5. Sort Lines</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 6: Tips and Tricks -->
+            <section id="tips-and-tricks" class="card p-6 mb-8">
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                    <i data-lucide="lightbulb" class="w-6 h-6 mr-2 text-primary"></i>
+                    Tips & Tricks
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-3 text-green-600">💡 Pro Tips</h4>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <span><strong>Order Matters:</strong> Always trim spaces and remove empty lines before removing duplicates for better results.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <span><strong>Test First:</strong> Try your workflow on a small sample before processing large datasets.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <span><strong>Save Workflows:</strong> Document successful workflows for team sharing and future use.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-lucide="check" class="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <span><strong>Use Undo:</strong> Don't be afraid to experiment - you can always undo operations.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-3 text-blue-600">🔧 Efficiency Hacks</h4>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start">
+                                <i data-lucide="zap" class="w-4 h-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <span><strong>Batch Processing:</strong> Process similar data types in batches using the same workflow.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-lucide="zap" class="w-4 h-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <span><strong>Keyboard Shortcuts:</strong> Use Ctrl+Z for undo and Ctrl+Y for redo.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-lucide="zap" class="w-4 h-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <span><strong>Clear Strategically:</strong> Clear history when starting a new type of workflow.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-lucide="zap" class="w-4 h-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0"></i>
+                                <span><strong>Preview Results:</strong> Check the preview pane after each operation.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <h4 class="font-semibold mb-2 flex items-center">
+                        <i data-lucide="star" class="w-5 h-5 mr-2 text-yellow-600"></i>
+                        Advanced Technique: Workflow Chaining
+                    </h4>
+                    <p class="text-sm text-yellow-800 mb-2">Build complex workflows by combining multiple execute-all sequences:</p>
+                    <ol class="text-sm text-yellow-700 space-y-1">
+                        <li>1. Create Phase 1 workflow (e.g., cleaning operations)</li>
+                        <li>2. Execute all and clear history</li>
+                        <li>3. Create Phase 2 workflow (e.g., formatting operations)</li>
+                        <li>4. Execute all for final result</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Section 7: Troubleshooting -->
+            <section id="troubleshooting" class="card p-6 mb-8">
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                    <i data-lucide="help-circle" class="w-6 h-6 mr-2 text-primary"></i>
+                    Troubleshooting Common Issues
+                </h3>
+
+                <div class="space-y-4">
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-2 text-red-600">❌ Issue: Operations not appearing in history</h4>
+                        <div class="text-sm text-gray-600 mb-2">
+                            <strong>Possible causes:</strong>
+                        </div>
+                        <ul class="text-sm text-gray-600 mb-3 space-y-1">
+                            <li>• No text changes detected</li>
+                            <li>• Operation executed during undo/redo</li>
+                            <li>• Browser JavaScript disabled</li>
+                        </ul>
+                        <div class="p-3 bg-blue-50 border border-blue-200 rounded">
+                            <p class="text-sm text-blue-800"><strong>Solution:</strong> Ensure there's text in the editor and the operation actually modifies the content.</p>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-2 text-red-600">❌ Issue: "Execute All" not working as expected</h4>
+                        <div class="p-3 bg-blue-50 border border-blue-200 rounded">
+                            <p class="text-sm text-blue-800"><strong>Solution:</strong> Check that operations are in the correct order. Some operations may not produce visible changes if applied after others.</p>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-2 text-red-600">❌ Issue: Unexpected results from workflow</h4>
+                        <div class="p-3 bg-blue-50 border border-blue-200 rounded">
+                            <p class="text-sm text-blue-800"><strong>Solution:</strong> Execute operations one by one to identify which step is causing the issue. Use undo to revert changes.</p>
+                        </div>
+                    </div>
+
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-2 text-red-600">❌ Issue: History cleared accidentally</h4>
+                        <div class="p-3 bg-blue-50 border border-blue-200 rounded">
+                            <p class="text-sm text-blue-800"><strong>Solution:</strong> History clearing cannot be undone. Recreate the workflow or document important workflows for future reference.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 8: Best Practices -->
+            <section id="best-practices" class="card p-6 mb-8">
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                    <i data-lucide="award" class="w-6 h-6 mr-2 text-primary"></i>
+                    Best Practices for Operation History
+                </h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-4 text-green-600">✅ Do These</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-start">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-medium">Test with sample data first</p>
+                                    <p class="text-sm text-gray-600">Verify your workflow works correctly before processing important data.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-medium">Document successful workflows</p>
+                                    <p class="text-sm text-gray-600">Keep notes on which operation sequences work for different data types.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-medium">Use logical operation order</p>
+                                    <p class="text-sm text-gray-600">Clean first (remove empty, trim), then transform (case, format), then organize (sort, number).</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-medium">Backup important data</p>
+                                    <p class="text-sm text-gray-600">Always keep a copy of original data before processing.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-4 text-red-600">❌ Avoid These</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-start">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-medium">Processing without understanding</p>
+                                    <p class="text-sm text-gray-600">Don't blindly apply operations without knowing what they do to your data.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-medium">Ignoring operation order</p>
+                                    <p class="text-sm text-gray-600">The sequence matters - some operations can nullify others if done in wrong order.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-medium">Overcomplicating workflows</p>
+                                    <p class="text-sm text-gray-600">Keep workflows simple and focused on specific goals.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i data-lucide="x-circle" class="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0"></i>
+                                <div>
+                                    <p class="font-medium">Skipping validation</p>
+                                    <p class="text-sm text-gray-600">Always verify results before using processed data in production.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call to Action -->
+            <div class="card p-8 text-center">
+                <h3 class="text-2xl font-semibold mb-4">Ready to Master Operation History?</h3>
+                <p class="text-gray-600 mb-6">Start building your own custom text formatting workflows today. Automate repetitive tasks and improve your productivity.</p>
+                <a href="/" class="format-btn inline-flex mr-4">
+                    <i data-lucide="play" class="w-4 h-4"></i>
+                    Try Text Formatter Now
+                </a>
+                <a href="/pages/remove-duplicates-guide.html" class="format-btn inline-flex bg-gray-600">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    More Tutorials
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Text Formatter. All rights reserved.</p>
+            <p class="mt-2 text-sm text-gray-400">
+                Visit us at <a href="https://text-formatter.com" class="text-white hover:underline">text-formatter.com</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const icon = themeToggle.querySelector('i');
+
+        // Get saved theme or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+
+        // Apply saved theme
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            icon.setAttribute('data-lucide', 'moon');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Update icon
+            icon.setAttribute('data-lucide', newTheme === 'dark' ? 'moon' : 'sun');
+            lucide.createIcons();
+        });
+
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

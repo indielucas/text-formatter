@@ -8,15 +8,16 @@ https://text-formatter.com/
 
 ## Main Features
 ### Text Formatting
-- Text formatting for Facebook, LinkedIn, Discord
+- Text formatting for Facebook, LinkedIn, Discord, Reddit
 - Online text editor with Monaco and WYSIWYG support
 - Find and replace functionality with regex support
 - Text transformations: add line numbers, remove empty lines, case conversion
 - Remove emojis and special characters
 - Add timestamps and dates
 - Merge lines and text manipulation
+- Operation History for custom workflow automation
 
-### Advanced Tools (New)
+### Advanced Tools
 - HTML tag remover - strip HTML/XML tags from text
 - URL encoder/decoder - convert URLs for web development
 - Base64 encoder/decoder - data encoding and conversion
@@ -24,12 +25,15 @@ https://text-formatter.com/
 - Text statistics - word count, character count, reading time
 - Duplicate line removal and text sorting
 - Text reversal and advanced text analysis
+- Reddit text formatter for professional posts and comments
 
 ### Developer Tools
 - Code formatting and beautification
 - Data conversion utilities
 - API testing support
 - Regex pattern matching
+- Log file processing
+- Workflow automation
 
 ## Target Audience
 - Web developers and programmers
@@ -38,6 +42,8 @@ https://text-formatter.com/
 - Data analysts and researchers
 - Students and academics
 - SEO specialists
+- Business professionals
+- E-commerce managers
 - Anyone needing text processing tools
 
 ## Key Pages
@@ -51,21 +57,129 @@ https://text-formatter.com/
 - Facebook Text Formatter: https://text-formatter.com/pages/facebook-text-formatter.html
 - LinkedIn Text Formatter: https://text-formatter.com/pages/linkedin-text-formatter.html
 - Discord Text Formatter: https://text-formatter.com/pages/discord-text-formatter.html
+- Reddit Text Formatter: https://text-formatter.com/pages/reddit-text-formatter.html
 - Domain Generator: https://text-formatter.com/domain-generator/
+- Remove Duplicates Guide: https://text-formatter.com/pages/remove-duplicates-guide.html
+- Remove Duplicates Use Cases: https://text-formatter.com/pages/remove-duplicates-use-cases.html
+- Operation History Tutorial: https://text-formatter.com/pages/operation-history-tutorial.html
 
 ## Technology
 - Frontend: HTML, CSS, JavaScript
 - Editor: Monaco Editor
 - Styling: Tailwind CSS with Claude Design System
+- Icons: Lucide Icons
 - Hosting: Cloudflare Pages
 - Framework: Vanilla JavaScript
 - Features: Client-side processing for privacy
 
+## Common User Problems and Solutions
+
+### Problem: "I need to clean up a messy email list"
+**Solution**: Use the Remove Duplicates feature combined with Operation History workflow:
+1. Paste your email list into the text editor
+2. Click "Remove Empty Lines" to clean up blank entries
+3. Click "Trim Space" to remove extra whitespace
+4. Click "Remove Duplicates" to eliminate duplicate email addresses
+5. Click "Sort Lines" to organize alphabetically
+6. Use "Execute All" in Operation History to repeat this workflow on future lists
+Read more: https://text-formatter.com/pages/remove-duplicates-guide.html
+
+### Problem: "I copied text from a website and it has HTML tags everywhere"
+**Solution**: Use the HTML Tag Remover:
+1. Paste the messy HTML content into the text editor
+2. Click "Strip HTML" button to remove all HTML and XML tags
+3. Click "Remove Empty Lines" to clean up any blank lines left behind
+4. Click "Trim Space" to clean up whitespace
+The result will be clean, readable text without any formatting codes.
+Read more: https://text-formatter.com/pages/html-tag-remover.html
+
+### Problem: "I need to format text for social media posts"
+**Solution**: Use platform-specific formatters:
+- **Facebook**: Use sentence case, remove extra spaces, add line numbers for lists
+- **LinkedIn**: Use title case for headlines, professional formatting
+- **Discord**: Use proper formatting for code snippets and structured messages
+- **Reddit**: Use the Reddit Format button for one-click optimization
+Each platform has specific formatting requirements that our tools handle automatically.
+
+### Problem: "I have duplicate entries in my data and need to remove them"
+**Solution**: The Remove Duplicates feature with best practices:
+1. **Preparation**: First trim whitespace and remove empty lines
+2. **Remove Duplicates**: Click the Remove Duplicates button
+3. **Verify Results**: Check that the correct entries were removed
+4. **Business Applications**: Perfect for customer lists, product catalogs, survey data
+Common use cases include e-commerce product imports, event registration processing, and customer database cleanup.
+Read more: https://text-formatter.com/pages/remove-duplicates-use-cases.html
+
+### Problem: "I do the same text formatting tasks repeatedly"
+**Solution**: Use Operation History to create custom workflows:
+1. Perform your formatting operations in sequence (e.g., Remove Empty → Trim Space → Remove Duplicates → Sort Lines)
+2. The Operation History automatically tracks each step
+3. Click "Execute All" to replay the entire workflow on new text
+4. Save time on repetitive tasks like data cleaning, content formatting, and list processing
+Read more: https://text-formatter.com/pages/operation-history-tutorial.html
+
+### Problem: "I need to encode/decode URLs or Base64 data"
+**Solution**: Use our encoding tools:
+- **URL Encoding**: Perfect for web development, making URLs safe for transmission
+- **Base64 Encoding**: Essential for data conversion, API payloads, email attachments
+- **Bidirectional**: Both encode and decode operations supported
+- **Developer Friendly**: Copy results directly for use in code
+
+### Problem: "My JSON is messy and hard to read"
+**Solution**: Use the JSON Formatter:
+1. Paste your minified or messy JSON
+2. Click "Format JSON" for automatic beautification
+3. Get proper indentation and structure
+4. Validation included - errors are highlighted
+Perfect for API development, configuration files, and data analysis.
+
+### Problem: "I need detailed statistics about my text content"
+**Solution**: Use Text Statistics feature:
+- Character count (with and without spaces)
+- Word count and line count
+- Paragraph count
+- Reading time estimates
+- Word frequency analysis
+Perfect for content creators, writers, and social media managers tracking post lengths.
+
+### Problem: "I'm processing large amounts of business data"
+**Solution**: Text Formatter is used by businesses for:
+- **Customer Data Management**: Clean email lists, remove duplicates, standardize formats
+- **Inventory Management**: Process product catalogs, merge supplier lists
+- **Financial Reporting**: Clean transaction data, remove duplicate entries
+- **Content Management**: Process large amounts of text content, format for different platforms
+- **Data Migration**: Clean and prepare data for system imports
+
+### Problem: "I need to process data for different industries"
+**Solution**: Industry-specific applications:
+- **E-commerce**: Product data cleanup, customer list management
+- **Healthcare**: Patient record processing, medication list cleanup
+- **Education**: Student list management, survey data processing
+- **Real Estate**: Property listing cleanup, client contact management
+- **Marketing**: Keyword research, content formatting, campaign data
+
+### Problem: "I want to automate complex text processing tasks"
+**Solution**: Advanced Operation History techniques:
+- **Workflow Chaining**: Combine multiple operation sequences
+- **Phase-based Processing**: Clean → Transform → Organize
+- **Team Workflows**: Document and share successful operation sequences
+- **Quality Control**: Test workflows on sample data first
+- **Batch Processing**: Apply the same workflow to multiple datasets
+
 ## SEO Keywords
-format text online, text formatter, online text formatting, HTML tag remover, URL encoder, Base64 encoder, JSON formatter, text cleaner, word count, character count, text statistics, remove duplicates, sort lines, text converter
+format text online, text formatter, online text formatting, HTML tag remover, URL encoder, Base64 encoder, JSON formatter, text cleaner, word count, character count, text statistics, remove duplicates, sort lines, text converter, duplicate removal, operation history, workflow automation, business data processing, social media formatting
 
 ## Content Policy
 This is a text formatting and data conversion utility tool. All content processing is done client-side for maximum privacy and security. No user data is stored or transmitted to servers.
 
 ## Contact
 For support or inquiries, please visit our website or check our GitHub repository.
+
+## Recent Updates (October 2025)
+- Added comprehensive Remove Duplicates functionality with advanced use cases and best practices
+- Implemented Operation History for custom workflow automation and repetitive task optimization
+- Enhanced business applications and industry-specific use cases across multiple sectors
+- Improved user experience with Lucide SVG icons and better visual consistency
+- Added detailed tutorials and guides for complex workflows including step-by-step instructions
+- Updated FAQ with user-focused problem-solving guidance and workflow examples
+- Enhanced sitemap and content discoverability for better user navigation

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Duplicates Guide - Complete Tutorial for Duplicate Line Removal | Text Formatter</title>
+    <meta name="description" content="Complete guide to removing duplicate lines from text. Learn how to clean data lists, remove redundant entries, and optimize your content with our free duplicate remover tool.">
+    <meta name="keywords" content="remove duplicates, duplicate line removal, clean data, dedupe text, remove redundant lines, text cleaner, data cleanup, list optimization">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* Inherit styles from main site */
+        :root {
+          --background: oklch(0.9818 0.0054 95.0986);
+          --foreground: oklch(0.3438 0.0269 95.7226);
+          --card: oklch(0.9818 0.0054 95.0986);
+          --card-foreground: oklch(0.1908 0.0020 106.5859);
+          --primary: oklch(0.6171 0.1375 39.0427);
+          --primary-foreground: oklch(1.0000 0 0);
+          --border: oklch(0.8847 0.0069 97.3627);
+          --muted: oklch(0.9341 0.0153 90.2390);
+          --muted-foreground: oklch(0.6059 0.0075 97.4233);
+        }
+
+        /* Dark theme support */
+        [data-theme="dark"] {
+          --background: oklch(0.2679 0.0036 106.6427);
+          --foreground: oklch(0.8074 0.0142 93.0137);
+          --card: oklch(0.2679 0.0036 106.6427);
+          --card-foreground: oklch(0.9818 0.0054 95.0986);
+          --border: oklch(0.3618 0.0101 106.8928);
+          --muted: oklch(0.2213 0.0038 106.7070);
+          --muted-foreground: oklch(0.7713 0.0169 99.0657);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+        .card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.10);
+        }
+        .format-btn {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+            border-radius: 0.375rem;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        .format-btn:hover {
+            opacity: 0.9;
+        }
+        .lucide {
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .code-block {
+            background-color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .example-box {
+            background-color: var(--muted);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center hover:opacity-80 transition-opacity">
+                        <img src="/logo.png" alt="Text Formatter Logo" class="h-8 w-8 mr-3">
+                        <h1 class="text-xl font-bold text-gray-900">Text Formatter</h1>
+                    </a>
+                </div>
+                <nav class="flex items-center space-x-6">
+                    <a href="/" class="text-gray-700 hover:text-primary">Home</a>
+                    <a href="/domain-generator/" class="text-gray-700 hover:text-primary">Domain Generator</a>
+                    <button id="theme-toggle" class="p-2 text-gray-700 hover:text-primary transition-colors" title="Toggle theme">
+                        <i data-lucide="sun" class="w-5 h-5"></i>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Hero Section -->
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Complete Guide to Removing Duplicate Lines</h2>
+                <p class="text-xl text-gray-600">Master the art of data cleanup with our comprehensive duplicate removal tutorial. Learn how to clean lists, optimize content, and streamline your workflow.</p>
+            </div>
+
+            <!-- Quick Tool Access -->
+            <div class="card p-6 mb-8 text-center">
+                <h3 class="text-lg font-semibold mb-4">Try Our Remove Duplicates Tool</h3>
+                <a href="/" class="format-btn inline-flex">
+                    <i data-lucide="copy-x" class="w-4 h-4"></i>
+                    Go to Text Formatter
+                </a>
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="card p-6 mb-8">
+                <h3 class="text-xl font-semibold mb-4">Table of Contents</h3>
+                <ul class="space-y-2 text-blue-600">
+                    <li><a href="#what-is-duplicate-removal" class="hover:underline">1. What is Duplicate Line Removal?</a></li>
+                    <li><a href="#why-remove-duplicates" class="hover:underline">2. Why Remove Duplicates?</a></li>
+                    <li><a href="#common-use-cases" class="hover:underline">3. Common Use Cases</a></li>
+                    <li><a href="#how-it-works" class="hover:underline">4. How Duplicate Removal Works</a></li>
+                    <li><a href="#step-by-step-guide" class="hover:underline">5. Step-by-Step Guide</a></li>
+                    <li><a href="#advanced-techniques" class="hover:underline">6. Advanced Techniques</a></li>
+                    <li><a href="#best-practices" class="hover:underline">7. Best Practices</a></li>
+                    <li><a href="#troubleshooting" class="hover:underline">8. Troubleshooting</a></li>
+                </ul>
+            </div>
+
+            <!-- Content Sections -->
+            <div class="space-y-8">
+                <!-- Section 1 -->
+                <section id="what-is-duplicate-removal" class="card p-6">
+                    <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                        <i data-lucide="info" class="w-6 h-6 mr-2 text-primary"></i>
+                        What is Duplicate Line Removal?
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        Duplicate line removal is the process of identifying and eliminating identical or redundant lines from a text document or list. This powerful data cleaning technique helps maintain data integrity, reduces file sizes, and improves readability.
+                    </p>
+                    <div class="example-box">
+                        <h4 class="font-semibold mb-2">Example:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm font-medium mb-2">Before (with duplicates):</p>
+                                <div class="code-block">apple
+banana
+apple
+orange
+banana
+grape
+apple</div>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium mb-2">After (duplicates removed):</p>
+                                <div class="code-block">apple
+banana
+orange
+grape</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 2 -->
+                <section id="why-remove-duplicates" class="card p-6">
+                    <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                        <i data-lucide="target" class="w-6 h-6 mr-2 text-primary"></i>
+                        Why Remove Duplicates?
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-3 flex items-center">
+                                <i data-lucide="zap" class="w-5 h-5 mr-2"></i>
+                                Performance Benefits
+                            </h4>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>• Reduced file sizes</li>
+                                <li>• Faster processing times</li>
+                                <li>• Lower memory usage</li>
+                                <li>• Improved database performance</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-3 flex items-center">
+                                <i data-lucide="shield-check" class="w-5 h-5 mr-2"></i>
+                                Data Quality
+                            </h4>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>• Eliminates redundancy</li>
+                                <li>• Improves accuracy</li>
+                                <li>• Reduces errors</li>
+                                <li>• Ensures data integrity</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 3 -->
+                <section id="common-use-cases" class="card p-6">
+                    <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                        <i data-lucide="list" class="w-6 h-6 mr-2 text-primary"></i>
+                        Common Use Cases
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <h4 class="font-semibold mb-2 flex items-center">
+                                <i data-lucide="database" class="w-4 h-4 mr-2"></i>
+                                Data Management
+                            </h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Customer lists</li>
+                                <li>• Email databases</li>
+                                <li>• Product catalogs</li>
+                                <li>• Inventory records</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <h4 class="font-semibold mb-2 flex items-center">
+                                <i data-lucide="file-text" class="w-4 h-4 mr-2"></i>
+                                Content Creation
+                            </h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Keyword lists</li>
+                                <li>• Reference materials</li>
+                                <li>• Bibliography cleanup</li>
+                                <li>• Tag management</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <h4 class="font-semibold mb-2 flex items-center">
+                                <i data-lucide="code" class="w-4 h-4 mr-2"></i>
+                                Development
+                            </h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Log file cleanup</li>
+                                <li>• Configuration files</li>
+                                <li>• Test data sets</li>
+                                <li>• API responses</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 4 -->
+                <section id="how-it-works" class="card p-6">
+                    <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                        <i data-lucide="cog" class="w-6 h-6 mr-2 text-primary"></i>
+                        How Duplicate Removal Works
+                    </h3>
+                    <div class="space-y-4">
+                        <p class="text-gray-600">
+                            Our duplicate removal algorithm uses a multi-step process to ensure accurate and efficient cleaning:
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <div class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-1">1</div>
+                                    <div>
+                                        <h4 class="font-semibold">Text Parsing</h4>
+                                        <p class="text-sm text-gray-600">Split input into individual lines for comparison</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-1">2</div>
+                                    <div>
+                                        <h4 class="font-semibold">Normalization</h4>
+                                        <p class="text-sm text-gray-600">Optional trimming and case-insensitive comparison</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <div class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-1">3</div>
+                                    <div>
+                                        <h4 class="font-semibold">Duplicate Detection</h4>
+                                        <p class="text-sm text-gray-600">Identify exact matches using hash comparison</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-1">4</div>
+                                    <div>
+                                        <h4 class="font-semibold">Output Generation</h4>
+                                        <p class="text-sm text-gray-600">Return clean list with duplicates removed</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 5 -->
+                <section id="step-by-step-guide" class="card p-6">
+                    <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                        <i data-lucide="book-open" class="w-6 h-6 mr-2 text-primary"></i>
+                        Step-by-Step Guide
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-primary pl-4">
+                            <h4 class="font-semibold mb-2">Step 1: Prepare Your Text</h4>
+                            <p class="text-gray-600 mb-2">Copy your text with duplicate lines into the Text Formatter editor.</p>
+                            <div class="code-block">Item 1
+Item 2
+Item 1
+Item 3
+Item 2
+Item 4</div>
+                        </div>
+
+                        <div class="border-l-4 border-primary pl-4">
+                            <h4 class="font-semibold mb-2">Step 2: Click Remove Duplicates</h4>
+                            <p class="text-gray-600 mb-2">Click the "Remove Duplicates" button in the formatting tools section.</p>
+                        </div>
+
+                        <div class="border-l-4 border-primary pl-4">
+                            <h4 class="font-semibold mb-2">Step 3: Review Results</h4>
+                            <p class="text-gray-600 mb-2">The tool will automatically remove duplicate lines and show the clean result:</p>
+                            <div class="code-block">Item 1
+Item 2
+Item 3
+Item 4</div>
+                        </div>
+
+                        <div class="border-l-4 border-primary pl-4">
+                            <h4 class="font-semibold mb-2">Step 4: Copy or Save</h4>
+                            <p class="text-gray-600">Use the "Copy to Clipboard" button to copy your cleaned text.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 6 -->
+                <section id="advanced-techniques" class="card p-6">
+                    <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                        <i data-lucide="settings" class="w-6 h-6 mr-2 text-primary"></i>
+                        Advanced Techniques
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <h4 class="font-semibold mb-2 flex items-center">
+                                <i data-lucide="layers" class="w-4 h-4 mr-2"></i>
+                                Combining with Other Tools
+                            </h4>
+                            <p class="text-sm text-gray-600 mb-2">Maximize efficiency by combining duplicate removal with other formatting operations:</p>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Remove empty lines → Remove duplicates → Sort lines</li>
+                                <li>• Trim whitespace → Remove duplicates → Add line numbers</li>
+                                <li>• Convert to lowercase → Remove duplicates → Title case</li>
+                            </ul>
+                        </div>
+
+                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <h4 class="font-semibold mb-2 flex items-center">
+                                <i data-lucide="workflow" class="w-4 h-4 mr-2"></i>
+                                Using Operation History
+                            </h4>
+                            <p class="text-sm text-gray-600">Save your duplicate removal workflow for repeated use with the Operation History feature.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 7 -->
+                <section id="best-practices" class="card p-6">
+                    <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                        <i data-lucide="star" class="w-6 h-6 mr-2 text-primary"></i>
+                        Best Practices
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-3 text-green-600">✅ Do</h4>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>• Always backup original data</li>
+                                <li>• Remove empty lines first</li>
+                                <li>• Trim whitespace before removing duplicates</li>
+                                <li>• Test with small samples first</li>
+                                <li>• Verify results manually</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-3 text-red-600">❌ Don't</h4>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>• Skip data validation</li>
+                                <li>• Assume all duplicates are unwanted</li>
+                                <li>• Ignore case sensitivity requirements</li>
+                                <li>• Process without understanding the data</li>
+                                <li>• Forget to check edge cases</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section 8 -->
+                <section id="troubleshooting" class="card p-6">
+                    <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                        <i data-lucide="help-circle" class="w-6 h-6 mr-2 text-primary"></i>
+                        Troubleshooting
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold mb-2">Problem: Lines that look identical aren't being removed</h4>
+                            <p class="text-gray-600 mb-2"><strong>Solution:</strong> Check for invisible characters, different whitespace, or encoding issues. Use "Trim Space" before removing duplicates.</p>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold mb-2">Problem: Important data was accidentally removed</h4>
+                            <p class="text-gray-600 mb-2"><strong>Solution:</strong> Use the Undo feature (Ctrl+Z) or check your Operation History to revert changes.</p>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold mb-2">Problem: Large files are processing slowly</h4>
+                            <p class="text-gray-600 mb-2"><strong>Solution:</strong> Break large files into smaller chunks or use our optimized algorithm for better performance.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="card p-8 text-center mt-12">
+                <h3 class="text-2xl font-semibold mb-4">Ready to Clean Your Data?</h3>
+                <p class="text-gray-600 mb-6">Start removing duplicates from your text with our powerful, free online tool.</p>
+                <a href="/" class="format-btn inline-flex">
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    Try Text Formatter Now
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Text Formatter. All rights reserved.</p>
+            <p class="mt-2 text-sm text-gray-400">
+                Visit us at <a href="https://text-formatter.com" class="text-white hover:underline">text-formatter.com</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const icon = themeToggle.querySelector('i');
+
+        // Get saved theme or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+
+        // Apply saved theme
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            icon.setAttribute('data-lucide', 'moon');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Update icon
+            icon.setAttribute('data-lucide', newTheme === 'dark' ? 'moon' : 'sun');
+            lucide.createIcons();
+        });
+
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

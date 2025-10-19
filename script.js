@@ -14,6 +14,11 @@ class TextFormatter {
         this.autoSaveDebounceTime = 500; // 500ms debounce
         this.autoSaveTimeout = null;
         this.isUndoRedoOperation = false; // Flag to prevent auto-save during undo/redo
+        this.undoRedoInProgress = false; // Flag to prevent rapid undo/redo clicks
+
+        // History saving configuration
+        this.historyDebounceTime = 500; // 500ms debounce for history saving
+        this.historyTimeout = null;
 
         // Operation History configuration
         this.operationHistory = [];
@@ -121,11 +126,13 @@ class TextFormatter {
             });
 
             this.editor.onDidChangeModelContent(() => {
-                this.updatePreview();
-                // Auto-save content changes (but not during undo/redo operations)
+                // Skip processing during undo/redo operations to prevent conflicts
                 if (!this.isUndoRedoOperation) {
+                    this.updatePreview();
                     const content = this.editor.getValue();
                     this.debouncedAutoSave(content);
+                    // Save to history with debouncing for user input
+                    this.debouncedHistorySave(content);
                 }
             });
 
@@ -229,6 +236,8 @@ class TextFormatter {
             // Auto-save content changes (but not during undo/redo operations)
             if (!this.isUndoRedoOperation) {
                 this.debouncedAutoSave(textarea.value);
+                // Save to history with debouncing for user input
+                this.debouncedHistorySave(textarea.value);
             }
         });
 
@@ -277,11 +286,13 @@ class TextFormatter {
 
         // Add event listeners
         this.wysiwygEditor.addEventListener('input', () => {
-            this.updatePreview();
-            // Auto-save content changes (but not during undo/redo operations)
+            // Skip processing during undo/redo operations to prevent conflicts
             if (!this.isUndoRedoOperation) {
+                this.updatePreview();
                 const content = this.htmlToMarkdown(this.wysiwygEditor.innerHTML);
                 this.debouncedAutoSave(content);
+                // Save to history with debouncing for user input
+                this.debouncedHistorySave(content);
             }
         });
 
@@ -388,6 +399,12 @@ class TextFormatter {
             wysiwygEditor.style.display = 'block';
             wysiwygEditor.innerHTML = htmlContent;
 
+            // Force reset WYSIWYG editor height to ensure scrolling
+            wysiwygEditor.style.height = '';
+            wysiwygEditor.style.minHeight = '200px';
+            wysiwygEditor.style.maxHeight = '100%';
+            wysiwygEditor.offsetHeight; // Force reflow
+
             // Hide preview column and make editor full width
             previewColumn.style.display = 'none';
             editorPreviewGrid.classList.remove('lg:grid-cols-2');
@@ -484,6 +501,11 @@ class TextFormatter {
             }
         } else {
             this.wysiwygEditor.innerHTML = this.parseMarkdown(value);
+            // Force height constraints after setting content
+            this.wysiwygEditor.style.height = '';
+            this.wysiwygEditor.style.minHeight = '200px';
+            this.wysiwygEditor.style.maxHeight = '100%';
+            this.wysiwygEditor.offsetHeight; // Force reflow
             // Auto-save when content is programmatically set (but not during undo/redo)
             if (!this.isUndoRedoOperation) {
                 this.debouncedAutoSave(value);
@@ -804,41 +826,77 @@ class TextFormatter {
     }
 
     undo() {
-        if (this.historyIndex > 0 && this.history.length > 0) {
-            this.historyIndex--;
-            this.isUndoRedoOperation = true;
-
-            // Ensure we have a valid history entry
-            if (this.history[this.historyIndex] !== undefined) {
-                this.setCurrentEditorValue(this.history[this.historyIndex]);
-            }
-
-            this.isUndoRedoOperation = false;
-            this.updateUndoRedoButtons();
+        // Prevent rapid clicks
+        if (this.undoRedoInProgress || this.historyIndex <= 0 || this.history.length === 0) {
+            return;
         }
+
+        // Cancel any pending history saves
+        if (this.historyTimeout) {
+            clearTimeout(this.historyTimeout);
+            this.historyTimeout = null;
+        }
+
+        this.undoRedoInProgress = true;
+        this.historyIndex--;
+        this.isUndoRedoOperation = true;
+
+        // Ensure we have a valid history entry
+        if (this.history[this.historyIndex] !== undefined) {
+            this.setCurrentEditorValue(this.history[this.historyIndex]);
+            // Manually update preview during undo since we skip the content change listener
+            this.updatePreview();
+        }
+
+        this.isUndoRedoOperation = false;
+
+        // Reset flag and update buttons on next frame for smooth operation
+        requestAnimationFrame(() => {
+            this.undoRedoInProgress = false;
+            this.updateUndoRedoButtons();
+        });
     }
 
     redo() {
-        if (this.historyIndex < this.history.length - 1 && this.history.length > 0) {
-            this.historyIndex++;
-            this.isUndoRedoOperation = true;
-
-            // Ensure we have a valid history entry
-            if (this.history[this.historyIndex] !== undefined) {
-                this.setCurrentEditorValue(this.history[this.historyIndex]);
-            }
-
-            this.isUndoRedoOperation = false;
-            this.updateUndoRedoButtons();
+        // Prevent rapid clicks
+        if (this.undoRedoInProgress || this.historyIndex >= this.history.length - 1 || this.history.length === 0) {
+            return;
         }
+
+        // Cancel any pending history saves
+        if (this.historyTimeout) {
+            clearTimeout(this.historyTimeout);
+            this.historyTimeout = null;
+        }
+
+        this.undoRedoInProgress = true;
+        this.historyIndex++;
+        this.isUndoRedoOperation = true;
+
+        // Ensure we have a valid history entry
+        if (this.history[this.historyIndex] !== undefined) {
+            this.setCurrentEditorValue(this.history[this.historyIndex]);
+            // Manually update preview during redo since we skip the content change listener
+            this.updatePreview();
+        }
+
+        this.isUndoRedoOperation = false;
+
+        // Reset flag and update buttons on next frame for smooth operation
+        requestAnimationFrame(() => {
+            this.undoRedoInProgress = false;
+            this.updateUndoRedoButtons();
+        });
     }
 
     updateUndoRedoButtons() {
         const undoBtn = document.getElementById('undo');
         const redoBtn = document.getElementById('redo');
 
-        undoBtn.disabled = this.historyIndex <= 0;
-        redoBtn.disabled = this.historyIndex >= this.history.length - 1;
+        if (undoBtn && redoBtn) {
+            undoBtn.disabled = this.historyIndex <= 0;
+            redoBtn.disabled = this.historyIndex >= this.history.length - 1;
+        }
     }
 
     saveHistoryToStorage() {
@@ -903,6 +961,18 @@ class TextFormatter {
         this.autoSaveTimeout = setTimeout(() => {
             this.saveContentToCache(content);
         }, this.autoSaveDebounceTime);
+    }
+
+    debouncedHistorySave(content) {
+        // Clear existing timeout
+        if (this.historyTimeout) {
+            clearTimeout(this.historyTimeout);
+        }
+
+        // Set new timeout
+        this.historyTimeout = setTimeout(() => {
+            this.saveToHistory(content);
+        }, this.historyDebounceTime);
     }
 
     formatText(formatter) {
@@ -1176,6 +1246,14 @@ class TextFormatter {
 
         // Clear the editor content
         this.setCurrentEditorValue('');
+
+        // Force reset WYSIWYG editor height if in WYSIWYG mode
+        if (this.currentEditor === 'wysiwyg') {
+            this.wysiwygEditor.style.height = '';
+            this.wysiwygEditor.style.minHeight = '300px';
+            // Force reflow to ensure height reset
+            this.wysiwygEditor.offsetHeight;
+        }
 
         // Save the cleared state to history
         this.saveToHistory('');

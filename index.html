@@ -100,8 +100,49 @@
             border: 1px solid var(--border);
         }
 
-        #preview {
+        /* This style is now combined with #editor-container below */
+
+        /* Editor columns height constraint */
+        #editor-column, #preview-column {
             height: 100% !important;
+            max-height: 500px !important;
+            overflow: hidden;
+        }
+
+        @media (max-width: 1024px) {
+            #editor-column, #preview-column {
+                max-height: 400px !important;
+            }
+        }
+
+        /* Editor and Preview containers height sync */
+        #editor-container, #preview {
+            height: calc(100% - 60px) !important;
+            max-height: calc(100% - 60px) !important;
+            overflow: hidden;
+        }
+
+        /* Monaco editor height constraint */
+        #monaco-editor {
+            height: 100% !important;
+            max-height: 100%;
+            overflow: hidden;
+        }
+
+        /* WYSIWYG editor height constraint and scroll */
+        #wysiwyg-editor {
+            height: 100% !important;
+            max-height: 100%;
+            min-height: 200px;
+            overflow-y: auto !important;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        /* Preview area specific styles */
+        #preview {
+            overflow-y: auto !important;
+            box-sizing: border-box;
             background-color: var(--muted);
             border: 1px solid var(--border);
         }
@@ -127,9 +168,14 @@
             transition: all 0.2s ease-in-out;
         }
 
-        button:focus {
-            outline: 2px solid var(--ring);
-            outline-offset: 2px;
+        /* Remove outline from all interactive elements */
+        button:focus,
+        button:active,
+        .format-btn:focus,
+        .format-btn:active,
+        input[type="checkbox"]:focus,
+        *:focus {
+            outline: none !important;
         }
 
         /* Container width consistency */
@@ -220,8 +266,7 @@
         }
 
         #find-replace-section input[type="text"]:focus {
-            outline: 2px solid var(--ring);
-            outline-offset: 2px;
+            outline: none;
         }
 
         #find-replace-section label {
@@ -390,6 +435,7 @@
                 <nav class="flex items-center space-x-6">
                     <div class="hidden md:flex space-x-8">
                         <a href="/domain-generator/" class="text-gray-700 hover:text-primary">Domain Generator</a>
+                        <a href="/pages/" class="text-gray-700 hover:text-primary">Articles</a>
                         <a href="#features" class="text-gray-700 hover:text-primary">Features</a>
                         <a href="#faq" class="text-gray-700 hover:text-primary">FAQ</a>
                     </div>
@@ -763,6 +809,18 @@
                     <div class="card p-6">
                         <h3 class="text-lg font-medium text-gray-900 mb-2">What does the Reddit Format button do?</h3>
                         <p class="text-gray-600">The Reddit Format button applies multiple formatting improvements in one click: removes extra spaces, standardizes line breaks, fixes punctuation spacing, corrects encoding issues, and trims whitespace. Perfect for creating professional Reddit posts and comments.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">What are the best practices for removing duplicate lines?</h3>
+                        <p class="text-gray-600">For optimal duplicate removal: first trim whitespace, then remove empty lines, and finally remove duplicates. This sequence ensures accurate detection. Always backup original data and test with small samples first. <a href="pages/remove-duplicates-guide.html" class="text-primary hover:underline">Read our complete duplicate removal guide</a> for detailed best practices and real-world examples.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">How do I create custom formatting workflows with Operation History?</h3>
+                        <p class="text-gray-600">Operation History automatically tracks every formatting operation you perform, allowing you to build reusable workflows. Simply perform your desired operations in sequence, then click "Execute All" to replay the entire workflow on new text. Perfect for repetitive tasks like cleaning email lists or processing data files. <a href="pages/operation-history-tutorial.html" class="text-primary hover:underline">Learn advanced workflow techniques</a> in our comprehensive tutorial.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Can I use this tool for business data processing?</h3>
+                        <p class="text-gray-600">Absolutely! Our text formatter is widely used by businesses for customer data management, inventory processing, financial reporting, and content management. The duplicate removal feature is particularly valuable for cleaning customer lists, product catalogs, and survey data. <a href="pages/remove-duplicates-use-cases.html" class="text-primary hover:underline">Explore business use cases</a> to see how professionals save time and improve data quality.</p>
                     </div>
                 </div>
             </div>

@@ -31,21 +31,16 @@ if ! wrangler whoami &> /dev/null; then
 fi
 
 # 创建项目（如果不存在）
-echo "📁 创建 Cloudflare Pages 项目..."
-wrangler pages project create text-formatter 2>/dev/null || echo "项目可能已存在，继续部署..."
+echo "📁 检查 Cloudflare Pages 项目..."
+wrangler pages project create text-formatter 2>/dev/null || true
+echo "✓ 项目准备完成，开始部署..."
 
 # 部署网站
 echo "🌐 正在部署网站..."
 wrangler pages deploy ./ --project-name=text-formatter
 
 if [ $? -eq 0 ]; then
-    echo "✅ 部署成功！"
-    echo "🌍 你的网站现在可以通过以下地址访问:"
-    echo "   https://text-formatter.pages.dev"
-    echo ""
-    echo "💡 提示:"
-    echo "   - 如需自定义域名，请在 Cloudflare Dashboard 中配置"
-    echo "   - 每次修改后运行此脚本即可更新网站"
+    echo "✅ 部署成功: https://text-formatter.com"
 else
     echo "❌ 部署失败，请检查错误信息"
     exit 1
